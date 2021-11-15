@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Text, StyleSheet, View, TextInput, Image, Button } from "react-native";
-import Slider from "@react-native-community/slider";
-import { Picker } from "@react-native-picker/picker";
 
 let array = [];
 for (let i = 0; i < 25; i++) {
