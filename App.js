@@ -1,13 +1,13 @@
-import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
+import * as React from "react";
+import { Text, View, StyleSheet } from "react-native";
+import Constants from "expo-constants";
 
-import AssetExample from './components/AssetExample';
-import Canvas from './components/Canvas';
-import ColorPicker from './components/ColorPicker';
-import { Card } from 'react-native-paper';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import AssetExample from "./components/AssetExample";
+import Canvas from "./components/Canvas";
+import ColorPicker from "./components/ColorPicker";
+import { Card } from "react-native-paper";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -21,12 +21,12 @@ export default function App() {
             <Stack.Screen
               name="Canvas"
               component={Canvas}
-              options={{ title: 'canvas' }}
+              options={{ title: "canvas" }}
             />
             <Stack.Screen
               name="ColorPicker"
               component={ColorPicker}
-              options={{ title: 'ColorPicker' }}
+              options={{ title: "ColorPicker" }}
             />
           </Stack.Navigator>
         </NavigationContainer>
@@ -38,9 +38,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
+    backgroundColor: "#ecf0f1",
+    padding: 8
+  }
 });
