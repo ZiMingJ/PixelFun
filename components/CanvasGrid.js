@@ -142,9 +142,6 @@ class CanvasGrid extends Component {
             />
           ))}
         </Grid>
-        <View>
-          <Text>{this.state.currentColor}</Text>
-        </View>
       </Wrapper>
     );
   }

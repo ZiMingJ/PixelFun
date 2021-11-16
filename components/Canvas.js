@@ -4,6 +4,7 @@ import { Text, StyleSheet, View, TextInput, Image, Button } from "react-native";
 import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import CanvasGrid from "./CanvasGrid";
+import { Background } from "@react-navigation/elements";
 
 export default class Canvas extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class Canvas extends Component {
 
   render() {
     const { route, navigation } = this.props;
-    const { newColor } = route.params == null ? "white" : route.params;
+    const { newColor } = route.params == null ? "pink" : route.params;
     return (
       <View>
         <CanvasGrid currentColor={newColor}></CanvasGrid>
@@ -25,11 +26,24 @@ export default class Canvas extends Component {
             this.props.navigation.navigate("ColorPicker");
           }}
         />
-
-        <Text>color:{JSON.stringify(newColor)}</Text>
+        <View
+          style={{
+            backgroundColor: newColor,
+            width: 44,
+            height: 44,
+            borderRadius: 44 / 2
+          }}
+        ></View>
+        <Text>color:{newColor}</Text>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  circle: {
+    width: 44,
+    height: 44,
+    borderRadius: 44 / 2
+  }
+});
