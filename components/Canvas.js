@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Text, StyleSheet, View, TextInput, Image, Button } from 'react-native';
-import Slider from '@react-native-community/slider';
-import { Picker } from '@react-native-picker/picker';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Text, StyleSheet, View, TextInput, Image, Button } from "react-native";
+import Slider from "@react-native-community/slider";
+import { Picker } from "@react-native-picker/picker";
 
 let array = [];
 for (let i = 0; i < 25; i++) {
@@ -14,7 +14,7 @@ export default class Canvas extends Component {
     super(props);
     this.state = {
       ids: array,
-      color: 'pink',
+      color: "pink"
     };
   }
 
@@ -24,27 +24,18 @@ export default class Canvas extends Component {
     let ids = this.state.ids;
     ids[id] = 1;
     this.setState({
-      ids,
+      ids
     });
     console.log(`press start${id}`);
   }
 
   onResponderMove(id, ev) {
-    let ids = this.state.ids;
-    ids[id] = 1;
-    this.setState({
-      ids,
-    });
+    // let ids = this.state.ids;
+    // ids[id] = 1;
+    // this.setState({
+    //   ids
+    // });
     console.log(`press move${id}`);
-  }
-
-  onResponderReject(id, ev) {
-    let ids = this.state.ids;
-    ids[id] = 1;
-    this.setState({
-      ids,
-    });
-    console.log(`reject${id}`);
   }
 
   createGrid = () => {
@@ -54,7 +45,7 @@ export default class Canvas extends Component {
       backgroundColor: this.state.color,
       height: 40,
       width: 40,
-      margin: 5,
+      margin: 5
     };
 
     for (let j = 0; j < 25; j++) {
@@ -63,13 +54,14 @@ export default class Canvas extends Component {
           id={j}
           key={j}
           style={this.state.ids[j] === 0 ? styles.cell : cellColored}
-          onStartShouldSetResponder={(ev) => true}
-          onMoveShouldSetResponder={(ev) => true}
-          onResponderGrant={(ev) => this.onResponderGrant(j, ev)}
-          onResponderMove={(ev) => this.onResponderMove(j, ev)}
-          onResponderRelease={(ev) => {}}
-          onResponderTerminationRequest={(ev) => true}
-          onResponderTer={(ev) => {}}>
+          onStartShouldSetResponder={ev => true}
+          onMoveShouldSetResponder={ev => true}
+          onResponderGrant={ev => this.onResponderGrant(j, ev)}
+          onResponderMove={ev => this.onResponderMove(j, ev)}
+          onResponderRelease={ev => {}}
+          onResponderTerminationRequest={ev => true}
+          onResponderTer={ev => {}}
+        >
           <Text>{this.state.ids[j]}</Text>
         </View>
       );
@@ -79,14 +71,14 @@ export default class Canvas extends Component {
 
   render() {
     const { route, navigation } = this.props;
-    const { newColor } = route.params == null ? 'grey' : route.params;
+    const { newColor } = route.params == null ? "grey" : route.params;
     return (
       <View style={styles.grid}>
         {this.createGrid()}
         <Button
           title="Pick Color"
           onPress={() => {
-            this.props.navigation.navigate('ColorPicker');
+            this.props.navigation.navigate("ColorPicker");
           }}
         />
         <Button
@@ -106,22 +98,22 @@ const styles = StyleSheet.create({
   grid: {
     height: 260,
     width: 260,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap"
   },
   cell: {
-    backgroundColor: 'grey',
+    backgroundColor: "grey",
     height: 40,
     width: 40,
-    margin: 5,
+    margin: 5
   },
   cellColored: {
-    backgroundColor: 'coral',
+    backgroundColor: "coral",
     height: 40,
     width: 40,
-    margin: 5,
-  },
+    margin: 5
+  }
 });
