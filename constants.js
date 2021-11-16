@@ -1,4 +1,5 @@
 import { Dimensions } from "react-native";
+import { useHeaderHeight } from "@react-navigation/stack";
 
 export const STATES = {
   IDLE: "idle",

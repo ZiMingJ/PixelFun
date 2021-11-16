@@ -6,6 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 import { PanResponder } from "react-native";
 import styled, { css } from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 import {
   EDITOR_BORDER_SIZE,
@@ -55,22 +56,28 @@ class CanvasGrid extends Component {
     super(props);
     this.state = {
       backgroundColor: "white",
-      currentColor: "pink",
+      currentColor: this.props.currentColor,
       selectedTool: "pencil",
       displayGrid: true,
       data: array
     };
   }
-  static defaultProps = {};
+  static defaultProps = {
+    backgroundColor: "white",
+    currentColor: "pink",
+    selectedTool: "pencil",
+    displayGrid: true,
+    data: array
+  };
 
-  updateCanvas = (evt, insets) => {
+  updateCanvas = (evt, insets, headerHeight) => {
     if (evt.nativeEvent.pageX > EDITOR_BORDER_SIZE + PIXEL_SIZE * PIXEL_COUNT) {
       return;
     }
     const tx = evt.nativeEvent.pageX - EDITOR_BORDER_SIZE;
     // const ty =
     //   evt.nativeEvent.pageY - EDITOR_BORDER_SIZE - HEADER_HEIGHT - insets.top;
-    const ty = evt.nativeEvent.pageY - EDITOR_BORDER_SIZE;
+    const ty = evt.nativeEvent.pageY - EDITOR_BORDER_SIZE - headerHeight;
     const px = Math.trunc(tx / PIXEL_SIZE);
     const py = Math.trunc(ty / PIXEL_SIZE);
     const arrayPosition = py * PIXEL_COUNT + px;
@@ -81,7 +88,7 @@ class CanvasGrid extends Component {
       this.state.data[arrayPosition].color ===
       (this.state.selectedTool === TOOLS.ERASER
         ? "none"
-        : this.state.currentColor)
+        : this.props.currentColor)
     ) {
       return;
     }
@@ -98,7 +105,7 @@ class CanvasGrid extends Component {
       newData[arrayPosition] = {
         color:
           this.state.selectedTool === TOOLS.PENCIL
-            ? this.state.currentColor
+            ? this.props.currentColor
             : "none"
       };
     }
@@ -109,7 +116,7 @@ class CanvasGrid extends Component {
 
   render() {
     const { route, navigation } = this.props;
-    const { insets } = this.props;
+    const { insets, headerHeight } = this.props;
     return (
       <Wrapper backgroundColor={this.props.backgroundColor}>
         <Grid
@@ -117,9 +124,9 @@ class CanvasGrid extends Component {
           onStartShouldSetResponderCapture={() => true}
           onMoveShouldSetResponder={() => true}
           onMoveShouldSetResponderCapture={() => true}
-          onResponderGrant={evt => this.updateCanvas(evt, insets)}
+          onResponderGrant={evt => this.updateCanvas(evt, insets, headerHeight)}
           onResponderMove={evt => {
-            this.updateCanvas(evt, insets);
+            this.updateCanvas(evt, insets, headerHeight);
           }}
           onResponderTerminationRequest={() => true}
           onShouldBlockNativeResponder={() => true}
@@ -135,6 +142,9 @@ class CanvasGrid extends Component {
             />
           ))}
         </Grid>
+        <View>
+          <Text>{this.state.currentColor}</Text>
+        </View>
       </Wrapper>
     );
   }
@@ -142,8 +152,18 @@ class CanvasGrid extends Component {
 
 export default function(props) {
   const insets = useSafeAreaInsets();
-
-  return <CanvasGrid {...props} insets={insets} />;
+  const headerHeight = useHeaderHeight();
+  return (
+    <View>
+      <CanvasGrid
+        {...props}
+        insets={insets}
+        headerHeight={headerHeight}
+        currentColor={props.currentColor}
+      />
+      <Text>aaa{props.currentColor}</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({});
