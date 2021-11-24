@@ -24,7 +24,7 @@ import Undo from "../assets/icons/undo.svg";
 import Bucket from "../assets/icons/bucket.svg";
 import Eraser from "../assets/icons/eraser.svg";
 import GridIcon from "../assets/icons/grid.svg";
-
+import Clear from "../assets/icons/clear.svg";
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const Wrapper = styled.View`
@@ -209,7 +209,14 @@ export default class Canvas extends Component {
             >
               <Eraser width={33} height={33} />
             </IconWrapper>
-
+            <IconWrapper
+              active={false}
+              onPress={() => {
+                this.updateCanvas(this.getInitialCanvasData());
+              }}
+            >
+              <Clear width={30} height={30} />
+            </IconWrapper>
             <IconWrapper
               active={false}
               disabled={history.length <= 1}
