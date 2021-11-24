@@ -38,7 +38,8 @@ let colors = [
   "#FFB800",
   "#35CE8D",
   "#4DB3FF",
-  "#0085FF"
+  "#0085FF",
+  "#274B6D"
 ];
 
 let colorMap = [];
@@ -98,7 +99,7 @@ export default class Canvas extends Component {
       drawerShown: false,
       backgroundColor: "white",
       colorMap: colorMap,
-      currentColor: "pink",
+      currentColor: colorMap[0].color,
       canvasData: this.getInitialCanvasData()
     };
   }
@@ -114,7 +115,6 @@ export default class Canvas extends Component {
     );
 
   updateCanvas = data => {
-    console.log(data);
     history.push(this.state.canvasData);
     if (history.length > 10) {
       history.shift();
@@ -132,12 +132,26 @@ export default class Canvas extends Component {
     navigation.goBack();
   };
 
+  updateColorMap = newColor => {
+    let colorMap = this.state.colorMap;
+    for (let i = 0; i < colorMap.length; i++) {
+      if (colorMap[i].color === this.state.currentColor) {
+        colorMap[i].color = newColor;
+      }
+    }
+    this.setState({
+      colorMap,
+      currentColor: newColor
+    });
+  };
+
   render() {
     const { route, navigation } = this.props;
     const newColor =
       route.params === undefined
         ? this.state.currentColor
         : route.params.newColor;
+
     return (
       <View>
         <CanvasGrid
@@ -226,7 +240,7 @@ export default class Canvas extends Component {
 
         <ScrollView horizontal style={{ maxHeight: 80 }}>
           <Row>
-            <ColorDrop
+            {/* <ColorDrop
               color={newColor}
               selected={
                 this.state.selectedTool !== TOOLS.ERASER &&
@@ -250,7 +264,7 @@ export default class Canvas extends Component {
                   });
                 }
               }}
-            />
+            /> */}
 
             {this.state.colorMap.map((item, index) => (
               <ColorDrop
@@ -283,9 +297,11 @@ export default class Canvas extends Component {
           </Row>
         </ScrollView>
         <Button
-          title="Pick Color"
+          title="Customize"
           onPress={() => {
-            this.props.navigation.navigate("ColorPicker");
+            this.props.navigation.navigate("ColorPicker", {
+              updateColorMap: this.updateColorMap
+            });
           }}
         />
       </View>
