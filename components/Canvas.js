@@ -11,12 +11,13 @@ import {
   TouchableOpacity,
   ScrollView
 } from "react-native";
+import { PIXEL_COUNT, TOOLS } from "../constants";
+
 import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import styled, { css } from "styled-components/native";
 import CanvasGrid from "./CanvasGrid";
 import { Background } from "@react-navigation/elements";
-import { TOOLS } from "../constants";
 
 import Pencil from "../assets/icons/pencil.svg";
 import Undo from "../assets/icons/undo.svg";
@@ -40,10 +41,12 @@ let colors = [
   "#0085FF"
 ];
 
-let array = [];
+let colorMap = [];
 for (let i = 0; i < colors.length; i++) {
-  array.push({ color: colors[i] });
+  colorMap.push({ color: colors[i] });
 }
+
+let history = [];
 
 const Row = styled.View`
   flex-direction: row;
@@ -94,12 +97,40 @@ export default class Canvas extends Component {
       displayGrid: true,
       drawerShown: false,
       backgroundColor: "white",
-      colorMap: array,
-      currentColor: "pink"
+      colorMap: colorMap,
+      currentColor: "pink",
+      canvasData: this.getInitialCanvasData()
     };
   }
 
   static defaultProps = {};
+
+  getInitialCanvasData = () =>
+    Array.from(
+      {
+        length: PIXEL_COUNT * PIXEL_COUNT
+      },
+      () => ({ color: "none" })
+    );
+
+  updateCanvas = data => {
+    console.log(data);
+    history.push(this.state.canvasData);
+    if (history.length > 10) {
+      history.shift();
+    }
+    this.setState({
+      canvasData: data
+    });
+  };
+
+  goBack = () => {
+    this.setState({
+      backgroundColor: "white",
+      canvasData: this.getInitialCanvasData()
+    });
+    navigation.goBack();
+  };
 
   render() {
     const { route, navigation } = this.props;
@@ -114,6 +145,8 @@ export default class Canvas extends Component {
           backgroundColor={this.state.backgroundColor}
           selectedTool={this.state.selectedTool}
           displayGrid={this.state.displayGrid}
+          data={this.state.canvasData}
+          updateData={this.updateCanvas}
         ></CanvasGrid>
         <Row>
           <IconButton
@@ -165,11 +198,15 @@ export default class Canvas extends Component {
 
             <IconWrapper
               active={false}
-              onPress={() =>
-                this.setState({
-                  selectedTool: TOOLS.ERASER
-                })
-              }
+              disabled={history.length <= 1}
+              onPress={() => {
+                if (history.length > 1) {
+                  this.setState({
+                    canvasData: history[history.length - 2]
+                  });
+                  history.pop();
+                }
+              }}
             >
               <Undo width={30} height={30} />
             </IconWrapper>

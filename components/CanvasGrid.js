@@ -59,7 +59,8 @@ class CanvasGrid extends Component {
       currentColor: this.props.currentColor,
       selectedTool: this.props.selectedTool,
       displayGrid: this.props.displayGrid,
-      data: array
+      data: this.props.data,
+      updatedData: this.props.updatedData
     };
   }
   static defaultProps = {
@@ -149,24 +150,24 @@ class CanvasGrid extends Component {
     const px = Math.trunc(tx / PIXEL_SIZE);
     const py = Math.trunc(ty / PIXEL_SIZE);
     const arrayPosition = py * PIXEL_COUNT + px;
-    if (arrayPosition + 1 > this.state.data.length || arrayPosition < 0) {
+    if (arrayPosition + 1 > this.props.data.length || arrayPosition < 0) {
       return;
     }
     if (
-      this.state.data[arrayPosition].color ===
+      this.props.data[arrayPosition].color ===
       (this.props.selectedTool === TOOLS.ERASER
         ? "none"
         : this.props.currentColor)
     ) {
       return;
     }
-    let newData = this.state.data;
+    let newData = this.props.data;
     if (this.props.selectedTool === TOOLS.BUCKET) {
       newData = this.dropBucket(
         newData,
         arrayPosition,
         this.props.currentColor,
-        this.state.data[arrayPosition].color,
+        this.props.data[arrayPosition].color,
         newData
       );
     } else {
@@ -180,6 +181,7 @@ class CanvasGrid extends Component {
     this.setState({
       data: newData
     });
+    this.props.updatedData([...newData]);
   };
 
   render() {
@@ -199,7 +201,7 @@ class CanvasGrid extends Component {
           onResponderTerminationRequest={() => true}
           onShouldBlockNativeResponder={() => true}
         >
-          {this.state.data.map((pixel, index) => (
+          {this.props.data.map((pixel, index) => (
             <PixelBlock
               key={index}
               index={index}
@@ -228,6 +230,8 @@ export default function(props) {
         backgroundColor={props.backgroundColor}
         selectedTool={props.selectedTool}
         displayGrid={props.displayGrid}
+        data={props.data}
+        updatedData={props.updateData}
       />
     </View>
   );
