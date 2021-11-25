@@ -233,16 +233,18 @@ export default class Canvas extends Component {
             </IconWrapper>
           </Row>
         ) : (
-          <IconWrapper
-            active={this.state.displayGrid}
-            onPress={() =>
-              this.setState({
-                displayGrid: !this.state.displayGrid
-              })
-            }
-          >
-            <GridIcon width={33} height={33} />
-          </IconWrapper>
+          <Row>
+            <IconWrapper
+              active={this.state.displayGrid}
+              onPress={() =>
+                this.setState({
+                  displayGrid: !this.state.displayGrid
+                })
+              }
+            >
+              <GridIcon width={33} height={33} />
+            </IconWrapper>
+          </Row>
         )}
 
         <ScrollView horizontal style={{ maxHeight: 80 }}>

@@ -1,0 +1,217 @@
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Text, StyleSheet, View, TextInput, Image, Button } from "react-native";
+import styled, { css } from "styled-components/native";
+import { FlatGrid } from "react-native-super-grid";
+
+const HeaderWrapper = styled.View`
+  padding: 20px 30px 10px 5px;
+  background: white;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+const Avatar = styled.View`
+  padding: 20px 20px 20px 20px;
+  background: white;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const UserName = styled.Text`
+  font-size: 14px;
+  font-weight: 600;
+  padding-top: 10px;
+`;
+
+const NumberWrapper = styled.View`
+  background: white;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const Number = styled.Text`
+  font-size: 25px;
+  font-weight: 300;
+`;
+
+const Tag = styled.Text`
+  font-size: 13px;
+  font-weight: 500;
+`;
+
+const InfosWrapper = styled.View`
+  margin-left: 10px;
+  flex: 1;
+`;
+
+const ButtonsRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  background: white;
+  padding-bottom: 10px;
+`;
+const IconButton = styled.TouchableOpacity`
+  flex-direction: row;
+  height: 30px;
+  border-radius: 15px;
+  background: ${({ active }) => (active ? "skyblue" : "#fff")};
+  width: 150px;
+  margin: 0px 10px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const examples = [
+  { name: "TURQUOISE", code: "#1abc9c" },
+  { name: "EMERALD", code: "#2ecc71" },
+  { name: "PETER RIVER", code: "#3498db" },
+  { name: "AMETHYST", code: "#9b59b6" },
+  { name: "WET ASPHALT", code: "#34495e" },
+  { name: "GREEN SEA", code: "#16a085" },
+  { name: "NEPHRITIS", code: "#27ae60" },
+  { name: "BELIZE HOLE", code: "#2980b9" },
+  { name: "WISTERIA", code: "#8e44ad" },
+  { name: "MIDNIGHT BLUE", code: "#2c3e50" },
+  { name: "SUN FLOWER", code: "#f1c40f" },
+  { name: "CARROT", code: "#e67e22" },
+  { name: "ALIZARIN", code: "#e74c3c" },
+  { name: "CLOUDS", code: "#ecf0f1" },
+  { name: "CONCRETE", code: "#95a5a6" },
+  { name: "ORANGE", code: "#f39c12" },
+  { name: "PUMPKIN", code: "#d35400" },
+  { name: "POMEGRANATE", code: "#c0392b" },
+  { name: "SILVER", code: "#bdc3c7" },
+  { name: "ASBESTOS", code: "#7f8c8d" }
+];
+
+export default class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDrafts: false
+    };
+  }
+
+  static defaultProps = {};
+
+  editProfile = () => {
+    console.log("edit");
+  };
+  render() {
+    return (
+      <InfosWrapper>
+        <HeaderWrapper>
+          <Avatar>
+            <Image
+              source={{
+                uri: `https://picsum.photos/id/125/250/250`
+              }}
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+                borderStyle: "solid"
+              }}
+            />
+
+            <UserName>profile</UserName>
+          </Avatar>
+          <NumberWrapper>
+            <Number>3</Number>
+            <View>
+              <Tag>Posts</Tag>
+            </View>
+          </NumberWrapper>
+          <NumberWrapper>
+            <Number>7</Number>
+            <View>
+              <Tag>Likes</Tag>
+            </View>
+          </NumberWrapper>
+          <NumberWrapper>
+            <Number>0</Number>
+            <View>
+              <Tag>Drafts</Tag>
+            </View>
+          </NumberWrapper>
+        </HeaderWrapper>
+        <ButtonsRow>
+          <IconButton
+            title="Published"
+            onPress={() => this.setState({ showDrafts: false })}
+            active={!this.state.showDrafts}
+            icon="Picture"
+            color="green"
+          >
+            <Text>Published</Text>
+          </IconButton>
+          <IconButton
+            title="Drafts"
+            onPress={() => this.setState({ showDrafts: true })}
+            active={this.state.showDrafts}
+            icon="EditPicture"
+            color="yellow"
+          >
+            <Text>Drafts</Text>
+          </IconButton>
+        </ButtonsRow>
+        {!this.state.showDrafts ? (
+          <FlatGrid
+            itemDimension={130}
+            data={examples}
+            style={styles.gridView}
+            // staticDimension={300}
+            // fixed
+            spacing={10}
+            renderItem={({ item }) => (
+              <View
+                style={[styles.itemContainer, { backgroundColor: item.code }]}
+              >
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemCode}>{item.code}</Text>
+              </View>
+            )}
+          />
+        ) : (
+          <FlatGrid
+            itemDimension={130}
+            data={[1, 2, 3, 4]}
+            renderItem={({ item }) => <Text>{item}</Text>}
+          />
+        )}
+
+        {/* <Button title="Edit Profile" onPress={() => this.editProfile()} /> */}
+      </InfosWrapper>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  gridView: {
+    marginTop: 10,
+    flex: 1
+  },
+  itemContainer: {
+    justifyContent: "flex-end",
+    borderRadius: 5,
+    padding: 10,
+    height: 150
+  },
+  itemName: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "600"
+  },
+  itemCode: {
+    fontWeight: "600",
+    fontSize: 12,
+    color: "#fff"
+  }
+});
