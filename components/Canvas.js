@@ -168,13 +168,17 @@ export default class Canvas extends Component {
             onPress={() =>
               this.setState({ displayDrawTab: !this.state.displayDrawTab })
             }
-          />
+          >
+            <Text>Draw</Text>
+          </IconButton>
           <IconButton
             active={!this.state.displayDrawTab}
             onPress={() =>
               this.setState({ displayDrawTab: !this.state.displayDrawTab })
             }
-          />
+          >
+            <Text>Background</Text>
+          </IconButton>
         </Row>
 
         {this.state.displayDrawTab ? (

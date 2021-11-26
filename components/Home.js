@@ -4,6 +4,8 @@ import styled, { css } from "styled-components/native";
 
 import LikeIcon from "../assets/icons/like";
 import CommentIcon from "../assets/icons/comment";
+import MoreIcon from "../assets/icons/more";
+
 import {
   Text,
   StyleSheet,
@@ -16,8 +18,9 @@ import {
 const Row = styled.View`
   flex-direction: row;
   align-items: center;
-  margin: 5px 0 6px 0;
+  margin: 5px 0 0 0;
   align-items: center;
+  flex: 1;
 `;
 
 const Wrapper = styled.Pressable`
@@ -28,23 +31,29 @@ const Wrapper = styled.Pressable`
   justify-content: space-around;
 `;
 
+const TopRow = styled.View`
+  flex-direction: row;
+  margin: 0px 0 0 0;
+  align-items: center;
+  justify-content: center;
+`;
 const IconLabel = styled.Text`
   font-size: 14px;
   margin-left: 5px;
-  font-weight: 600;
+  font-weight: 500;
   margin-right: 10px;
 `;
 
 const UserName = styled.Text`
   margin-left: 10px;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
 `;
 
-const Desc = styled.Text`
-  color: ${({ theme }) => theme.secondaryText};
-  font-size: 14px;
+const TimeLabel = styled.Text`
+  font-size: 13px;
   font-weight: 400;
+  color: #707070;
 `;
 
 const DATA = [
@@ -88,35 +97,41 @@ const Item = ({
 }) => {
   return (
     <Wrapper style={styles.item}>
+      <TopRow>
+        <Row>
+          <Image
+            source={{
+              uri: `https://picsum.photos/id/125/250/250`
+            }}
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: 13
+            }}
+          />
+          <UserName>{author}</UserName>
+        </Row>
+        <MoreIcon width={25} height={25} />
+      </TopRow>
       <Row>
         <Image
           source={{
             uri: `https://picsum.photos/id/125/250/250`
           }}
           style={{
-            width: 26,
-            height: 26,
-            borderRadius: 13,
-            borderStyle: "solid"
+            width: 340,
+            height: 340
           }}
         />
-        <UserName>{author}</UserName>
       </Row>
-
-      <Image
-        source={{
-          uri: `https://picsum.photos/id/125/250/250`
-        }}
-        style={{
-          width: 340,
-          height: 340
-        }}
-      />
       <Row>
         <LikeIcon width={23} height={23} />
         <IconLabel>{likesCount} likes</IconLabel>
         <CommentIcon width={23} height={23} />
         <IconLabel>{commentsCount} comments</IconLabel>
+      </Row>
+      <Row>
+        <TimeLabel>6 hours ago</TimeLabel>
       </Row>
     </Wrapper>
   );

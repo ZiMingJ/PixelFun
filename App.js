@@ -24,7 +24,19 @@ export default function App() {
       <View style={styles.container}>
         <View style={styles.container}>
           <NavigationContainer>
-            <Tabbar />
+            <Stack.Navigator>
+              <Stack.Screen
+                name="HomeTab"
+                component={Tabbar}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ColorPicker"
+                component={ColorPicker}
+                options={{ title: "ColorPicker" }}
+              />
+            </Stack.Navigator>
+
             {/* <Stack.Navigator name="HomeComponent">
               <Stack.Screen
                 name="Home"

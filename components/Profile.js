@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Text, StyleSheet, View, TextInput, Image, Button } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  Button
+} from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
 
@@ -26,6 +34,19 @@ const UserName = styled.Text`
   font-weight: 600;
   padding-top: 10px;
 `;
+const EditProfile = styled.Text`
+  font-size: 15px;
+  font-weight: 400;
+`;
+const EditButton = styled.TouchableOpacity`
+  background: white;
+  justify-content: center;
+  padding: 5px;
+  align-items: center;
+  border-width: 1px;
+  border-color: gray;
+  margin: 0px 10px 0px 10px;
+`;
 
 const NumberWrapper = styled.View`
   background: white;
@@ -35,34 +56,35 @@ const NumberWrapper = styled.View`
 `;
 
 const Number = styled.Text`
-  font-size: 25px;
-  font-weight: 300;
+  font-size: 20px;
+  font-weight: 500;
 `;
 
 const Tag = styled.Text`
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
 `;
 
 const InfosWrapper = styled.View`
-  margin-left: 10px;
   flex: 1;
+  background: white;
+  justify-content: center;
 `;
 
 const ButtonsRow = styled.View`
+  margin-top: 10px;
   flex-direction: row;
   align-items: center;
   width: 100%;
-  justify-content: center;
+  justify-content: space-between;
   background: white;
   padding-bottom: 10px;
 `;
 const IconButton = styled.TouchableOpacity`
   flex-direction: row;
   height: 30px;
-  border-radius: 15px;
-  background: ${({ active }) => (active ? "skyblue" : "#fff")};
-  width: 150px;
+  border-bottom-width: ${({ active }) => (active ? "1px" : "0px")};
+  width: 180px;
   margin: 0px 10px;
   align-items: center;
   justify-content: center;
@@ -116,8 +138,7 @@ export default class Profile extends Component {
               style={{
                 width: 80,
                 height: 80,
-                borderRadius: 40,
-                borderStyle: "solid"
+                borderRadius: 40
               }}
             />
 
@@ -142,6 +163,11 @@ export default class Profile extends Component {
             </View>
           </NumberWrapper>
         </HeaderWrapper>
+
+        <EditButton onPress={() => this.editProfile()}>
+          <EditProfile>Edit Profile</EditProfile>
+        </EditButton>
+
         <ButtonsRow>
           <IconButton
             title="Published"
@@ -186,8 +212,6 @@ export default class Profile extends Component {
             renderItem={({ item }) => <Text>{item}</Text>}
           />
         )}
-
-        {/* <Button title="Edit Profile" onPress={() => this.editProfile()} /> */}
       </InfosWrapper>
     );
   }
