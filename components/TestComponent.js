@@ -11,7 +11,7 @@ export default class DummyComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ids: array
+      ids: array,
     };
   }
 
@@ -21,7 +21,7 @@ export default class DummyComponent extends Component {
     let ids = this.state.ids;
     ids[id] = 1;
     this.setState({
-      ids
+      ids,
     });
     console.log(`press start${id}`);
   }
@@ -30,7 +30,7 @@ export default class DummyComponent extends Component {
     let ids = this.state.ids;
     ids[id] = 1;
     this.setState({
-      ids
+      ids,
     });
     console.log(`press move${id}`);
   }
@@ -39,7 +39,7 @@ export default class DummyComponent extends Component {
     let ids = this.state.ids;
     ids[id] = 1;
     this.setState({
-      ids
+      ids,
     });
     console.log(`reject${id}`);
   }
@@ -52,13 +52,13 @@ export default class DummyComponent extends Component {
           id={j}
           key={j}
           style={this.state.ids[j] === 0 ? styles.cell : styles.cellColored}
-          onStartShouldSetResponder={ev => true}
-          onMoveShouldSetResponder={ev => true}
-          onResponderGrant={ev => this.onResponderGrant(j, ev)}
-          onResponderMove={ev => this.onResponderMove(j, ev)}
-          onResponderRelease={ev => {}}
-          onResponderTerminationRequest={ev => true}
-          onResponderTer={ev => {}}
+          onStartShouldSetResponder={(ev) => true}
+          onMoveShouldSetResponder={(ev) => true}
+          onResponderGrant={(ev) => this.onResponderGrant(j, ev)}
+          onResponderMove={(ev) => this.onResponderMove(j, ev)}
+          onResponderRelease={(ev) => {}}
+          onResponderTerminationRequest={(ev) => true}
+          onResponderTer={(ev) => {}}
         >
           <Text>{this.state.ids[j]}</Text>
         </View>
@@ -80,18 +80,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     flexDirection: "row",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   cell: {
     backgroundColor: "grey",
     height: 40,
     width: 40,
-    margin: 5
+    margin: 5,
   },
   cellColored: {
     backgroundColor: "coral",
     height: 40,
     width: 40,
-    margin: 5
-  }
+    margin: 5,
+  },
 });

@@ -15,20 +15,20 @@ const tabs = [
   {
     name: "Home",
     activeIcon: <HomeIcon width={33} height={33} />,
-    inactiveIcon: <HomeIcon width={33} height={33} />
+    inactiveIcon: <HomeIcon width={33} height={33} />,
   },
 
   {
     name: "New",
     activeIcon: <AddIcon width={33} height={33} />,
-    inactiveIcon: <AddIcon width={33} height={33} />
+    inactiveIcon: <AddIcon width={33} height={33} />,
   },
 
   {
     name: "Profile",
     activeIcon: <ProfileIcon width={33} height={33} />,
-    inactiveIcon: <ProfileIcon width={33} height={33} />
-  }
+    inactiveIcon: <ProfileIcon width={33} height={33} />,
+  },
 ];
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +40,7 @@ export default class MyTabbar extends Component {
 
   static defaultProps = {};
 
-  handleTabChange = active => {
+  handleTabChange = (active) => {
     this.props.navigation.navigate(active);
   };
 
@@ -72,6 +72,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1"
-  }
+    backgroundColor: "#ecf0f1",
+  },
 });

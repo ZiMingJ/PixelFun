@@ -13,7 +13,7 @@ import {
   HEADER_HEIGHT,
   PIXEL_COUNT,
   PIXEL_SIZE,
-  TOOLS
+  TOOLS,
 } from "../constants";
 
 let array = [];
@@ -37,7 +37,7 @@ const Grid = styled.View`
 `;
 
 const PixelBlock = styled.View`
-  background: ${props =>
+  background: ${(props) =>
     props.color === "none" ? props.backgroundColor : props.color};
   height: ${PIXEL_SIZE}px;
   width: ${PIXEL_SIZE}px;
@@ -60,7 +60,7 @@ class CanvasGrid extends Component {
       selectedTool: this.props.selectedTool,
       displayGrid: this.props.displayGrid,
       data: this.props.data,
-      updatedData: this.props.updatedData
+      updatedData: this.props.updatedData,
     };
   }
   static defaultProps = {
@@ -68,7 +68,7 @@ class CanvasGrid extends Component {
     currentColor: "pink",
     selectedTool: "pencil",
     displayGrid: true,
-    data: array
+    data: array,
   };
 
   dropBucket = (data, dropIndex, color, initialColor, initialData) => {
@@ -175,11 +175,11 @@ class CanvasGrid extends Component {
         color:
           this.props.selectedTool === TOOLS.PENCIL
             ? this.props.currentColor
-            : "none"
+            : "none",
       };
     }
     this.setState({
-      data: newData
+      data: newData,
     });
     this.props.updatedData([...newData]);
   };
@@ -194,8 +194,10 @@ class CanvasGrid extends Component {
           onStartShouldSetResponderCapture={() => true}
           onMoveShouldSetResponder={() => true}
           onMoveShouldSetResponderCapture={() => true}
-          onResponderGrant={evt => this.updateCanvas(evt, insets, headerHeight)}
-          onResponderMove={evt => {
+          onResponderGrant={(evt) =>
+            this.updateCanvas(evt, insets, headerHeight)
+          }
+          onResponderMove={(evt) => {
             this.updateCanvas(evt, insets, headerHeight);
           }}
           onResponderTerminationRequest={() => true}
@@ -217,7 +219,7 @@ class CanvasGrid extends Component {
   }
 }
 
-export default function(props) {
+export default function (props) {
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
   return (

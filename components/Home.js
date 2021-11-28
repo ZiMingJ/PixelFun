@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 
-import LikeIcon from "../assets/icons/like";
-import CommentIcon from "../assets/icons/comment";
-import MoreIcon from "../assets/icons/more";
+import LikeIcon from "../assets/like";
+import CommentIcon from "../assets/comment";
+import MoreIcon from "../assets/more";
 
 import {
   Text,
@@ -12,7 +12,7 @@ import {
   View,
   TextInput,
   Image,
-  FlatList
+  FlatList,
 } from "react-native";
 
 const Row = styled.View`
@@ -64,7 +64,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#EC9560",
     report: "babalabala",
-    author: "Jerromy"
+    author: "Jerromy",
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -73,7 +73,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#4BBED0",
     report: "babalabala",
-    author: "Jerromy"
+    author: "Jerromy",
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
@@ -82,8 +82,8 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#414954",
     report: "babalabala",
-    author: "Jerromy"
-  }
+    author: "Jerromy",
+  },
 ];
 
 const Item = ({
@@ -93,7 +93,7 @@ const Item = ({
   commentsCount,
   backgroundColor,
   report,
-  author
+  author,
 }) => {
   return (
     <Wrapper style={styles.item}>
@@ -101,12 +101,12 @@ const Item = ({
         <Row>
           <Image
             source={{
-              uri: `https://picsum.photos/id/125/250/250`
+              uri: `https://picsum.photos/id/125/250/250`,
             }}
             style={{
               width: 26,
               height: 26,
-              borderRadius: 13
+              borderRadius: 13,
             }}
           />
           <UserName>{author}</UserName>
@@ -116,11 +116,11 @@ const Item = ({
       <Row>
         <Image
           source={{
-            uri: `https://picsum.photos/id/125/250/250`
+            uri: `https://picsum.photos/id/125/250/250`,
           }}
           style={{
             width: 340,
-            height: 340
+            height: 340,
           }}
         />
       </Row>
@@ -163,7 +163,7 @@ export default class Home extends Component {
         <FlatList
           data={DATA}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
         />
       </View>
     );
@@ -175,9 +175,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
-  }
+    fontSize: 32,
+  },
 });
