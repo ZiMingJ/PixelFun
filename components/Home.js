@@ -51,31 +51,40 @@ const DATA = [
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      index: null
+    };
   }
 
   static defaultProps = {};
 
-  render() {
-    const renderItem = ({ item }) => (
-      <Card
-        title={item.title}
-        id={item.id}
-        likesCount={item.likesCount}
-        commentsCount={item.commentsCount}
-        backgroundColor={item.backgroundColor}
-        report={item.report}
-        author={item.author}
-      />
-    );
+  viewDetail = (index, item) => {
+    this.props.navigation.navigate("Detail", item);
+  };
 
+  renderItem = ({ index, item }) => (
+    <Card
+      viewDetail={this.viewDetail}
+      style={{ backgroundColor: "black" }}
+      title={item.title}
+      id={item.id}
+      likesCount={item.likesCount}
+      commentsCount={item.commentsCount}
+      backgroundColor={item.backgroundColor}
+      report={item.report}
+      author={item.author}
+      item={item}
+    />
+  );
+
+  render() {
     const { route, navigation } = this.props;
 
     return (
       <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
         <FlatList
           data={DATA}
-          renderItem={renderItem}
+          renderItem={this.renderItem}
           keyExtractor={item => item.id}
         />
         <ActionButton buttonColor="rgba(231,76,60,1)">

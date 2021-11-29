@@ -18,6 +18,8 @@ import { Picker } from "@react-native-picker/picker";
 import styled, { css } from "styled-components/native";
 import CanvasGrid from "./CanvasGrid";
 import { Background } from "@react-navigation/elements";
+import { useHeaderHeight } from "@react-navigation/elements";
+import Icon from "react-native-vector-icons/Ionicons";
 
 import Pencil from "../assets/icons/pencil.svg";
 import Undo from "../assets/icons/undo.svg";
@@ -25,6 +27,7 @@ import Bucket from "../assets/icons/bucket.svg";
 import Eraser from "../assets/icons/eraser.svg";
 import GridIcon from "../assets/icons/grid.svg";
 import Clear from "../assets/icons/clear.svg";
+
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const Wrapper = styled.View`
@@ -48,6 +51,20 @@ for (let i = 0; i < colors.length; i++) {
 }
 
 let history = [];
+
+const MyHeader = styled.View`
+  padding-top: 50px;
+  height: 80px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+`;
+
+const MyHeaderTitle = styled.Text`
+  font-size: 17px;
+  font-weight: 600;
+`;
 
 const Row = styled.View`
   flex-direction: row;
@@ -129,7 +146,7 @@ export default class Canvas extends Component {
       backgroundColor: "white",
       canvasData: this.getInitialCanvasData()
     });
-    navigation.goBack();
+    this.props.navigation.goBack();
   };
 
   updateColorMap = newColor => {
@@ -153,7 +170,17 @@ export default class Canvas extends Component {
         : route.params.newColor;
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style>
+        <MyHeader>
+          <Icon
+            name="md-backspace"
+            style={styles.actionButtonIcon}
+            onPress={() => this.goBack()}
+          ></Icon>
+          <MyHeaderTitle>Canvas</MyHeaderTitle>
+          <Icon name="md-save" style={styles.actionButtonIcon}></Icon>
+        </MyHeader>
+
         <CanvasGrid
           currentColor={this.state.currentColor}
           backgroundColor={this.state.backgroundColor}
@@ -327,5 +354,12 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 44 / 2
+  },
+
+  actionButtonIcon: {
+    fontSize: 30,
+    height: 30,
+    color: "skyblue",
+    marginHorizontal: 20
   }
 });

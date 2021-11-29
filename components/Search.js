@@ -40,6 +40,10 @@ export default class Search extends Component {
     this.setState({ search });
   };
 
+  viewDetail = item => {
+    this.props.navigation.navigate("Detail", item);
+  };
+
   render() {
     const { search } = this.state;
     return (
@@ -54,7 +58,11 @@ export default class Search extends Component {
           inputStyle={styles.input}
         />
         <ScrollView>
-          <PhotoGrid PhotosList={Photos} borderRadius={10} />
+          <PhotoGrid
+            PhotosList={Photos}
+            borderRadius={10}
+            viewDetail={this.viewDetail}
+          />
         </ScrollView>
       </View>
     );

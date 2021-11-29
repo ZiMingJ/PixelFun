@@ -60,79 +60,59 @@ const TimeLabel = styled.Text`
   color: #707070;
 `;
 
-const Item = ({
-  title,
-  id,
-  likesCount,
-  commentsCount,
-  backgroundColor,
-  report,
-  author
-}) => {};
-
-export default class Card extends Component {
+export default class Detail extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // title: this.props.title,
-      // id: this.props.id,
-      // likesCount: this.props.likesCount,
-      // commentsCount: this.props.commentsCount,
-      // backgroundColor: this.props.backgroundColor,
-      // report: this.props.report,
-      // author: this.props.author
-    };
+    this.state = {};
   }
 
   static defaultProps = {};
 
   render() {
     return (
-      <Wrapper
-        onPress={() => this.props.viewDetail(this.props.item)}
-        style={styles.item}
-      >
-        <TopRow>
+      <Wrapper style={styles.item}>
+        <Text>Detail</Text>
+        {/* <TopRow>
+            <Row>
+              <Image
+                source={{
+                  uri: `https://picsum.photos/id/125/250/250`
+                }}
+                style={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: 13
+                }}
+              />
+              <UserName>{this.props.author}</UserName>
+            </Row>
+            <MoreIcon width={25} height={25} />
+          </TopRow>
+  
           <Row>
             <Image
               source={{
                 uri: `https://picsum.photos/id/125/250/250`
               }}
               style={{
-                width: 26,
-                height: 26,
-                borderRadius: 13
+                width: 340,
+                height: 340
               }}
             />
-            <UserName>{this.props.author}</UserName>
           </Row>
-          <MoreIcon width={25} height={25} />
-        </TopRow>
-
-        <Row>
-          <Image
-            source={{
-              uri: `https://picsum.photos/id/125/250/250`
-            }}
-            style={{
-              width: 340,
-              height: 340
-            }}
-          />
-        </Row>
-
-        <Row>
-          <LikeIcon width={23} height={23} />
-          <IconLabel>{this.props.likesCount} likes</IconLabel>
-          <CommentIcon width={23} height={23} />
-          <IconLabel>{this.props.commentsCount} comments</IconLabel>
-        </Row>
-        <Row>
-          <Title>{this.props.title}</Title>
-        </Row>
-        <Row>
-          <TimeLabel>6 hours ago</TimeLabel>
-        </Row>
+  
+          <Row>
+            <LikeIcon width={23} height={23} />
+            <IconLabel>{this.props.likesCount} likes</IconLabel>
+            <CommentIcon width={23} height={23} />
+            <IconLabel>{this.props.commentsCount} comments</IconLabel>
+          </Row>
+          <Row>
+            <Title>{this.props.title}</Title>
+          </Row>
+          <Row>
+            <TimeLabel>6 hours ago</TimeLabel>
+          </Row> */}
       </Wrapper>
     );
   }

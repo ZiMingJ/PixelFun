@@ -7,6 +7,7 @@ import ColorPicker from "./components/ColorPicker";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Tabbar from "./components/Tabbar";
+import Detail from "./components/Detail";
 import { Card } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -14,6 +15,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { CardStyleInterpolators } from "@react-navigation/stack";
+import { TransitionPresets } from "@react-navigation/stack";
+import { HeaderStyleInterpolators } from "@react-navigation/stack";
 
 import "react-native-gesture-handler";
 //import React, { useEffect, useState } from "react";
@@ -82,20 +86,26 @@ export default function App() {
                       component={Tabbar}
                       options={{ headerShown: false }}
                     />
-                  </Stack.Group>
-                  <Stack.Group screenOptions={{}}>
                     <Stack.Screen
                       name="Canvas"
                       component={Canvas}
                       options={{
                         title: "Canvas",
-                        presentation: "modal"
+                        headerShown: false,
+                        ...TransitionPresets.ModalSlideFromBottomIOS
                       }}
                     />
+                  </Stack.Group>
+                  <Stack.Group screenOptions={{ presentation: "modal" }}>
                     <Stack.Screen
                       name="ColorPicker"
                       component={ColorPicker}
                       options={{ title: "ColorPicker" }}
+                    />
+                    <Stack.Screen
+                      name="Detail"
+                      component={Detail}
+                      options={{ title: "Detail" }}
                     />
                   </Stack.Group>
                 </>

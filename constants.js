@@ -1,6 +1,10 @@
-import { Dimensions } from "react-native";
 import { useHeaderHeight } from "@react-navigation/stack";
+import { Dimensions, DeviceInfo, Platform } from "react-native";
 
+export const getOrientation = () => {
+  const { width, height } = Dimensions.get("window");
+  return width > height ? LANDSCAPE : PORTRAIT;
+};
 export const STATES = {
   IDLE: "idle",
   LOADING: "loading",
