@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
-  Button,
+  Button
 } from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
@@ -110,14 +110,14 @@ const examples = [
   { name: "PUMPKIN", code: "#d35400" },
   { name: "POMEGRANATE", code: "#c0392b" },
   { name: "SILVER", code: "#bdc3c7" },
-  { name: "ASBESTOS", code: "#7f8c8d" },
+  { name: "ASBESTOS", code: "#7f8c8d" }
 ];
 
 export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDrafts: false,
+      showDrafts: false
     };
   }
 
@@ -133,12 +133,12 @@ export default class Profile extends Component {
           <Avatar>
             <Image
               source={{
-                uri: `https://picsum.photos/id/125/250/250`,
+                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`
               }}
               style={{
                 width: 80,
                 height: 80,
-                borderRadius: 40,
+                borderRadius: 40
               }}
             />
 
@@ -220,22 +220,22 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   gridView: {
     marginTop: 10,
-    flex: 1,
+    flex: 1
   },
   itemContainer: {
     justifyContent: "flex-end",
     borderRadius: 5,
     padding: 10,
-    height: 150,
+    height: 150
   },
   itemName: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: "600"
   },
   itemCode: {
     fontWeight: "600",
     fontSize: 12,
-    color: "#fff",
-  },
+    color: "#fff"
+  }
 });

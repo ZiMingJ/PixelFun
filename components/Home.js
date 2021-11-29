@@ -5,6 +5,9 @@ import styled, { css } from "styled-components/native";
 import LikeIcon from "../assets/like";
 import CommentIcon from "../assets/comment";
 import MoreIcon from "../assets/more";
+import Card from "./Card";
+import ActionButton from "react-native-action-button";
+import Icon from "react-native-vector-icons/Ionicons";
 
 import {
   Text,
@@ -12,49 +15,8 @@ import {
   View,
   TextInput,
   Image,
-  FlatList,
+  FlatList
 } from "react-native";
-
-const Row = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin: 5px 0 0 0;
-  align-items: center;
-  flex: 1;
-`;
-
-const Wrapper = styled.Pressable`
-  border-radius: 8px;
-  padding: 5px 20px 5px 20px;
-  margin-bottom: 10px;
-  align-items: flex-start;
-  justify-content: space-around;
-`;
-
-const TopRow = styled.View`
-  flex-direction: row;
-  margin: 0px 0 0 0;
-  align-items: center;
-  justify-content: center;
-`;
-const IconLabel = styled.Text`
-  font-size: 14px;
-  margin-left: 5px;
-  font-weight: 500;
-  margin-right: 10px;
-`;
-
-const UserName = styled.Text`
-  margin-left: 10px;
-  font-size: 14px;
-  font-weight: 500;
-`;
-
-const TimeLabel = styled.Text`
-  font-size: 13px;
-  font-weight: 400;
-  color: #707070;
-`;
 
 const DATA = [
   {
@@ -64,7 +26,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#EC9560",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -73,7 +35,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#4BBED0",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
@@ -82,60 +44,9 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#414954",
     report: "babalabala",
-    author: "Jerromy",
-  },
+    author: "Jerromy"
+  }
 ];
-
-const Item = ({
-  title,
-  id,
-  likesCount,
-  commentsCount,
-  backgroundColor,
-  report,
-  author,
-}) => {
-  return (
-    <Wrapper style={styles.item}>
-      <TopRow>
-        <Row>
-          <Image
-            source={{
-              uri: `https://picsum.photos/id/125/250/250`,
-            }}
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: 13,
-            }}
-          />
-          <UserName>{author}</UserName>
-        </Row>
-        <MoreIcon width={25} height={25} />
-      </TopRow>
-      <Row>
-        <Image
-          source={{
-            uri: `https://picsum.photos/id/125/250/250`,
-          }}
-          style={{
-            width: 340,
-            height: 340,
-          }}
-        />
-      </Row>
-      <Row>
-        <LikeIcon width={23} height={23} />
-        <IconLabel>{likesCount} likes</IconLabel>
-        <CommentIcon width={23} height={23} />
-        <IconLabel>{commentsCount} comments</IconLabel>
-      </Row>
-      <Row>
-        <TimeLabel>6 hours ago</TimeLabel>
-      </Row>
-    </Wrapper>
-  );
-};
 
 export default class Home extends Component {
   constructor(props) {
@@ -147,7 +58,7 @@ export default class Home extends Component {
 
   render() {
     const renderItem = ({ item }) => (
-      <Item
+      <Card
         title={item.title}
         id={item.id}
         likesCount={item.likesCount}
@@ -158,13 +69,40 @@ export default class Home extends Component {
       />
     );
 
+    const { route, navigation } = this.props;
+
     return (
-      <View>
+      <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
         <FlatList
           data={DATA}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
         />
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+          <ActionButton.Item
+            buttonColor="#9b59b6"
+            title="New Grid"
+            onPress={() => navigation.navigate("Canvas")}
+          >
+            <Icon name="md-grid" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+
+          <ActionButton.Item
+            buttonColor="#1abc9c"
+            title="Drafts"
+            onPress={() => {}}
+          >
+            <Icon name="md-folder-open" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+
+          <ActionButton.Item
+            buttonColor="#3498db"
+            title="Camera"
+            onPress={() => {}}
+          >
+            <Icon name="md-camera" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
       </View>
     );
   }
@@ -175,9 +113,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
-    fontSize: 32,
+    fontSize: 32
   },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: "white"
+  }
 });

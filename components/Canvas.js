@@ -9,7 +9,7 @@ import {
   Button,
   Dimensions,
   TouchableOpacity,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import { PIXEL_COUNT, TOOLS } from "../constants";
 
@@ -39,7 +39,7 @@ let colors = [
   "#35CE8D",
   "#4DB3FF",
   "#0085FF",
-  "#274B6D",
+  "#274B6D"
 ];
 
 let colorMap = [];
@@ -100,7 +100,7 @@ export default class Canvas extends Component {
       backgroundColor: "white",
       colorMap: colorMap,
       currentColor: colorMap[0].color,
-      canvasData: this.getInitialCanvasData(),
+      canvasData: this.getInitialCanvasData()
     };
   }
 
@@ -109,30 +109,30 @@ export default class Canvas extends Component {
   getInitialCanvasData = () =>
     Array.from(
       {
-        length: PIXEL_COUNT * PIXEL_COUNT,
+        length: PIXEL_COUNT * PIXEL_COUNT
       },
       () => ({ color: "none" })
     );
 
-  updateCanvas = (data) => {
+  updateCanvas = data => {
     history.push(this.state.canvasData);
     if (history.length > 10) {
       history.shift();
     }
     this.setState({
-      canvasData: data,
+      canvasData: data
     });
   };
 
   goBack = () => {
     this.setState({
       backgroundColor: "white",
-      canvasData: this.getInitialCanvasData(),
+      canvasData: this.getInitialCanvasData()
     });
     navigation.goBack();
   };
 
-  updateColorMap = (newColor) => {
+  updateColorMap = newColor => {
     let colorMap = this.state.colorMap;
     for (let i = 0; i < colorMap.length; i++) {
       if (colorMap[i].color === this.state.currentColor) {
@@ -141,7 +141,7 @@ export default class Canvas extends Component {
     }
     this.setState({
       colorMap,
-      currentColor: newColor,
+      currentColor: newColor
     });
   };
 
@@ -153,7 +153,7 @@ export default class Canvas extends Component {
         : route.params.newColor;
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <CanvasGrid
           currentColor={this.state.currentColor}
           backgroundColor={this.state.backgroundColor}
@@ -187,7 +187,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.PENCIL}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.PENCIL,
+                  selectedTool: TOOLS.PENCIL
                 })
               }
             >
@@ -197,7 +197,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.BUCKET}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.BUCKET,
+                  selectedTool: TOOLS.BUCKET
                 })
               }
             >
@@ -207,7 +207,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.ERASER}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.ERASER,
+                  selectedTool: TOOLS.ERASER
                 })
               }
             >
@@ -227,7 +227,7 @@ export default class Canvas extends Component {
               onPress={() => {
                 if (history.length > 1) {
                   this.setState({
-                    canvasData: history[history.length - 2],
+                    canvasData: history[history.length - 2]
                   });
                   history.pop();
                 }
@@ -242,7 +242,7 @@ export default class Canvas extends Component {
               active={this.state.displayGrid}
               onPress={() =>
                 this.setState({
-                  displayGrid: !this.state.displayGrid,
+                  displayGrid: !this.state.displayGrid
                 })
               }
             >
@@ -292,16 +292,16 @@ export default class Canvas extends Component {
                 onPress={() => {
                   if (this.state.displayDrawTab) {
                     this.setState({
-                      currentColor: item.color,
+                      currentColor: item.color
                     });
                     if (this.state.selectedTool === TOOLS.ERASER) {
                       this.setState({
-                        selectedTool: TOOLS.ERASER,
+                        selectedTool: TOOLS.ERASER
                       });
                     }
                   } else {
                     this.setState({
-                      backgroundColor: item.color,
+                      backgroundColor: item.color
                     });
                   }
                 }}
@@ -313,7 +313,7 @@ export default class Canvas extends Component {
           title="Customize"
           onPress={() => {
             this.props.navigation.navigate("ColorPicker", {
-              updateColorMap: this.updateColorMap,
+              updateColorMap: this.updateColorMap
             });
           }}
         />
@@ -326,6 +326,6 @@ const styles = StyleSheet.create({
   circle: {
     width: 44,
     height: 44,
-    borderRadius: 44 / 2,
-  },
+    borderRadius: 44 / 2
+  }
 });

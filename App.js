@@ -39,17 +39,17 @@ export default function App() {
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         usersRef
           .doc(user.uid)
           .get()
-          .then((document) => {
+          .then(document => {
             const userData = document.data();
             setLoading(false);
             setUser(userData);
           })
-          .catch((error) => {
+          .catch(error => {
             setLoading(false);
           });
       } else {
@@ -76,16 +76,28 @@ export default function App() {
             </Stack.Screen> */}
                   {/* <Tabbar /> */}
                   {/* <Stack.Screen name="Login" component={Tabbar} /> */}
-                  <Stack.Screen
-                    name="HomeTab"
-                    component={Tabbar}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="ColorPicker"
-                    component={ColorPicker}
-                    options={{ title: "ColorPicker" }}
-                  />
+                  <Stack.Group>
+                    <Stack.Screen
+                      name="HomeTab"
+                      component={Tabbar}
+                      options={{ headerShown: false }}
+                    />
+                  </Stack.Group>
+                  <Stack.Group screenOptions={{}}>
+                    <Stack.Screen
+                      name="Canvas"
+                      component={Canvas}
+                      options={{
+                        title: "Canvas",
+                        presentation: "modal"
+                      }}
+                    />
+                    <Stack.Screen
+                      name="ColorPicker"
+                      component={ColorPicker}
+                      options={{ title: "ColorPicker" }}
+                    />
+                  </Stack.Group>
                 </>
               ) : (
                 <>
@@ -108,6 +120,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-  },
+    backgroundColor: "#ecf0f1"
+  }
 });

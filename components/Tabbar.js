@@ -8,28 +8,12 @@ import ProfileIcon from "../assets/icons/profile";
 import AddIcon from "../assets/icons/add";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../components/Home";
+import Search from "../components/Search";
 import Profile from "../components/Profile";
 import Canvas from "../components/Canvas";
 
-const tabs = [
-  {
-    name: "Home",
-    activeIcon: <HomeIcon width={33} height={33} />,
-    inactiveIcon: <HomeIcon width={33} height={33} />,
-  },
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-  {
-    name: "New",
-    activeIcon: <AddIcon width={33} height={33} />,
-    inactiveIcon: <AddIcon width={33} height={33} />,
-  },
-
-  {
-    name: "Profile",
-    activeIcon: <ProfileIcon width={33} height={33} />,
-    inactiveIcon: <ProfileIcon width={33} height={33} />,
-  },
-];
 const Tab = createBottomTabNavigator();
 
 export default class MyTabbar extends Component {
@@ -40,7 +24,7 @@ export default class MyTabbar extends Component {
 
   static defaultProps = {};
 
-  handleTabChange = (active) => {
+  handleTabChange = active => {
     this.props.navigation.navigate(active);
   };
 
@@ -48,9 +32,28 @@ export default class MyTabbar extends Component {
     const { route, navigation } = this.props;
 
     return (
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === "Home") {
+              iconName = focused ? "home" : "home-outline";
+            } else if (route.name === "Profile") {
+              iconName = focused ? "person" : "person-outline";
+            } else if (route.name === "Search") {
+              iconName = focused ? "search" : "search-outline";
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: "tomato",
+          tabBarInactiveTintColor: "gray"
+        })}
+      >
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Canvas" component={Canvas} />
+        <Tab.Screen name="Search" component={Search} />
         <Tab.Screen name="Profile" component={Profile} />
       </Tab.Navigator>
       // <View style={styles.container}>
@@ -72,6 +75,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-  },
+    backgroundColor: "#ecf0f1"
+  }
 });
