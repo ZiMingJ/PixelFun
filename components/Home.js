@@ -8,6 +8,7 @@ import MoreIcon from "../assets/more";
 import Card from "./Card";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
+import { firebase } from "../firebase/config";
 
 import {
   Text,
@@ -15,7 +16,8 @@ import {
   View,
   TextInput,
   Image,
-  FlatList
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 
 const DATA = [
@@ -26,7 +28,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#EC9560",
     report: "babalabala",
-    author: "Jerromy"
+    author: "Jerromy",
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -35,7 +37,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#4BBED0",
     report: "babalabala",
-    author: "Jerromy"
+    author: "Jerromy",
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
@@ -44,15 +46,16 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#414954",
     report: "babalabala",
-    author: "Jerromy"
-  }
+    author: "Jerromy",
+  },
 ];
-
+const imagesRef = firebase.firestore().collection("images");
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      index: null
+      index: null,
+      userID: this.props.extraData,
     };
   }
 
@@ -76,22 +79,83 @@ export default class Home extends Component {
       item={item}
     />
   );
+  componentDidMount() {
+    imagesRef
+      //.where("authorID", "==", userID)
+      .orderBy("publishTime")
+      .onSnapshot(
+        (querySnapshot) => {
+          const newEntities = [];
+          querySnapshot.forEach((doc) => {
+            const entity = doc.data();
+            entity.id = doc.id;
+            newEntities.push(entity);
+          });
+          // setEntities(newEntities);
+          console.log("GET!!!!");
+          console.log(newEntities[0].title);
+          console.log(newEntities[0].likes);
+          console.log(newEntities[0].comments);
+          console.log(newEntities[0].publishTime);
+          console.log(newEntities[0].backGroundColor);
+          console.log(newEntities[0].canvasData[0]);
+          console.log(newEntities[1].userID);
+          console.log("GET!!!!");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  onLogout() {
+    console.log("Before1");
+    console.log(this.state.userID);
+    console.log("Before2");
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        console.log("After1");
+        console.log(this.state.userID);
+        console.log("After2");
+        this.props.navigation.navigate("Login");
+        // firebase.auth().onAuthStateChanged((user) => {
+        //   if (user) {
+        //   } else {
+
+        //   }
+        // });
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  }
 
   render() {
     const { route, navigation } = this.props;
 
     return (
       <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
+        <Text>{this.state.userID}</Text>
+        <TouchableOpacity style={styles.button} onPress={() => this.onLogout()}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
         <FlatList
           data={DATA}
           renderItem={this.renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
         />
         <ActionButton buttonColor="rgba(231,76,60,1)">
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="New Grid"
-            onPress={() => navigation.navigate("Canvas")}
+            onPress={() =>
+              navigation.navigate("Canvas", {
+                uid: this.props.extraData,
+              })
+            }
           >
             <Icon name="md-grid" style={styles.actionButtonIcon} />
           </ActionButton.Item>
@@ -122,14 +186,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
+    fontSize: 32,
   },
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: "white"
-  }
+    color: "white",
+  },
 });

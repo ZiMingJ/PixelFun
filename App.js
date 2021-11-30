@@ -43,17 +43,17 @@ export default function App() {
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         usersRef
           .doc(user.uid)
           .get()
-          .then(document => {
+          .then((document) => {
             const userData = document.data();
             setLoading(false);
             setUser(userData);
           })
-          .catch(error => {
+          .catch((error) => {
             setLoading(false);
           });
       } else {
@@ -63,7 +63,12 @@ export default function App() {
   }, []);
 
   if (loading) {
-    return <></>;
+    console.log("No User!");
+    return (
+      <>
+        <Text>No User!!!</Text>
+      </>
+    );
   }
 
   return (
@@ -75,9 +80,13 @@ export default function App() {
             <Stack.Navigator>
               {user ? (
                 <>
-                  {/* <Stack.Screen name="Home">
-              {(props) => <HomeScreen {...props} extraData={user} />}
-            </Stack.Screen> */}
+                  {/* <Stack.Screen
+                    name="HomeTab"
+                    component={Tabbar}
+                    options={{ headerShown: false }}
+                  >
+                    {(props) => <Tabbar {...props} extraData={user} />}
+                  </Stack.Screen> */}
                   {/* <Tabbar /> */}
                   {/* <Stack.Screen name="Login" component={Tabbar} /> */}
                   <Stack.Group>
@@ -92,8 +101,13 @@ export default function App() {
                       options={{
                         title: "Canvas",
                         headerShown: false,
-                        ...TransitionPresets.ModalSlideFromBottomIOS
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
                       }}
+                    />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen
+                      name="Registration"
+                      component={RegistrationScreen}
                     />
                   </Stack.Group>
                   <Stack.Group screenOptions={{ presentation: "modal" }}>
@@ -111,6 +125,13 @@ export default function App() {
                 </>
               ) : (
                 <>
+                  {/* <Stack.Screen
+                    name="HomeTab"
+                    //component={Tabbar}
+                    options={{ headerShown: false }}
+                  > */}
+                  {/* {(props) => <Tabbar {...props} extraData={user} />} */}
+                  {/* </Stack.Screen> */}
                   <Stack.Screen name="Login" component={LoginScreen} />
                   <Stack.Screen
                     name="Registration"
@@ -130,6 +151,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1"
-  }
+    backgroundColor: "#ecf0f1",
+  },
 });
