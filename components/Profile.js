@@ -12,6 +12,7 @@ import {
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
 import { firebase } from "../firebase/config";
+import PixelArt from "./PixelArt";
 
 const HeaderWrapper = styled.View`
   padding: 20px 30px 10px 5px;
@@ -120,7 +121,9 @@ export default class Profile extends Component {
     super(props);
     this.state = {
       userID: this.props.extraData,
-      showDrafts: false
+      showDrafts: false,
+      published: examples,
+      drafts: examples
     };
   }
 
@@ -138,6 +141,10 @@ export default class Profile extends Component {
             entity.id = doc.id;
             newEntities.push(entity);
           });
+          this.setState({
+            published: newEntities
+          });
+
           // setEntities(newEntities);
           console.log("GETPUBLISH!!!!");
           console.log(newEntities[0].title);
@@ -164,7 +171,10 @@ export default class Profile extends Component {
             entity.id = doc.id;
             newEntities.push(entity);
           });
-          // setEntities(newEntities);
+          this.setState({
+            drafts: newEntities
+          });
+
           console.log("GETDRAFT!!!!");
           console.log(newEntities[0].createdAt);
           console.log(newEntities[0].backGroundColor);
@@ -180,7 +190,15 @@ export default class Profile extends Component {
   editProfile = () => {
     this.props.navigation.navigate("EditProfile");
   };
-
+  renderItem = ({ index, item }) => (
+    <View style={{ borderColor: "black", borderWidth: 1 }}>
+      <PixelArt
+        data={item.canvasData}
+        backgroundColor={item.backGroundColor}
+        size={130}
+      />
+    </View>
+  );
   render() {
     const { route, navigation } = this.props;
     return (
@@ -223,7 +241,7 @@ export default class Profile extends Component {
         <EditButton onPress={() => navigation.navigate("EditProfile")}>
           <EditProfile>Edit Profile</EditProfile>
         </EditButton>
-
+        <Text>{this.state.published.length}</Text>
         <ButtonsRow>
           <IconButton
             title="Published"
@@ -247,19 +265,12 @@ export default class Profile extends Component {
         {!this.state.showDrafts ? (
           <FlatGrid
             itemDimension={130}
-            data={examples}
+            data={this.state.published}
             style={styles.gridView}
             // staticDimension={300}
             // fixed
             spacing={10}
-            renderItem={({ item }) => (
-              <View
-                style={[styles.itemContainer, { backgroundColor: item.code }]}
-              >
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemCode}>{item.code}</Text>
-              </View>
-            )}
+            renderItem={this.renderItem}
           />
         ) : (
           // <FlatGrid

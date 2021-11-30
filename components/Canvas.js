@@ -6,10 +6,10 @@ import {
   View,
   TextInput,
   Image,
-  Button,
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import { PIXEL_COUNT, TOOLS } from "../constants";
 
@@ -21,6 +21,7 @@ import { Background } from "@react-navigation/elements";
 import { useHeaderHeight } from "@react-navigation/elements";
 import Icon from "react-native-vector-icons/Ionicons";
 import { firebase } from "../firebase/config";
+import { Button, Overlay } from "react-native-elements";
 
 import Pencil from "../assets/icons/pencil.svg";
 import Undo from "../assets/icons/undo.svg";
@@ -28,6 +29,7 @@ import Bucket from "../assets/icons/bucket.svg";
 import Eraser from "../assets/icons/eraser.svg";
 import GridIcon from "../assets/icons/grid.svg";
 import Clear from "../assets/icons/clear.svg";
+import { is } from "css-select";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -43,7 +45,7 @@ let colors = [
   "#35CE8D",
   "#4DB3FF",
   "#0085FF",
-  "#274B6D",
+  "#274B6D"
 ];
 
 let colorMap = [];
@@ -106,6 +108,14 @@ const IconButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
 `;
+
+const CustomizeButton = styled.TouchableOpacity`
+  alignItems: center;
+  backgroundColor: #DDDDDD;
+  padding: 10px;
+  margin: 20px 100px 20px 100px;
+>`;
+
 const imagesRef = firebase.firestore().collection("images");
 const draftsRef = firebase.firestore().collection("drafts");
 export default class Canvas extends Component {
@@ -121,11 +131,14 @@ export default class Canvas extends Component {
       currentColor: colorMap[0].color,
       canvasData: this.getInitialCanvasData(),
       userID: 0,
+      isVisible: false
     };
   }
 
   static defaultProps = {};
-  onPublishPress = () => {
+
+  onPublishPress = title => {
+    console.log(title);
     //if (entityText && entityText.length > 0) {
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const data = {
@@ -133,17 +146,16 @@ export default class Canvas extends Component {
       backGroundColor: this.state.backgroundColor,
       canvasData: this.state.canvasData,
       publishTime: timestamp,
-      title: "hahaha",
+      title: title,
       likes: 0,
-      comments: 0,
+      comments: 0
     };
     imagesRef
       .add(data)
-      .then((_doc) => {
-        // setEntityText("");
-        // Keyboard.dismiss();
+      .then(_doc => {
+        this.props.navigation.navigate("Home");
       })
-      .catch((error) => {
+      .catch(error => {
         alert(error);
       });
     //}
@@ -156,15 +168,16 @@ export default class Canvas extends Component {
       userID: this.state.userID,
       backGroundColor: this.state.backgroundColor,
       canvasData: this.state.canvasData,
-      createdAt: timestamp,
+      createdAt: timestamp
     };
     draftsRef
       .add(data)
-      .then((_doc) => {
+      .then(_doc => {
+        this.props.navigation.navigate("Home");
         // setEntityText("");
         // Keyboard.dismiss();
       })
-      .catch((error) => {
+      .catch(error => {
         alert(error);
       });
     //}
@@ -172,30 +185,30 @@ export default class Canvas extends Component {
   getInitialCanvasData = () =>
     Array.from(
       {
-        length: PIXEL_COUNT * PIXEL_COUNT,
+        length: PIXEL_COUNT * PIXEL_COUNT
       },
       () => ({ color: "none" })
     );
 
-  updateCanvas = (data) => {
+  updateCanvas = data => {
     history.push(this.state.canvasData);
     if (history.length > 10) {
       history.shift();
     }
     this.setState({
-      canvasData: data,
+      canvasData: data
     });
   };
 
   goBack = () => {
     this.setState({
       backgroundColor: "white",
-      canvasData: this.getInitialCanvasData(),
+      canvasData: this.getInitialCanvasData()
     });
     this.props.navigation.goBack();
   };
 
-  updateColorMap = (newColor) => {
+  updateColorMap = newColor => {
     let colorMap = this.state.colorMap;
     for (let i = 0; i < colorMap.length; i++) {
       if (colorMap[i].color === this.state.currentColor) {
@@ -204,7 +217,7 @@ export default class Canvas extends Component {
     }
     this.setState({
       colorMap,
-      currentColor: newColor,
+      currentColor: newColor
     });
   };
 
@@ -215,18 +228,58 @@ export default class Canvas extends Component {
         ? this.state.currentColor
         : route.params.newColor;
     this.state.userID = route.params === undefined ? 0 : route.params.uid;
+    const nonEmpty = this.state.canvasData.some(item => item.color !== "none");
     return (
       <View style>
         <MyHeader>
           <Icon
             name="md-backspace"
             style={styles.actionButtonIcon}
-            onPress={() => this.goBack()}
+            onPress={() => {
+              if (nonEmpty) {
+                Alert.alert(
+                  "Save your work?",
+                  "You can edit it later from your profile page.",
+                  [
+                    {
+                      text: "No thanks",
+                      onPress: () => {
+                        this.goBack();
+                      },
+                      style: "destructive"
+                    },
+                    {
+                      text: "Sure!",
+                      onPress: () => {
+                        this.onDraftPress();
+                        this.goBack();
+                      }
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              } else {
+                this.goBack();
+              }
+            }}
           ></Icon>
           <MyHeaderTitle>Canvas</MyHeaderTitle>
-          <Icon name="md-save" style={styles.actionButtonIcon}></Icon>
+          <Icon
+            name="md-save"
+            style={styles.actionButtonIcon}
+            onPress={() => {
+              if (nonEmpty) {
+                navigation.navigate("Publish", {
+                  canvasData: this.state.canvasData,
+                  backgroundColor: this.state.backgroundColor,
+                  onPublishPress: this.onPublishPress
+                });
+              } else {
+                Alert.alert("Oh no!", "You cannot submit an empty canvas!");
+              }
+            }}
+          ></Icon>
         </MyHeader>
-
         <CanvasGrid
           currentColor={this.state.currentColor}
           backgroundColor={this.state.backgroundColor}
@@ -260,7 +313,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.PENCIL}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.PENCIL,
+                  selectedTool: TOOLS.PENCIL
                 })
               }
             >
@@ -270,7 +323,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.BUCKET}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.BUCKET,
+                  selectedTool: TOOLS.BUCKET
                 })
               }
             >
@@ -280,7 +333,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.ERASER}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.ERASER,
+                  selectedTool: TOOLS.ERASER
                 })
               }
             >
@@ -300,7 +353,7 @@ export default class Canvas extends Component {
               onPress={() => {
                 if (history.length > 1) {
                   this.setState({
-                    canvasData: history[history.length - 2],
+                    canvasData: history[history.length - 2]
                   });
                   history.pop();
                 }
@@ -315,7 +368,7 @@ export default class Canvas extends Component {
               active={this.state.displayGrid}
               onPress={() =>
                 this.setState({
-                  displayGrid: !this.state.displayGrid,
+                  displayGrid: !this.state.displayGrid
                 })
               }
             >
@@ -365,16 +418,16 @@ export default class Canvas extends Component {
                 onPress={() => {
                   if (this.state.displayDrawTab) {
                     this.setState({
-                      currentColor: item.color,
+                      currentColor: item.color
                     });
                     if (this.state.selectedTool === TOOLS.ERASER) {
                       this.setState({
-                        selectedTool: TOOLS.ERASER,
+                        selectedTool: TOOLS.ERASER
                       });
                     }
                   } else {
                     this.setState({
-                      backgroundColor: item.color,
+                      backgroundColor: item.color
                     });
                   }
                 }}
@@ -382,16 +435,37 @@ export default class Canvas extends Component {
             ))}
           </Row>
         </ScrollView>
-        <Button
-          title="Customize"
+        <CustomizeButton
           onPress={() => {
             this.props.navigation.navigate("ColorPicker", {
               updateColorMap: this.updateColorMap,
+              currentColor: this.state.currentColor
             });
           }}
-        />
-        <Button title="Publish" onPress={this.onPublishPress} />
+        >
+          <Text>Customize</Text>
+        </CustomizeButton>
+        {/* <Button title="Publish" onPress={this.onPublishPress} />
         <Button title="Draft" onPress={this.onDraftPress} />
+        <Button
+          title="Open Overlay"
+          onPress={() =>
+            this.setState({
+              isVisible: !this.state.isVisible
+            })
+          }
+        />
+
+        <Overlay
+          isVisible={this.state.isVisible}
+          onBackdropPress={() =>
+            this.setState({
+              isVisible: !this.state.isVisible
+            })
+          }
+        >
+          <Text>Hello from Overlay!</Text>
+        </Overlay> */}
       </View>
     );
   }
@@ -401,13 +475,13 @@ const styles = StyleSheet.create({
   circle: {
     width: 44,
     height: 44,
-    borderRadius: 44 / 2,
+    borderRadius: 44 / 2
   },
 
   actionButtonIcon: {
     fontSize: 30,
     height: 30,
     color: "skyblue",
-    marginHorizontal: 20,
-  },
+    marginHorizontal: 20
+  }
 });

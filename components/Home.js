@@ -69,12 +69,12 @@ export default class Home extends Component {
   renderItem = ({ index, item }) => (
     <Card
       viewDetail={this.viewDetail}
-      style={{ backgroundColor: "black" }}
+      data={item.canvasData}
       title={item.title}
       id={item.id}
       likesCount={item.likes}
       commentsCount={item.comments}
-      backgroundColor={item.backgroundColor}
+      backgroundColor={item.backGroundColor}
       report={item.report}
       author={item.author}
       item={item}
@@ -83,7 +83,7 @@ export default class Home extends Component {
   componentDidMount() {
     imagesRef
       //.where("authorID", "==", userID)
-      .orderBy("publishTime")
+      .orderBy("publishTime", "desc")
       .onSnapshot(
         querySnapshot => {
           const newEntities = [];
@@ -92,19 +92,11 @@ export default class Home extends Component {
             entity.id = doc.id;
             newEntities.push(entity);
           });
+          console.log(newEntities.length);
           // setEntities(newEntities);
           this.setState({
             data: newEntities
           });
-          console.log("GET!!!!");
-          console.log(newEntities[0].title);
-          console.log(newEntities[0].likes);
-          console.log(newEntities[0].comments);
-          console.log(newEntities[0].publishTime);
-          console.log(newEntities[0].backGroundColor);
-          console.log(newEntities[0].canvasData[0]);
-          console.log(newEntities[1].userID);
-          console.log("GET!!!!");
         },
         error => {
           console.log(error);
@@ -137,12 +129,37 @@ export default class Home extends Component {
       });
   }
 
+  componentDidMount() {
+    imagesRef
+      //.where("authorID", "==", userID)
+      .orderBy("publishTime", "desc")
+      .onSnapshot(
+        querySnapshot => {
+          const newEntities = [];
+          querySnapshot.forEach(doc => {
+            const entity = doc.data();
+            entity.id = doc.id;
+            newEntities.push(entity);
+          });
+          console.log(newEntities.length);
+          // setEntities(newEntities);
+          this.setState({
+            data: newEntities
+          });
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
   render() {
     const { route, navigation } = this.props;
 
     return (
       <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
         <Text>{this.state.userID}</Text>
+        <Text>{this.state.data.length}</Text>
+
         <TouchableOpacity style={styles.button} onPress={() => this.onLogout()}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>

@@ -6,7 +6,7 @@ class ColorPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newColor: "pink",
+      newColor: "pink"
     };
   }
 
@@ -18,8 +18,7 @@ class ColorPicker extends React.Component {
 
   render() {
     const { route, navigation } = this.props;
-    console.log(route.params);
-    const { updateColorMap } = route.params;
+    const { updateColorMap, currentColor } = route.params;
     return (
       <View style={styles.container}>
         <View style={{ flex: 1, padding: 45, backgroundColor: "#212021" }}>
@@ -27,14 +26,14 @@ class ColorPicker extends React.Component {
             title="Confirm"
             onPress={() => {
               this.props.navigation.navigate("Canvas", {
-                newColor: this.state.newColor,
+                newColor: this.state.newColor
               });
             }}
           />
 
           <TriangleColorPicker
-            oldColor="white"
-            onColorChange={(color) => this.onColorChange(color, updateColorMap)}
+            oldColor={currentColor}
+            onColorChange={color => this.onColorChange(color, updateColorMap)}
             style={{ flex: 1 }}
           />
         </View>
@@ -47,14 +46,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 45,
-    backgroundColor: "#212021",
+    backgroundColor: "#212021"
   },
   touchable: {
-    padding: 5,
+    padding: 5
   },
   text: {
-    color: "white",
-  },
+    color: "white"
+  }
 });
 
 export default ColorPicker;

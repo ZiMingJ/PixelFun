@@ -5482,6 +5482,11 @@
     "base64-js" "^1.5.1"
     "xmlbuilder" "^9.0.7"
 
+"popup-ui@^1.2.2":
+  "integrity" "sha512-2vJZ79lOSyHuVEH0zHfB8ga3LY9xYpuggKA2sT9tTKbcOsKlJnuvY/kEugIM1xW0+svxWE9Orku1tRQQvR9Hog=="
+  "resolved" "https://registry.npmjs.org/popup-ui/-/popup-ui-1.2.2.tgz"
+  "version" "1.2.2"
+
 "posix-character-classes@^0.1.0":
   "integrity" "sha1-AerA/jta9xoqbAL+q7jB/vfgDqs="
   "resolved" "https://registry.npmjs.org/posix-character-classes/-/posix-character-classes-0.1.1.tgz"

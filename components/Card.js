@@ -5,6 +5,7 @@ import styled, { css } from "styled-components/native";
 import LikeIcon from "../assets/like";
 import CommentIcon from "../assets/comment";
 import MoreIcon from "../assets/more";
+import PixelArt from "./PixelArt";
 import {
   Text,
   StyleSheet,
@@ -110,7 +111,7 @@ export default class Card extends Component {
         </TopRow>
 
         <Row>
-          <Image
+          {/* <Image
             source={{
               uri: `https://picsum.photos/id/125/250/250`
             }}
@@ -118,6 +119,11 @@ export default class Card extends Component {
               width: 340,
               height: 340
             }}
+          /> */}
+          <PixelArt
+            size={340}
+            backgroundColor={this.props.backgroundColor}
+            data={this.props.data}
           />
         </Row>
 

@@ -9,7 +9,7 @@ import Profile from "./components/Profile";
 import Tabbar from "./components/Tabbar";
 import Detail from "./components/Detail";
 import EditProfile from "./components/EditProfile";
-
+import Publish from "./components/Publish";
 import { Card } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -110,6 +110,11 @@ export default function App() {
                     <Stack.Screen
                       name="Registration"
                       component={RegistrationScreen}
+                    />
+                    <Stack.Screen
+                      name="Publish"
+                      component={Publish}
+                      options={{ title: "Publish" }}
                     />
                   </Stack.Group>
                   <Stack.Group screenOptions={{ presentation: "modal" }}>
