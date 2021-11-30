@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 
-import LikeIcon from "../assets/like";
-import CommentIcon from "../assets/comment";
-import MoreIcon from "../assets/more";
 import Card from "./Card";
 import { PhotoGrid } from "./PhotoGrid";
 import { SearchBar } from "react-native-elements";

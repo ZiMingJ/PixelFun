@@ -8,6 +8,8 @@ import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Tabbar from "./components/Tabbar";
 import Detail from "./components/Detail";
+import EditProfile from "./components/EditProfile";
+
 import { Card } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -43,17 +45,17 @@ export default function App() {
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         usersRef
           .doc(user.uid)
           .get()
-          .then((document) => {
+          .then(document => {
             const userData = document.data();
             setLoading(false);
             setUser(userData);
           })
-          .catch((error) => {
+          .catch(error => {
             setLoading(false);
           });
       } else {
@@ -101,7 +103,7 @@ export default function App() {
                       options={{
                         title: "Canvas",
                         headerShown: false,
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                        ...TransitionPresets.ModalSlideFromBottomIOS
                       }}
                     />
                     <Stack.Screen name="Login" component={LoginScreen} />
@@ -120,6 +122,11 @@ export default function App() {
                       name="Detail"
                       component={Detail}
                       options={{ title: "Detail" }}
+                    />
+                    <Stack.Screen
+                      name="EditProfile"
+                      component={EditProfile}
+                      options={{ title: "Edit Profile" }}
                     />
                   </Stack.Group>
                 </>
@@ -151,6 +158,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-  },
+    backgroundColor: "#ecf0f1"
+  }
 });

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
-  Button,
+  Button
 } from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
@@ -111,7 +111,7 @@ const examples = [
   { name: "PUMPKIN", code: "#d35400" },
   { name: "POMEGRANATE", code: "#c0392b" },
   { name: "SILVER", code: "#bdc3c7" },
-  { name: "ASBESTOS", code: "#7f8c8d" },
+  { name: "ASBESTOS", code: "#7f8c8d" }
 ];
 const imagesRef = firebase.firestore().collection("images");
 const draftsRef = firebase.firestore().collection("drafts");
@@ -120,19 +120,20 @@ export default class Profile extends Component {
     super(props);
     this.state = {
       userID: this.props.extraData,
-      showDrafts: false,
+      showDrafts: false
     };
   }
 
   static defaultProps = {};
+
   componentDidMount() {
     imagesRef
       .where("userID", "==", this.state.userID)
       .orderBy("publishTime")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
@@ -148,7 +149,7 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETPUBLISh!!!!");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -156,9 +157,9 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("createdAt")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
@@ -171,27 +172,29 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETDRAFT!!!!");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
   }
   editProfile = () => {
-    console.log("edit");
+    this.props.navigation.navigate("EditProfile");
   };
+
   render() {
+    const { route, navigation } = this.props;
     return (
       <InfosWrapper>
         <HeaderWrapper>
           <Avatar>
             <Image
               source={{
-                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`,
+                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`
               }}
               style={{
                 width: 80,
                 height: 80,
-                borderRadius: 40,
+                borderRadius: 40
               }}
             />
 
@@ -217,7 +220,7 @@ export default class Profile extends Component {
           </NumberWrapper>
         </HeaderWrapper>
 
-        <EditButton onPress={() => this.editProfile()}>
+        <EditButton onPress={() => navigation.navigate("EditProfile")}>
           <EditProfile>Edit Profile</EditProfile>
         </EditButton>
 
@@ -289,22 +292,22 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   gridView: {
     marginTop: 10,
-    flex: 1,
+    flex: 1
   },
   itemContainer: {
     justifyContent: "flex-end",
     borderRadius: 5,
     padding: 10,
-    height: 150,
+    height: 150
   },
   itemName: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: "600"
   },
   itemCode: {
     fontWeight: "600",
     fontSize: 12,
-    color: "#fff",
-  },
+    color: "#fff"
+  }
 });
