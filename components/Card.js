@@ -151,7 +151,7 @@ export default class Card extends Component {
           <Title>{this.props.title}</Title>
         </Row>
         <Row>
-          <TimeLabel>6 hours ago</TimeLabel>
+          <TimeLabel>{this.props.publishTime.toString()}></TimeLabel>
         </Row>
       </Wrapper>
     );

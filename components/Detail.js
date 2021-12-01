@@ -7,7 +7,7 @@ import CommentIcon from "../assets/comment";
 import MoreIcon from "../assets/more";
 import PixelArt from "./PixelArt";
 import Icon from "react-native-vector-icons/Ionicons";
-
+import Comment from "./Comment";
 import {
   Text,
   StyleSheet,
@@ -78,6 +78,12 @@ const TimeLabel = styled.Text`
   font-weight: 400;
   color: #c1c1c1;
 `;
+const InfosText = styled.Text`
+  font-weight: 600;
+  font-size: 14px;
+  color: ${({ theme }) => theme.secondaryText};
+  margin: 15px 0;
+`;
 
 const commentsContent = [];
 for (let i = 0; i < 5; i++) {
@@ -85,7 +91,8 @@ for (let i = 0; i < 5; i++) {
     id: i,
     user: "daisy",
     time: new Date(),
-    detail: "dadhsahuaiwhou"
+    text: "dadhsahuaiwhou",
+    userId: "safhsauhaoshaoh"
   });
 }
 export default class Detail extends Component {
@@ -160,6 +167,20 @@ export default class Detail extends Component {
             <CommentIcon width={25} height={25} />
             <IconLabel>{item.comments}</IconLabel>
           </Row>
+          {commentsContent.length === 0 ? (
+            <InfosText>There's nothing to show here yet!</InfosText>
+          ) : (
+            commentsContent.map((item, i) => (
+              <Comment
+                key={i}
+                text={item.text}
+                id={item.id}
+                user={item.user}
+                time={item.time}
+                userId={item.userId}
+              />
+            ))
+          )}
         </ScrollView>
         <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={70}>
           <InputWrapper insetBottom={30}>

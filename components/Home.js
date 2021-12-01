@@ -78,6 +78,7 @@ export default class Home extends Component {
       report={item.report}
       author={item.author}
       item={item}
+      publishTime={item.publishTime}
     />
   );
 
