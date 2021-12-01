@@ -126,10 +126,16 @@ export default class Canvas extends Component {
       selectedTool: "pencil",
       displayGrid: true,
       drawerShown: false,
-      backgroundColor: "white",
+      backgroundColor:
+        this.props.route.params.backgroundColor === undefined
+          ? "white"
+          : this.props.route.params.backgroundColor,
       colorMap: colorMap,
       currentColor: colorMap[0].color,
-      canvasData: this.getInitialCanvasData(),
+      canvasData:
+        this.props.route.params.initialData === undefined
+          ? this.getInitialCanvasData()
+          : this.props.route.params.initialData,
       userID: 0,
       isVisible: false
     };
@@ -182,6 +188,7 @@ export default class Canvas extends Component {
       });
     //}
   };
+
   getInitialCanvasData = () =>
     Array.from(
       {
@@ -229,6 +236,7 @@ export default class Canvas extends Component {
         : route.params.newColor;
     this.state.userID = route.params === undefined ? 0 : route.params.uid;
     const nonEmpty = this.state.canvasData.some(item => item.color !== "none");
+
     return (
       <View style>
         <MyHeader>
