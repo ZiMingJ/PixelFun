@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
   Button,
-  Alert,
+  Alert
 } from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
@@ -115,8 +115,9 @@ const examples = [
   { name: "PUMPKIN", code: "#d35400" },
   { name: "POMEGRANATE", code: "#c0392b" },
   { name: "SILVER", code: "#bdc3c7" },
-  { name: "ASBESTOS", code: "#7f8c8d" },
+  { name: "ASBESTOS", code: "#7f8c8d" }
 ];
+
 const imagesRef = firebase.firestore().collection("images");
 const draftsRef = firebase.firestore().collection("drafts");
 const usersRef = firebase.firestore().collection("users");
@@ -128,6 +129,8 @@ export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      photoUrl:
+        "https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/%E5%A5%B6%E8%8C%B6%E8%80%97%E5%AD%90.jpg?alt=media&token=1c0107af-ea10-4295-b890-2b082d907bf6",
       userID: this.props.extraData,
       showDrafts: false,
       published: examples,
@@ -135,13 +138,13 @@ export default class Profile extends Component {
       userName: null,
       postsNum: null,
       likesNum: null,
-      draftsNum: null,
+      draftsNum: null
     };
   }
 
   static defaultProps = {};
 
-  deletePhoto = (item) => {
+  deletePhoto = item => {
     //Detele the photo here
     console.log("delete");
     imagesRef.doc(item.id).delete();
@@ -165,15 +168,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("publishTime", "desc")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            published: newEntities,
+            published: newEntities
           });
 
           // setEntities(newEntities);
@@ -187,7 +190,7 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETPUBLISh!!!!");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -195,15 +198,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("createdAt")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            drafts: newEntities,
+            drafts: newEntities
           });
 
           console.log("GETDRAFT!!!!");
@@ -213,14 +216,14 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETDRAFT!!!!");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
     usersRef.where("id", "==", this.state.userID).onSnapshot(
-      (querySnapshot) => {
+      querySnapshot => {
         const newEntities = [];
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(doc => {
           const entity = doc.data();
           // entity.id = doc.id;
           // newEntities.push(entity);
@@ -228,7 +231,7 @@ export default class Profile extends Component {
             userName: doc.data().fullName,
             postsNum: doc.data().posts,
             likesNum: doc.data().likes,
-            draftsNum: doc.data().drafts,
+            draftsNum: doc.data().drafts
           });
           console.log("FULLNAME!!!!!");
           console.log(doc.data().fullName);
@@ -239,7 +242,7 @@ export default class Profile extends Component {
         //   data: newEntities,
         // });
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -250,15 +253,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("publishTime", "desc")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            published: newEntities,
+            published: newEntities
           });
 
           // setEntities(newEntities);
@@ -272,7 +275,7 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETPUBLISh!!!!");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -280,15 +283,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("createdAt")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            drafts: newEntities,
+            drafts: newEntities
           });
 
           console.log("GETDRAFT!!!!");
@@ -298,14 +301,14 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETDRAFT!!!!");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
     usersRef.where("id", "==", this.state.userID).onSnapshot(
-      (querySnapshot) => {
+      querySnapshot => {
         const newEntities = [];
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(doc => {
           const entity = doc.data();
           // entity.id = doc.id;
           // newEntities.push(entity);
@@ -313,7 +316,7 @@ export default class Profile extends Component {
             userName: doc.data().fullName,
             postsNum: doc.data().posts,
             likesNum: doc.data().likes,
-            draftsNum: doc.data().drafts,
+            draftsNum: doc.data().drafts
           });
           console.log("FULLNAME!!!!!");
           console.log(doc.data().fullName);
@@ -324,14 +327,12 @@ export default class Profile extends Component {
         //   data: newEntities,
         // });
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
   }
-  editProfile = () => {
-    this.props.navigation.navigate("EditProfile");
-  };
+
   renderDraftItem = ({ index, item }) => (
     <TouchableOpacity
       style={{ borderColor: "grey", borderWidth: 1 }}
@@ -340,7 +341,7 @@ export default class Profile extends Component {
           initialData: item.canvasData,
           backgroundColor: item.backGroundColor,
           uid: this.state.userID,
-          itemId: item.id,
+          itemId: item.id
         });
       }}
     >
@@ -361,15 +362,15 @@ export default class Profile extends Component {
           [
             {
               text: "Cancel",
-              onPress: () => {},
+              onPress: () => {}
             },
             {
               text: "Detele",
               onPress: () => {
                 this.deletePhoto(item);
               },
-              style: "destructive",
-            },
+              style: "destructive"
+            }
           ],
           { cancelable: false }
         );
@@ -390,12 +391,12 @@ export default class Profile extends Component {
           <Avatar>
             <Image
               source={{
-                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`,
+                uri: this.state.photoUrl
               }}
               style={{
                 width: 80,
                 height: 80,
-                borderRadius: 40,
+                borderRadius: 40
               }}
             />
 
@@ -421,7 +422,14 @@ export default class Profile extends Component {
           </NumberWrapper>
         </HeaderWrapper>
 
-        <EditButton onPress={() => navigation.navigate("EditProfile")}>
+        <EditButton
+          onPress={() =>
+            navigation.navigate("EditProfile", {
+              name: "testname",
+              url: this.state.photoUrl
+            })
+          }
+        >
           <EditProfile>Edit Profile</EditProfile>
         </EditButton>
         <ButtonsRow>
@@ -471,22 +479,22 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   gridView: {
     marginTop: 10,
-    flex: 1,
+    flex: 1
   },
   itemContainer: {
     justifyContent: "flex-end",
     borderRadius: 5,
     padding: 10,
-    height: 150,
+    height: 150
   },
   itemName: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: "600"
   },
   itemCode: {
     fontWeight: "600",
     fontSize: 12,
-    color: "#fff",
-  },
+    color: "#fff"
+  }
 });

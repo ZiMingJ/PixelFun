@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Button } from "react-native";
 import Constants from "expo-constants";
 
 import Canvas from "./components/Canvas";
@@ -46,17 +46,17 @@ export default function App() {
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         usersRef
           .doc(user.uid)
           .get()
-          .then((document) => {
+          .then(document => {
             const userData = document.data();
             setLoading(false);
             setUser(userData);
           })
-          .catch((error) => {
+          .catch(error => {
             setLoading(false);
           });
       } else {
@@ -104,7 +104,7 @@ export default function App() {
                       options={{
                         title: "Canvas",
                         headerShown: false,
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                        ...TransitionPresets.ModalSlideFromBottomIOS
                       }}
                     />
                     <Stack.Screen name="Login" component={LoginScreen} />
@@ -115,7 +115,9 @@ export default function App() {
                     <Stack.Screen
                       name="Publish"
                       component={Publish}
-                      options={{ title: "Publish" }}
+                      options={{
+                        title: "Publish"
+                      }}
                     />
                   </Stack.Group>
                   <Stack.Group screenOptions={{ presentation: "modal" }}>
@@ -132,8 +134,24 @@ export default function App() {
                     <Stack.Screen
                       name="EditProfile"
                       component={EditProfile}
-                      options={{ title: "Edit Profile" }}
+                      options={({ navigation, route }) => ({
+                        headerTitle: "Edit Profile"
+                      })}
                     />
+                    {/* <Stack.Screen
+                      name="EditProfile"
+                      component={EditProfile}
+                      options={{
+                        headerTitle: "Edit Profile",
+                        headerRight: () => (
+                          <Button
+                            onPress={() => alert("This is a button!")}
+                            title="Save  "
+                            color="tomato"
+                          />
+                        )
+                      }}
+                    /> */}
                   </Stack.Group>
                 </>
               ) : (
@@ -164,6 +182,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-  },
+    backgroundColor: "#ecf0f1"
+  }
 });

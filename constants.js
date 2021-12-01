@@ -65,3 +65,11 @@ export const MONTHS_FULL = [
   "November",
   "December"
 ];
+
+const Photos = [];
+for (let i = 0; i < 12; i++) {
+  Photos.push(
+    "https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77"
+  );
+}
+export const AvatorPhotos = Photos;

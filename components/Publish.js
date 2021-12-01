@@ -14,7 +14,8 @@ import {
   AppRegistry,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from "react-native";
 
 const Title = styled.Text`
@@ -23,16 +24,25 @@ const Title = styled.Text`
 `;
 
 const Wrapper = styled.View`
+  flex: 1;
+  background-color: white;
+`;
+
+const TitleWrapper = styled.View`
+  border-top-width: 1px;
+  border-color: grey;
+  padding-top: 25px;
+  padding-bottom: 40px;
   justify-content: center;
-  height: 50px;
   align-items: center;
   flex-direction: row;
 `;
+
 const PublishButton = styled.TouchableOpacity`
   alignItems: center;
   backgroundColor: #DDDDDD;
   padding: 10px;
-  margin: 20px 100px 20px 100px;
+  margin: 30px 100px 20px 100px;
 >`;
 
 export default class Publish extends Component {
@@ -50,13 +60,13 @@ export default class Publish extends Component {
     const { route, navigation } = this.props;
     const { backgroundColor, canvasData, onPublishPress } = route.params;
     return (
-      <View>
+      <Wrapper>
         <PixelArt
           data={canvasData}
           backgroundColor={backgroundColor}
           size={Dimensions.get("window").width}
         />
-        <Wrapper>
+        <TitleWrapper>
           <Icon
             name="pencil"
             style={{
@@ -68,16 +78,18 @@ export default class Publish extends Component {
           ></Icon>
 
           <Title>Name Your Work</Title>
-        </Wrapper>
-
-        <Input
-          placeholder="balabala"
-          onChangeText={value =>
-            this.setState({
-              title: value
-            })
-          }
-        />
+        </TitleWrapper>
+        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={70}>
+          <Input
+            containerStyle={{ backgroundColor: "white", padding: 12 }}
+            placeholder="Title..."
+            onChangeText={value =>
+              this.setState({
+                title: value
+              })
+            }
+          />
+        </KeyboardAvoidingView>
         <PublishButton
           onPress={() => {
             this.setState({
@@ -92,7 +104,7 @@ export default class Publish extends Component {
             <Text>Publish</Text>
           )}
         </PublishButton>
-      </View>
+      </Wrapper>
     );
   }
 }

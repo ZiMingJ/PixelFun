@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { Input } from "react-native-elements";
+import { AvatorPhotos } from "../constants";
+import { FlatGrid } from "react-native-super-grid";
 
 import {
   Text,
@@ -10,6 +14,9 @@ import {
   Image,
   AppRegistry,
   ScrollView,
+  TouchableOpacity,
+  Button,
+  Alert
 } from "react-native";
 
 const Avatar = styled.View`
@@ -19,7 +26,12 @@ const Avatar = styled.View`
   align-items: center;
   justify-content: space-around;
 `;
-
+const Wrapper = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+`;
 const EditButton = styled.TouchableOpacity`
   background: white;
   justify-content: center;
@@ -35,71 +47,117 @@ const Row = styled.View`
   align-items: center;
   margin: 5px 0 0 0;
   align-items: center;
-  flex: 1;
+  background-color: white;
 `;
-const RowBox = styled.View`
-  margin-left: 50px;
-`;
-const EDitText = styled.TextInput`
-  margin-left: 50px;
-`;
+
 const RowText = styled.Text`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
+  margin-right: 30px;
 `;
 
 export default class EditProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      name: this.props.route === undefined ? "" : this.props.route.params.name,
+      url: this.props.route === undefined ? "" : this.props.route.params.url
+    };
   }
 
   static defaultProps = {};
 
+  onSubmit = () => {
+    // {name:this.state.name}
+    // {photoUrl:this.state.url}
+    Alert.alert("Sucess", "Save!");
+    this.props.navigation.goBack();
+  };
+
+  renderItem = ({ item, index }) => (
+    <TouchableOpacity
+      style={{ borderColor: "grey", borderWidth: 1 }}
+      onPress={() => {
+        this.setState({
+          url: item
+        });
+      }}
+    >
+      <Image
+        source={{
+          uri: item
+        }}
+        style={{
+          width: 120,
+          height: 120
+        }}
+      />
+    </TouchableOpacity>
+  );
+
   render() {
-    const {} = this.props;
+    const { route, navigation } = this.props;
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          onPress={() => this.onSubmit()}
+          title="Save   "
+          color="tomato"
+        />
+      )
+    });
+
     return (
-      <View>
-        <Text>EditProfile</Text>
+      <Wrapper>
         <Avatar>
           <Image
             source={{
-              uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`,
+              uri: this.state.url
             }}
             style={{
-              width: 80,
-              height: 80,
-              borderRadius: 40,
+              width: 100,
+              height: 100,
+              borderRadius: 50
             }}
           />
         </Avatar>
-        <EditButton onPress={() => console.log("eidt avator")}>
-          <EditProfile>Edit Profile Photo</EditProfile>
-        </EditButton>
-
         <Row>
-          <RowBox>
-            <RowText>Name</RowText>
-          </RowBox>
-          <RowBox>
-            {/* <RowText>{this.props.Name}</RowText> */}
-            <RowText>Name</RowText>
-          </RowBox>
+          <RowText>Name</RowText>
+          <TextInput
+            defaultValue={this.state.name}
+            style={{
+              height: 40,
+              width: 200,
+              borderColor: "gray",
+              borderBottomWidth: 1
+            }}
+            onChangeText={text => this.setState({ name: text })}
+          />
         </Row>
-      </View>
+        <FlatGrid
+          data={AvatorPhotos}
+          style={styles.gridView}
+          spacing={10}
+          renderItem={this.renderItem}
+        />
+      </Wrapper>
     );
   }
 }
 
 const styles = {
   container: {
-    alignItems: "center",
+    alignItems: "center"
   },
   inputContainer: {
     height: 30,
-    backgroundColor: "#EFEFEF",
+    backgroundColor: "#EFEFEF"
   },
   input: {
-    fontSize: 16,
+    fontSize: 16
   },
+  gridView: {
+    marginTop: 10,
+    flex: 1
+  }
 };
