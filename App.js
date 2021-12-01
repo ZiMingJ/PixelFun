@@ -30,6 +30,7 @@ import { firebase } from "./firebase/config";
 // import { createStackNavigator } from "@react-navigation/stack";
 import { LoginScreen, HomeScreen, RegistrationScreen } from "./screens";
 import { decode, encode } from "base-64";
+import storage from "./store";
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -45,17 +46,17 @@ export default function App() {
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         usersRef
           .doc(user.uid)
           .get()
-          .then(document => {
+          .then((document) => {
             const userData = document.data();
             setLoading(false);
             setUser(userData);
           })
-          .catch(error => {
+          .catch((error) => {
             setLoading(false);
           });
       } else {
@@ -103,7 +104,7 @@ export default function App() {
                       options={{
                         title: "Canvas",
                         headerShown: false,
-                        ...TransitionPresets.ModalSlideFromBottomIOS
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
                       }}
                     />
                     <Stack.Screen name="Login" component={LoginScreen} />
@@ -163,6 +164,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1"
-  }
+    backgroundColor: "#ecf0f1",
+  },
 });

@@ -9,7 +9,7 @@ import {
   TextInput,
   Image,
   AppRegistry,
-  ScrollView
+  ScrollView,
 } from "react-native";
 
 const Avatar = styled.View`
@@ -64,12 +64,12 @@ export default class EditProfile extends Component {
         {/* <Avatar>
           <Image
             source={{
-              uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`
+              uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`,
             }}
             style={{
               width: 80,
               height: 80,
-              borderRadius: 40
+              borderRadius: 40,
             }}
           />
         </Avatar>
@@ -82,7 +82,8 @@ export default class EditProfile extends Component {
             <RowText>Name</RowText>
           </RowBox>
           <RowBox>
-            <RowText>{this.props.Name}</RowText>
+            {/* <RowText>{this.props.Name}</RowText> */}
+            <RowText>Name</RowText>
           </RowBox>
         </Row> */}
       </View>
@@ -92,13 +93,13 @@ export default class EditProfile extends Component {
 
 const styles = {
   container: {
-    alignItems: "center"
+    alignItems: "center",
   },
   inputContainer: {
     height: 30,
-    backgroundColor: "#EFEFEF"
+    backgroundColor: "#EFEFEF",
   },
   input: {
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 };

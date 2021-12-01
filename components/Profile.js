@@ -9,12 +9,13 @@ import {
   Image,
   Dimensions,
   Button,
-  Alert
+  Alert,
 } from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
 import { firebase } from "../firebase/config";
 import PixelArt from "./PixelArt";
+import storage from "../store";
 
 const HeaderWrapper = styled.View`
   padding: 20px 30px 10px 5px;
@@ -114,10 +115,11 @@ const examples = [
   { name: "PUMPKIN", code: "#d35400" },
   { name: "POMEGRANATE", code: "#c0392b" },
   { name: "SILVER", code: "#bdc3c7" },
-  { name: "ASBESTOS", code: "#7f8c8d" }
+  { name: "ASBESTOS", code: "#7f8c8d" },
 ];
 const imagesRef = firebase.firestore().collection("images");
 const draftsRef = firebase.firestore().collection("drafts");
+const usersRef = firebase.firestore().collection("users");
 
 const publishImages1 = [];
 const draftImages1 = [];
@@ -129,30 +131,49 @@ export default class Profile extends Component {
       userID: this.props.extraData,
       showDrafts: false,
       published: examples,
-      drafts: examples
+      drafts: examples,
+      userName: null,
+      postsNum: null,
+      likesNum: null,
+      draftsNum: null,
     };
   }
 
   static defaultProps = {};
 
-  deletePhoto = item => {
+  deletePhoto = (item) => {
     //Detele the photo here
     console.log("delete");
+    imagesRef.doc(item.id).delete();
   };
   componentWillMount() {
+    // storage
+    //   .load({
+    //     key: "uid",
+    //   })
+    //   .then((ret) => {
+    //     this.setState({
+    //       userID: ret.id,
+    //     });
+    //     console.log(ret.id);
+    //     console.log("success!");
+    //   })
+    //   .catch((err) => {
+    //     console.warn(err.message);
+    //   });
     imagesRef
       .where("userID", "==", this.state.userID)
       .orderBy("publishTime", "desc")
       .onSnapshot(
-        querySnapshot => {
+        (querySnapshot) => {
           const newEntities = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            published: newEntities
+            published: newEntities,
           });
 
           // setEntities(newEntities);
@@ -166,7 +187,7 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETPUBLISh!!!!");
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -174,15 +195,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("createdAt")
       .onSnapshot(
-        querySnapshot => {
+        (querySnapshot) => {
           const newEntities = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            drafts: newEntities
+            drafts: newEntities,
           });
 
           console.log("GETDRAFT!!!!");
@@ -192,10 +213,36 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETDRAFT!!!!");
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
+    usersRef.where("id", "==", this.state.userID).onSnapshot(
+      (querySnapshot) => {
+        const newEntities = [];
+        querySnapshot.forEach((doc) => {
+          const entity = doc.data();
+          // entity.id = doc.id;
+          // newEntities.push(entity);
+          this.setState({
+            userName: doc.data().fullName,
+            postsNum: doc.data().posts,
+            likesNum: doc.data().likes,
+            draftsNum: doc.data().drafts,
+          });
+          console.log("FULLNAME!!!!!");
+          console.log(doc.data().fullName);
+        });
+        //console.log(newEntities.length);
+        // setEntities(newEntities);
+        // this.setState({
+        //   data: newEntities,
+        // });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   componentDidMount() {
@@ -203,15 +250,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("publishTime", "desc")
       .onSnapshot(
-        querySnapshot => {
+        (querySnapshot) => {
           const newEntities = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            published: newEntities
+            published: newEntities,
           });
 
           // setEntities(newEntities);
@@ -225,7 +272,7 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETPUBLISh!!!!");
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -233,15 +280,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.state.userID)
       .orderBy("createdAt")
       .onSnapshot(
-        querySnapshot => {
+        (querySnapshot) => {
           const newEntities = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            drafts: newEntities
+            drafts: newEntities,
           });
 
           console.log("GETDRAFT!!!!");
@@ -251,34 +298,36 @@ export default class Profile extends Component {
           console.log(newEntities[0].userID);
           console.log("GETDRAFT!!!!");
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
-    // draftsRef
-    //   .where("userID", "==", this.state.userID)
-    //   .orderBy("createdAt")
-    //   .onSnapshot(
-    //     (querySnapshot) => {
-    //       querySnapshot.forEach((doc) => {
-    //         const entity = doc.data();
-    //         entity.id = doc.id;
-    //         this.state.draftImages.push(entity);
-    //       });
-    //       // setEntities(newEntities);
-    //       console.log("GETDRAFT!!!!");
-    //       console.log(this.state.draftImages[0].createdAt);
-
-    //       console.log(this.state.draftImages[0].backGroundColor);
-    //       console.log(this.state.draftImages[0].canvasData[0]);
-
-    //       console.log(this.state.draftImages[0].userID);
-    //       console.log("GETDRAFT!!!!");
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     }
-    //   );
+    usersRef.where("id", "==", this.state.userID).onSnapshot(
+      (querySnapshot) => {
+        const newEntities = [];
+        querySnapshot.forEach((doc) => {
+          const entity = doc.data();
+          // entity.id = doc.id;
+          // newEntities.push(entity);
+          this.setState({
+            userName: doc.data().fullName,
+            postsNum: doc.data().posts,
+            likesNum: doc.data().likes,
+            draftsNum: doc.data().drafts,
+          });
+          console.log("FULLNAME!!!!!");
+          console.log(doc.data().fullName);
+        });
+        //console.log(newEntities.length);
+        // setEntities(newEntities);
+        // this.setState({
+        //   data: newEntities,
+        // });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
   editProfile = () => {
     this.props.navigation.navigate("EditProfile");
@@ -289,7 +338,9 @@ export default class Profile extends Component {
       onPress={() => {
         this.props.navigation.navigate("Canvas", {
           initialData: item.canvasData,
-          backgroundColor: item.backGroundColor
+          backgroundColor: item.backGroundColor,
+          uid: this.state.userID,
+          itemId: item.id,
         });
       }}
     >
@@ -310,15 +361,15 @@ export default class Profile extends Component {
           [
             {
               text: "Cancel",
-              onPress: () => {}
+              onPress: () => {},
             },
             {
               text: "Detele",
               onPress: () => {
                 this.deletePhoto(item);
               },
-              style: "destructive"
-            }
+              style: "destructive",
+            },
           ],
           { cancelable: false }
         );
@@ -339,31 +390,31 @@ export default class Profile extends Component {
           <Avatar>
             <Image
               source={{
-                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`
+                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`,
               }}
               style={{
                 width: 80,
                 height: 80,
-                borderRadius: 40
+                borderRadius: 40,
               }}
             />
 
-            <UserName>profile</UserName>
+            <UserName>{this.state.userName}</UserName>
           </Avatar>
           <NumberWrapper>
-            <Number>3</Number>
+            <Number>{this.state.postsNum}</Number>
             <View>
               <Tag>Posts</Tag>
             </View>
           </NumberWrapper>
           <NumberWrapper>
-            <Number>7</Number>
+            <Number>{this.state.likesNum}</Number>
             <View>
               <Tag>Likes</Tag>
             </View>
           </NumberWrapper>
           <NumberWrapper>
-            <Number>0</Number>
+            <Number>{this.state.draftsNum}</Number>
             <View>
               <Tag>Drafts</Tag>
             </View>
@@ -420,22 +471,22 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   gridView: {
     marginTop: 10,
-    flex: 1
+    flex: 1,
   },
   itemContainer: {
     justifyContent: "flex-end",
     borderRadius: 5,
     padding: 10,
-    height: 150
+    height: 150,
   },
   itemName: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "600"
+    fontWeight: "600",
   },
   itemCode: {
     fontWeight: "600",
     fontSize: 12,
-    color: "#fff"
-  }
+    color: "#fff",
+  },
 });
