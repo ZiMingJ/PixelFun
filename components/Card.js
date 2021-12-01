@@ -81,7 +81,6 @@ export default class Card extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      preventDefault: false,
       // title: this.props.title,
       // id: this.props.id,
       likesCount: this.props.likesCount,
@@ -118,9 +117,9 @@ export default class Card extends Component {
                 uri: `https://picsum.photos/id/125/250/250`
               }}
               style={{
-                width: 26,
-                height: 26,
-                borderRadius: 13
+                width: 30,
+                height: 30,
+                borderRadius: 15
               }}
             />
             <UserName>{this.props.author}</UserName>
@@ -129,15 +128,6 @@ export default class Card extends Component {
         </TopRow>
 
         <Row>
-          {/* <Image
-            source={{
-              uri: `https://picsum.photos/id/125/250/250`
-            }}
-            style={{
-              width: 340,
-              height: 340
-            }}
-          /> */}
           <PixelArt
             size={340}
             backgroundColor={this.props.backgroundColor}
@@ -145,12 +135,6 @@ export default class Card extends Component {
           />
         </Row>
 
-        {/* <Row>
-          <LikeIcon width={23} height={23} />
-          <IconLabel>{this.state.likesCount} likes</IconLabel>
-          <CommentIcon width={23} height={23} />
-          <IconLabel>{this.props.commentsCount} comments</IconLabel>
-        </Row> */}
         <Row>
           <Pressable onPress={e => this.pressLike()}>
             {this.state.islike ? (

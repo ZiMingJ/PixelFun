@@ -62,8 +62,8 @@ export default class Home extends Component {
 
   static defaultProps = {};
 
-  viewDetail = (index, item) => {
-    this.props.navigation.navigate("Detail", item);
+  viewDetail = item => {
+    this.props.navigation.navigate("Detail", { item: item });
   };
 
   renderItem = ({ index, item }) => (
@@ -145,6 +145,7 @@ export default class Home extends Component {
           renderItem={this.renderItem}
           keyExtractor={item => item.id}
         />
+
         <ActionButton buttonColor="rgba(231,76,60,1)">
           <ActionButton.Item
             buttonColor="#9b59b6"
