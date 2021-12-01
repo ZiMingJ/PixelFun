@@ -71,7 +71,7 @@ export default function LoginScreen({ navigation }) {
 
             //AsyncStorage.setItem("uid", JSON.stringify(uid));
             console.log(uid + "NEW ID");
-            navigation.navigate("HomeTab", { user: user });
+            //navigation.navigate("HomeTab", { user: user });
             navigation.navigate("HomeTab", {
               uid: uid,
             });

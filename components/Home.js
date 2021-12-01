@@ -66,7 +66,11 @@ export default class Home extends Component {
   static defaultProps = {};
 
   viewDetail = (item) => {
-    this.props.navigation.navigate("Detail", { item: item });
+    this.props.navigation.navigate("Detail", {
+      itemId: item.id,
+      item: item,
+      uid: this.props.extraData,
+    });
   };
 
   renderItem = ({ index, item }) => (
@@ -108,7 +112,7 @@ export default class Home extends Component {
 
   onLogout() {
     console.log("Before1");
-    console.log(this.state.userID);
+    console.log(this.props.extraData);
     console.log("Before2");
     firebase
       .auth()
@@ -116,7 +120,7 @@ export default class Home extends Component {
       .then(() => {
         // Sign-out successful.
         console.log("After1");
-        console.log(this.state.userID);
+        console.log(this.props.extraData);
         console.log("After2");
         this.props.navigation.navigate("Login");
         // firebase.auth().onAuthStateChanged((user) => {
@@ -190,7 +194,7 @@ export default class Home extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
-        <Text>{this.state.userID}</Text>
+        <Text>{this.props.extraData}</Text>
         <Text>{this.state.data.length}</Text>
 
         <TouchableOpacity style={styles.button} onPress={() => this.onLogout()}>

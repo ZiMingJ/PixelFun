@@ -13,7 +13,7 @@ import Profile from "../components/Profile";
 import Canvas from "../components/Canvas";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import { DeviceEventEmitter } from "react-native";
 const Tab = createBottomTabNavigator();
 
 export default class MyTabbar extends Component {
@@ -24,10 +24,14 @@ export default class MyTabbar extends Component {
 
   static defaultProps = {};
 
-  handleTabChange = active => {
+  handleTabChange = (active) => {
     this.props.navigation.navigate(active);
   };
-
+  componentDidMount() {
+    // 注册事件通知
+    DeviceEventEmitter.emit("testName");
+    //testName:通知的名称 param：发送的消息（传参）
+  }
   render() {
     const { route, navigation } = this.props;
 
@@ -49,11 +53,11 @@ export default class MyTabbar extends Component {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray"
+          tabBarInactiveTintColor: "gray",
         })}
       >
         <Tab.Screen name="Home">
-          {props => (
+          {(props) => (
             <Home
               {...props}
               extraData={route.params === undefined ? 0 : route.params.uid}
@@ -62,9 +66,8 @@ export default class MyTabbar extends Component {
         </Tab.Screen>
         <Tab.Screen name="Search" component={Search} />
         <Tab.Screen name="Profile">
-          {props => (
+          {() => (
             <Profile
-              {...props}
               extraData={route.params === undefined ? 0 : route.params.uid}
             />
           )}
@@ -89,6 +92,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1"
-  }
+    backgroundColor: "#ecf0f1",
+  },
 });
