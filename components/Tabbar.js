@@ -66,8 +66,9 @@ export default class MyTabbar extends Component {
         </Tab.Screen>
         <Tab.Screen name="Search" component={Search} />
         <Tab.Screen name="Profile">
-          {() => (
+          {(props) => (
             <Profile
+              {...props}
               extraData={route.params === undefined ? 0 : route.params.uid}
             />
           )}

@@ -172,7 +172,7 @@ export default class Profile extends Component {
         console.warn(err.message);
       });
     imagesRef
-      .where("userID", "==", this.state.userID)
+      .where("userID", "==", this.props.extraData)
       .orderBy("publishTime", "desc")
       .onSnapshot(
         (querySnapshot) => {
@@ -202,7 +202,7 @@ export default class Profile extends Component {
         }
       );
     draftsRef
-      .where("userID", "==", this.state.userID)
+      .where("userID", "==", this.props.extraData)
       .orderBy("createdAt")
       .onSnapshot(
         (querySnapshot) => {
@@ -227,7 +227,7 @@ export default class Profile extends Component {
           console.log(error);
         }
       );
-    usersRef.where("id", "==", this.state.userID).onSnapshot(
+    usersRef.where("id", "==", this.props.extraData).onSnapshot(
       (querySnapshot) => {
         const newEntities = [];
         querySnapshot.forEach((doc) => {
@@ -282,7 +282,7 @@ export default class Profile extends Component {
     //     console.warn(err.message);
     //   });
     imagesRef
-      .where("userID", "==", this.state.userID)
+      .where("userID", "==", this.props.extraData)
       .orderBy("publishTime", "desc")
       .onSnapshot(
         (querySnapshot) => {
@@ -312,7 +312,7 @@ export default class Profile extends Component {
         }
       );
     draftsRef
-      .where("userID", "==", this.state.userID)
+      .where("userID", "==", this.props.extraData)
       .orderBy("createdAt")
       .onSnapshot(
         (querySnapshot) => {
@@ -337,7 +337,7 @@ export default class Profile extends Component {
           console.log(error);
         }
       );
-    usersRef.where("id", "==", this.state.userID).onSnapshot(
+    usersRef.where("id", "==", this.props.extraData).onSnapshot(
       (querySnapshot) => {
         const newEntities = [];
         querySnapshot.forEach((doc) => {
@@ -371,7 +371,7 @@ export default class Profile extends Component {
         this.props.navigation.navigate("Canvas", {
           initialData: item.canvasData,
           backgroundColor: item.backGroundColor,
-          uid: this.state.userID,
+          uid: item.userID,
           itemId: item.id,
         });
       }}

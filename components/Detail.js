@@ -86,7 +86,6 @@ const InfosText = styled.Text`
   margin: 15px 0;
 `;
 
-const commentsContent = [];
 // for (let i = 0; i < 5; i++) {
 //   commentsContent.push({
 //     id: i,
@@ -116,6 +115,7 @@ export default class Detail extends Component {
           ? 0
           : this.props.route.params.itemId,
       userName: null,
+      commentsContent: [],
     };
   }
 
@@ -141,6 +141,7 @@ export default class Detail extends Component {
         querySnapshot.forEach((doc) => {
           this.setState({ userName: doc.data().fullName });
         });
+        console.log(this.state.userName);
         // this.setState({
         //   published: newEntities,
         // });
@@ -149,25 +150,32 @@ export default class Detail extends Component {
         console.log(error);
       }
     );
-    commentsRef
-      .where("itemId", "==", this.state.itemId)
-      .orderBy("commentTime", "desc")
-      .onSnapshot(
-        (querySnapshot) => {
-          //const newEntities = [];
-          querySnapshot.forEach((doc) => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            commentsContent.push(entity);
-          });
-          // this.setState({
-          //   published: newEntities,
-          // });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    if (this.state.itemId !== 0 && this.state.commentsContent.length === 0) {
+      //commentsContent = null;
+      commentsRef
+        .where("itemId", "==", this.state.itemId)
+        .orderBy("commentTime", "desc")
+        .onSnapshot(
+          (querySnapshot) => {
+            const newEntities = [];
+            querySnapshot.forEach((doc) => {
+              const entity = doc.data();
+              entity.id = doc.id;
+              newEntities.push(entity);
+            });
+            this.setState({
+              commentsContent: newEntities,
+            });
+            //console.log(commentsContent);
+            // this.setState({
+            //   published: newEntities,
+            // });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }
   }
 
   pressLike = () => {
@@ -195,7 +203,7 @@ export default class Detail extends Component {
                 borderRadius: 15,
               }}
             />
-            <UserName>{item.author}</UserName>
+            <UserName>{this.state.userName}</UserName>
           </Row>
           <PixelArt
             data={item.canvasData}
@@ -212,7 +220,7 @@ export default class Detail extends Component {
               paddingBottom: 16,
             }}
           >
-            <TimeLabel>{item.publishTime.toString()}</TimeLabel>
+            {/* <TimeLabel>{item.publishTime.toString()}</TimeLabel> */}
           </Row>
           <Row>
             <Pressable onPress={(e) => this.pressLike()}>
@@ -226,14 +234,14 @@ export default class Detail extends Component {
             <CommentIcon width={25} height={25} />
             <IconLabel>{item.comments}</IconLabel>
           </Row>
-          {commentsContent.length === 0 ? (
+          {this.state.commentsContent.length === 0 ? (
             <InfosText>There's nothing to show here yet!</InfosText>
           ) : (
-            commentsContent.map((item, i) => (
+            this.state.commentsContent.map((item, i) => (
               <Comment
-                key={i}
+                key={new Date() + i}
                 text={item.text}
-                id={item.itemId}
+                id={this.state.itemId}
                 user={item.userName}
                 time={item.commentTime}
                 userId={item.userID}
