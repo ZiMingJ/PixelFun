@@ -24,7 +24,7 @@ export default class MyTabbar extends Component {
 
   static defaultProps = {};
 
-  handleTabChange = (active) => {
+  handleTabChange = active => {
     this.props.navigation.navigate(active);
   };
   componentDidMount() {
@@ -53,11 +53,11 @@ export default class MyTabbar extends Component {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
+          tabBarInactiveTintColor: "gray"
         })}
       >
         <Tab.Screen name="Home">
-          {(props) => (
+          {props => (
             <Home
               {...props}
               extraData={route.params === undefined ? 0 : route.params.uid}
@@ -66,10 +66,10 @@ export default class MyTabbar extends Component {
         </Tab.Screen>
         <Tab.Screen name="Search" component={Search} />
         <Tab.Screen name="Profile">
-          {(props) => (
+          {props => (
             <Profile
               {...props}
-              extraData={route.params === undefined ? 0 : route.params.uid}
+              userID={route.params === undefined ? 0 : route.params.uid}
             />
           )}
         </Tab.Screen>
@@ -93,6 +93,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-  },
+    backgroundColor: "#ecf0f1"
+  }
 });

@@ -19,7 +19,7 @@ import {
   TextInput,
   Image,
   FlatList,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 
 const DATA = [
@@ -30,7 +30,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#EC9560",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -39,7 +39,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#4BBED0",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
@@ -48,8 +48,8 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#414954",
     report: "babalabala",
-    author: "Jerromy",
-  },
+    author: "Jerromy"
+  }
 ];
 const imagesRef = firebase.firestore().collection("images");
 
@@ -59,17 +59,17 @@ export default class Home extends Component {
     this.state = {
       index: null,
       userID: this.props.extraData,
-      data: DATA,
+      data: DATA
     };
   }
 
   static defaultProps = {};
 
-  viewDetail = (item) => {
+  viewDetail = item => {
     this.props.navigation.navigate("Detail", {
       itemId: item.id,
       item: item,
-      uid: this.props.extraData,
+      uid: this.props.extraData
     });
   };
 
@@ -130,7 +130,7 @@ export default class Home extends Component {
         //   }
         // });
       })
-      .catch((error) => {
+      .catch(error => {
         // An error happened.
       });
   }
@@ -171,9 +171,9 @@ export default class Home extends Component {
       //.where("authorID", "==", userID)
       .orderBy("publishTime", "desc")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
@@ -181,10 +181,10 @@ export default class Home extends Component {
           console.log(newEntities.length);
           // setEntities(newEntities);
           this.setState({
-            data: newEntities,
+            data: newEntities
           });
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -203,7 +203,7 @@ export default class Home extends Component {
         <FlatList
           data={this.state.data}
           renderItem={this.renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
         />
 
         <ActionButton buttonColor="rgba(231,76,60,1)">
@@ -212,7 +212,7 @@ export default class Home extends Component {
             title="New Grid"
             onPress={() =>
               navigation.navigate("Canvas", {
-                uid: this.props.extraData,
+                uid: this.props.extraData
               })
             }
           >
@@ -245,14 +245,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
-    fontSize: 32,
+    fontSize: 32
   },
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: "white",
-  },
+    color: "white"
+  }
 });
