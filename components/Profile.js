@@ -95,28 +95,7 @@ const IconButton = styled.TouchableOpacity`
   justify-content: center;
 `;
 
-const examples = [
-  { name: "TURQUOISE", code: "#1abc9c" },
-  { name: "EMERALD", code: "#2ecc71" },
-  { name: "PETER RIVER", code: "#3498db" },
-  { name: "AMETHYST", code: "#9b59b6" },
-  { name: "WET ASPHALT", code: "#34495e" },
-  { name: "GREEN SEA", code: "#16a085" },
-  { name: "NEPHRITIS", code: "#27ae60" },
-  { name: "BELIZE HOLE", code: "#2980b9" },
-  { name: "WISTERIA", code: "#8e44ad" },
-  { name: "MIDNIGHT BLUE", code: "#2c3e50" },
-  { name: "SUN FLOWER", code: "#f1c40f" },
-  { name: "CARROT", code: "#e67e22" },
-  { name: "ALIZARIN", code: "#e74c3c" },
-  { name: "CLOUDS", code: "#ecf0f1" },
-  { name: "CONCRETE", code: "#95a5a6" },
-  { name: "ORANGE", code: "#f39c12" },
-  { name: "PUMPKIN", code: "#d35400" },
-  { name: "POMEGRANATE", code: "#c0392b" },
-  { name: "SILVER", code: "#bdc3c7" },
-  { name: "ASBESTOS", code: "#7f8c8d" }
-];
+const examples = [];
 
 const imagesRef = firebase.firestore().collection("images");
 const draftsRef = firebase.firestore().collection("drafts");
@@ -155,134 +134,37 @@ export default class Profile extends Component {
     return true;
   }
 
-  // componentWillMount() {
-  //   // storage
-  //   //   .load({
-  //   //     key: "uid"
-  //   //   })
-  //   //   .then(ret => {
-  //   //     this.setState({
-  //   //       userID: ret.id
-  //   //     });
-  //   //     console.log(ret.id);
-  //   //     console.log("success!");
-  //   //   })
-  //   //   .catch(err => {
-  //   //     console.warn(err.message);
-  //   //   });
+  static getDerivedStateFromProps(props, state) {
+    if (props.userID !== state.userID) {
+      const publishedNew = [];
 
-  //   imagesRef
-  //     .where("userID", "==", this.props.userID)
-  //     .orderBy("publishTime", "desc")
-  //     .onSnapshot(
-  //       querySnapshot => {
-  //         const newEntities = [];
-  //         querySnapshot.forEach(doc => {
-  //           const entity = doc.data();
-  //           entity.id = doc.id;
-  //           newEntities.push(entity);
-  //         });
-  //         this.setState({
-  //           published: newEntities
-  //         });
+      imagesRef
+        .where("userID", "==", props.userID)
+        .orderBy("publishTime", "desc")
+        .onSnapshot(
+          querySnapshot => {
+            querySnapshot.forEach(doc => {
+              let entity = doc.data();
+              entity.id = doc.id;
+              publishedNew.push(entity);
+              console.log("????");
+              console.log(entity.id);
+            });
+          },
+          error => {
+            console.log(error);
+          }
+        );
 
-  //         // setEntities(newEntities);
-  //         console.log("GETPUBLISH!!!!");
-  //         console.log(newEntities[0].title);
-  //         console.log(newEntities[0].likes);
-  //         console.log(newEntities[0].comments);
-  //         console.log(newEntities[0].publishTime);
-  //         console.log(newEntities[0].backGroundColor);
-  //         console.log(newEntities[0].canvasData[0]);
-  //         console.log(newEntities[0].userID);
-  //         console.log("GETPUBLISh!!!!");
-  //       },
-  //       error => {
-  //         console.log(error);
-  //       }
-  //     );
-  //   draftsRef
-  //     .where("userID", "==", this.props.userID)
-  //     .orderBy("createdAt")
-  //     .onSnapshot(
-  //       querySnapshot => {
-  //         const newEntities = [];
-  //         querySnapshot.forEach(doc => {
-  //           const entity = doc.data();
-  //           entity.id = doc.id;
-  //           newEntities.push(entity);
-  //         });
-  //         this.setState({
-  //           drafts: newEntities
-  //         });
-
-  //         console.log("GETDRAFT!!!!");
-  //         console.log(newEntities[0].createdAt);
-  //         console.log(newEntities[0].backGroundColor);
-  //         console.log(newEntities[0].canvasData[0]);
-  //         console.log(newEntities[0].userID);
-  //         console.log("GETDRAFT!!!!");
-  //       },
-  //       error => {
-  //         console.log(error);
-  //       }
-  //     );
-  //   usersRef.where("id", "==", this.props.userID).onSnapshot(
-  //     querySnapshot => {
-  //       const newEntities = [];
-  //       querySnapshot.forEach(doc => {
-  //         const entity = doc.data();
-  //         // entity.id = doc.id;
-  //         // newEntities.push(entity);
-  //         this.setState({
-  //           userName: doc.data().fullName,
-  //           postsNum: doc.data().posts,
-  //           likesNum: doc.data().likes,
-  //           draftsNum: doc.data().drafts
-  //         });
-  //         console.log("FULLNAME!!!!!");
-  //         console.log(doc.data().fullName);
-  //       });
-  //       //console.log(newEntities.length);
-  //       // setEntities(newEntities);
-  //       // this.setState({
-  //       //   data: newEntities,
-  //       // });
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
-  // listener = null;
-
-  // componentDidMount() {
-  //   //testName:通知的名称    param:接收到的消息（传参）
-  //   this.listener = DeviceEventEmitter.addListener("testName", function () {
-  //     //  自定义页面刷新动作
-  //     this.forceUpdate();
-  //   });
-  // }
-
-  componentWillReceiveProps() {
-    this.forceUpdate();
+      return {
+        published: publishedNew
+      };
+    }
+    return null;
   }
 
   componentDidMount() {
-    // storage
-    //   .load({
-    //     key: "uid",
-    //   })
-    //   .then((ret) => {
-    //     this.setState({
-    //       userID: ret.id,
-    //     });
-    //     console.log(ret.id);
-    //     console.log("success!");
-    //   })
-    //   .catch((err) => {
-    //     console.warn(err.message);
-    //   });
+    console.log("??didmount called");
     imagesRef
       .where("userID", "==", this.props.userID)
       .orderBy("publishTime", "desc")
@@ -423,6 +305,9 @@ export default class Profile extends Component {
     //this.forceUpdate();
     return (
       <InfosWrapper>
+        <Text>{this.props.userID}</Text>
+        <Text>{this.state.userID}</Text>
+        <Text>{this.state.published.length}</Text>
         <HeaderWrapper>
           <Avatar>
             <Image
