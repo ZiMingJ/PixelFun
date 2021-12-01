@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 import LikeIcon from "../assets/like";
 import CommentIcon from "../assets/comment";
@@ -12,8 +13,13 @@ import {
   View,
   TextInput,
   Image,
-  FlatList
+  FlatList,
+  Pressable
 } from "react-native";
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback
+} from "react-native-gesture-handler";
 
 const Row = styled.View`
   flex-direction: row;
@@ -33,7 +39,7 @@ const Wrapper = styled.Pressable`
 
 const TopRow = styled.View`
   flex-direction: row;
-  margin: 0px 0 0 0;
+  margin-bottom: 5px;
   align-items: center;
   justify-content: center;
 `;
@@ -75,22 +81,34 @@ export default class Card extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      preventDefault: false,
       // title: this.props.title,
       // id: this.props.id,
-      // likesCount: this.props.likesCount,
+      likesCount: this.props.likesCount,
       // commentsCount: this.props.commentsCount,
       // backgroundColor: this.props.backgroundColor,
       // report: this.props.report,
-      // author: this.props.author
+      // author: this.props.author,
+      islike: false
     };
   }
 
   static defaultProps = {};
 
+  pressLike = () => {
+    this.setState({
+      islike: !this.state.islike,
+      likesCount: this.state.islike
+        ? this.state.likesCount - 1
+        : this.state.likesCount + 1
+    });
+  };
   render() {
     return (
       <Wrapper
-        onPress={() => this.props.viewDetail(this.props.item)}
+        onPress={() => {
+          this.props.viewDetail(this.props.item);
+        }}
         style={styles.item}
       >
         <TopRow>
@@ -127,10 +145,22 @@ export default class Card extends Component {
           />
         </Row>
 
-        <Row>
+        {/* <Row>
           <LikeIcon width={23} height={23} />
-          <IconLabel>{this.props.likesCount} likes</IconLabel>
+          <IconLabel>{this.state.likesCount} likes</IconLabel>
           <CommentIcon width={23} height={23} />
+          <IconLabel>{this.props.commentsCount} comments</IconLabel>
+        </Row> */}
+        <Row>
+          <Pressable onPress={e => this.pressLike()}>
+            {this.state.islike ? (
+              <Icon name="heart" size={25} color="tomato" />
+            ) : (
+              <Icon name="heart-outline" size={25} />
+            )}
+          </Pressable>
+          <IconLabel>{this.state.likesCount} likes</IconLabel>
+          <CommentIcon width={25} height={25} />
           <IconLabel>{this.props.commentsCount} comments</IconLabel>
         </Row>
         <Row>

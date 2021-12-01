@@ -34,6 +34,7 @@ const PublishButton = styled.TouchableOpacity`
   padding: 10px;
   margin: 20px 100px 20px 100px;
 >`;
+
 export default class Publish extends Component {
   constructor(props) {
     super(props);

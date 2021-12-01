@@ -80,29 +80,6 @@ export default class Home extends Component {
       item={item}
     />
   );
-  componentDidMount() {
-    imagesRef
-      //.where("authorID", "==", userID)
-      .orderBy("publishTime", "desc")
-      .onSnapshot(
-        querySnapshot => {
-          const newEntities = [];
-          querySnapshot.forEach(doc => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            newEntities.push(entity);
-          });
-          console.log(newEntities.length);
-          // setEntities(newEntities);
-          this.setState({
-            data: newEntities
-          });
-        },
-        error => {
-          console.log(error);
-        }
-      );
-  }
 
   onLogout() {
     console.log("Before1");
