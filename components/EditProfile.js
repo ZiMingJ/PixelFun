@@ -61,7 +61,7 @@ export default class EditProfile extends Component {
     return (
       <View>
         <Text>EditProfile</Text>
-        {/* <Avatar>
+        <Avatar>
           <Image
             source={{
               uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`,
@@ -85,7 +85,7 @@ export default class EditProfile extends Component {
             {/* <RowText>{this.props.Name}</RowText> */}
             <RowText>Name</RowText>
           </RowBox>
-        </Row> */}
+        </Row>
       </View>
     );
   }
