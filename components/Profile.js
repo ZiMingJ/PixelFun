@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
   Button,
-  Alert
+  Alert,
 } from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
@@ -117,13 +117,13 @@ export default class Profile extends Component {
       userName: null,
       postsNum: null,
       likesNum: null,
-      draftsNum: null
+      draftsNum: null,
     };
   }
 
   static defaultProps = {};
 
-  deletePhoto = item => {
+  deletePhoto = (item) => {
     //Detele the photo here
     console.log("delete");
     imagesRef.doc(item.id).delete();
@@ -142,8 +142,8 @@ export default class Profile extends Component {
         .where("userID", "==", props.userID)
         .orderBy("publishTime", "desc")
         .onSnapshot(
-          querySnapshot => {
-            querySnapshot.forEach(doc => {
+          (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
               let entity = doc.data();
               entity.id = doc.id;
               publishedNew.push(entity);
@@ -151,13 +151,13 @@ export default class Profile extends Component {
               console.log(entity.id);
             });
           },
-          error => {
+          (error) => {
             console.log(error);
           }
         );
 
       return {
-        published: publishedNew
+        published: publishedNew,
       };
     }
     return null;
@@ -169,15 +169,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.props.userID)
       .orderBy("publishTime", "desc")
       .onSnapshot(
-        querySnapshot => {
+        (querySnapshot) => {
           const newEntities = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            published: newEntities
+            published: newEntities,
           });
 
           // // setEntities(newEntities);
@@ -191,7 +191,7 @@ export default class Profile extends Component {
           // console.log(newEntities[0].userID);
           // console.log("GETPUBLISh!!!!");
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -199,15 +199,15 @@ export default class Profile extends Component {
       .where("userID", "==", this.props.userID)
       .orderBy("createdAt")
       .onSnapshot(
-        querySnapshot => {
+        (querySnapshot) => {
           const newEntities = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            drafts: newEntities
+            drafts: newEntities,
           });
 
           // console.log("GETDRAFT!!!!");
@@ -217,14 +217,14 @@ export default class Profile extends Component {
           // console.log(newEntities[0].userID);
           // console.log("GETDRAFT!!!!");
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
     usersRef.where("id", "==", this.props.userID).onSnapshot(
-      querySnapshot => {
+      (querySnapshot) => {
         const newEntities = [];
-        querySnapshot.forEach(doc => {
+        querySnapshot.forEach((doc) => {
           const entity = doc.data();
           // entity.id = doc.id;
           // newEntities.push(entity);
@@ -232,7 +232,7 @@ export default class Profile extends Component {
             userName: doc.data().fullName,
             postsNum: doc.data().posts,
             likesNum: doc.data().likes,
-            draftsNum: doc.data().drafts
+            draftsNum: doc.data().drafts,
           });
           console.log("FULLNAME!!!!!");
           console.log(doc.data().fullName);
@@ -243,7 +243,7 @@ export default class Profile extends Component {
         //   data: newEntities,
         // });
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
@@ -257,7 +257,7 @@ export default class Profile extends Component {
           initialData: item.canvasData,
           backgroundColor: item.backGroundColor,
           uid: this.props.userID,
-          itemId: item.id
+          itemId: item.id,
         });
       }}
     >
@@ -279,15 +279,15 @@ export default class Profile extends Component {
           [
             {
               text: "Cancel",
-              onPress: () => {}
+              onPress: () => {},
             },
             {
               text: "Detele",
               onPress: () => {
                 this.deletePhoto(item);
               },
-              style: "destructive"
-            }
+              style: "destructive",
+            },
           ],
           { cancelable: false }
         );
@@ -312,12 +312,12 @@ export default class Profile extends Component {
           <Avatar>
             <Image
               source={{
-                uri: this.state.photoUrl
+                uri: this.state.photoUrl,
               }}
               style={{
                 width: 80,
                 height: 80,
-                borderRadius: 40
+                borderRadius: 40,
               }}
             />
 
@@ -347,7 +347,8 @@ export default class Profile extends Component {
           onPress={() =>
             navigation.navigate("EditProfile", {
               name: "testname",
-              url: this.state.photoUrl
+              uid: this.props.extraData,
+              url: this.state.photoUrl,
             })
           }
         >
@@ -399,22 +400,22 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   gridView: {
     marginTop: 10,
-    flex: 1
+    flex: 1,
   },
   itemContainer: {
     justifyContent: "flex-end",
     borderRadius: 5,
     padding: 10,
-    height: 150
+    height: 150,
   },
   itemName: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "600"
+    fontWeight: "600",
   },
   itemCode: {
     fontWeight: "600",
     fontSize: 12,
-    color: "#fff"
-  }
+    color: "#fff",
+  },
 });

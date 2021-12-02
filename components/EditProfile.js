@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Input } from "react-native-elements";
 import { AvatorPhotos } from "../constants";
 import { FlatGrid } from "react-native-super-grid";
+import { firebase } from "../firebase/config";
 
 import {
   Text,
@@ -16,7 +17,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
-  Alert
+  Alert,
 } from "react-native";
 
 const Avatar = styled.View`
@@ -56,12 +57,14 @@ const RowText = styled.Text`
   margin-right: 30px;
 `;
 
+const usersRef = firebase.firestore().collection("users");
 export default class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: this.props.route === undefined ? "" : this.props.route.params.name,
-      url: this.props.route === undefined ? "" : this.props.route.params.url
+      url: this.props.route === undefined ? "" : this.props.route.params.url,
+      userID: this.props.route === undefined ? "" : this.props.route.params.uid,
     };
   }
 
@@ -70,6 +73,9 @@ export default class EditProfile extends Component {
   onSubmit = () => {
     // {name:this.state.name}
     // {photoUrl:this.state.url}
+    usersRef.doc(this.state.userID).update({
+      fullName: this.state.name,
+    });
     Alert.alert("Sucess", "Save!");
     this.props.navigation.goBack();
   };
@@ -79,17 +85,17 @@ export default class EditProfile extends Component {
       style={{ borderColor: "grey", borderWidth: 1 }}
       onPress={() => {
         this.setState({
-          url: item
+          url: item,
         });
       }}
     >
       <Image
         source={{
-          uri: item
+          uri: item,
         }}
         style={{
           width: 120,
-          height: 120
+          height: 120,
         }}
       />
     </TouchableOpacity>
@@ -104,7 +110,7 @@ export default class EditProfile extends Component {
           title="Save   "
           color="tomato"
         />
-      )
+      ),
     });
 
     return (
@@ -112,12 +118,12 @@ export default class EditProfile extends Component {
         <Avatar>
           <Image
             source={{
-              uri: this.state.url
+              uri: this.state.url,
             }}
             style={{
               width: 100,
               height: 100,
-              borderRadius: 50
+              borderRadius: 50,
             }}
           />
         </Avatar>
@@ -129,9 +135,9 @@ export default class EditProfile extends Component {
               height: 40,
               width: 200,
               borderColor: "gray",
-              borderBottomWidth: 1
+              borderBottomWidth: 1,
             }}
-            onChangeText={text => this.setState({ name: text })}
+            onChangeText={(text) => this.setState({ name: text })}
           />
         </Row>
         <FlatGrid
@@ -147,17 +153,17 @@ export default class EditProfile extends Component {
 
 const styles = {
   container: {
-    alignItems: "center"
+    alignItems: "center",
   },
   inputContainer: {
     height: 30,
-    backgroundColor: "#EFEFEF"
+    backgroundColor: "#EFEFEF",
   },
   input: {
-    fontSize: 16
+    fontSize: 16,
   },
   gridView: {
     marginTop: 10,
-    flex: 1
-  }
+    flex: 1,
+  },
 };

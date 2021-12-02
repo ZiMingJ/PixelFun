@@ -5,6 +5,7 @@ import styled, { css } from "styled-components/native";
 import Card from "./Card";
 import { PhotoGrid } from "./PhotoGrid";
 import { SearchBar } from "react-native-elements";
+import { firebase } from "../firebase/config";
 
 import {
   Text,
@@ -13,31 +14,32 @@ import {
   TextInput,
   Image,
   AppRegistry,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { Background } from "@react-navigation/elements";
 
 const Photos = [];
 for (let i = 0; i < 10; i++) {
   Photos.push({
-    url: "https://picsum.photos/id/125/250/250"
+    url: "https://picsum.photos/id/125/250/250",
   });
 }
+const imagesRef = firebase.firestore().collection("images");
 export default class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: ""
+      search: "",
     };
   }
 
   static defaultProps = {};
 
-  updateSearch = search => {
+  updateSearch = (search) => {
     this.setState({ search });
   };
 
-  viewDetail = item => {
+  viewDetail = (item) => {
     this.props.navigation.navigate("Detail", item);
   };
 
@@ -68,13 +70,13 @@ export default class Search extends Component {
 
 const styles = {
   container: {
-    alignItems: "center"
+    alignItems: "center",
   },
   inputContainer: {
     height: 30,
-    backgroundColor: "#EFEFEF"
+    backgroundColor: "#EFEFEF",
   },
   input: {
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 };
