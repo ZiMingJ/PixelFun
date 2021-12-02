@@ -91,12 +91,15 @@ export default function App() {
                     {(props) => <Tabbar {...props} extraData={user} />}
                   </Stack.Screen> */}
                   {/* <Tabbar /> */}
-                  {/* <Stack.Screen name="Login" component={Tabbar} /> */}
+
                   <Stack.Group>
                     <Stack.Screen
                       name="HomeTab"
                       component={Tabbar}
-                      options={{ headerShown: false }}
+                      options={{
+                        headerShown: false,
+                        ...TransitionPresets.SlideFromRightIOS
+                      }}
                     />
                     <Stack.Screen
                       name="Canvas"
@@ -107,17 +110,20 @@ export default function App() {
                         ...TransitionPresets.ModalSlideFromBottomIOS
                       }}
                     />
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen
-                      name="Registration"
-                      component={RegistrationScreen}
-                    />
+
                     <Stack.Screen
                       name="Publish"
                       component={Publish}
                       options={{
                         title: "Publish"
                       }}
+                    />
+                  </Stack.Group>
+                  <Stack.Group>
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen
+                      name="Registration"
+                      component={RegistrationScreen}
                     />
                   </Stack.Group>
                   <Stack.Group screenOptions={{ presentation: "modal" }}>
