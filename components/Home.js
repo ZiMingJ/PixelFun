@@ -9,7 +9,6 @@ import Card from "./Card";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
 import { firebase } from "../firebase/config";
-import { AsyncStorage } from "react-native";
 import storage from "../store";
 
 import {
@@ -20,7 +19,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  Alert,
+  Alert
 } from "react-native";
 
 const DATA = [
@@ -31,7 +30,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#EC9560",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -40,7 +39,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#4BBED0",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
@@ -49,8 +48,8 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#414954",
     report: "babalabala",
-    author: "Jerromy",
-  },
+    author: "Jerromy"
+  }
 ];
 const imagesRef = firebase.firestore().collection("images");
 
@@ -60,7 +59,7 @@ export default class Home extends Component {
     this.state = {
       index: null,
       userID: this.props.extraData,
-      data: DATA,
+      data: DATA
     };
   }
 
@@ -81,6 +80,7 @@ export default class Home extends Component {
       islike: islike,
       likesCount: likesCount,
       onChangeLike: this.onChangeLike,
+      publishTime: item.publishTime
     });
   };
 
@@ -133,27 +133,30 @@ export default class Home extends Component {
     //         break;
     //     }
     //   });
-    imagesRef
-      //.where("authorID", "==", userID)
-      .orderBy("publishTime", "desc")
-      .onSnapshot(
-        (querySnapshot) => {
-          const newEntities = [];
-          querySnapshot.forEach((doc) => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            newEntities.push(entity);
-          });
-          console.log(newEntities.length);
-          // setEntities(newEntities);
-          this.setState({
-            data: newEntities,
-          });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    const fetchData = async () => {
+      imagesRef
+        //.where("authorID", "==", userID)
+        .orderBy("publishTime", "desc")
+        .onSnapshot(
+          querySnapshot => {
+            const newEntities = [];
+            querySnapshot.forEach(doc => {
+              const entity = doc.data();
+              entity.id = doc.id;
+              newEntities.push(entity);
+            });
+            console.log(newEntities.length);
+            // setEntities(newEntities);
+            this.setState({
+              data: newEntities
+            });
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    };
+    fetchData();
   }
   render() {
     const { route, navigation } = this.props;
@@ -164,7 +167,7 @@ export default class Home extends Component {
         <FlatList
           data={this.state.data}
           renderItem={this.renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
         />
 
         <ActionButton buttonColor="rgba(231,76,60,1)">
@@ -189,7 +192,7 @@ export default class Home extends Component {
                 ]);
               } else {
                 navigation.navigate("Canvas", {
-                  uid: this.props.extraData,
+                  uid: this.props.extraData
                 });
               }
             }}
@@ -242,14 +245,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
-    fontSize: 32,
+    fontSize: 32
   },
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: "white",
-  },
+    color: "white"
+  }
 });

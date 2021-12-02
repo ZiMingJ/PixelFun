@@ -100,9 +100,9 @@ export default class Card extends Component {
       userName: "Visitor",
       userId: this.props.item.userID === undefined ? 0 : this.props.item.userID,
       publishTime:
-        this.props.publishTime === undefined
-          ? new Date()
-          : this.props.publishTime.toDate()
+        !this.props.publishTime == null && !this.props.publishTime === undefined
+          ? this.props.publishTime.toDate()
+          : new Date()
     };
   }
 
@@ -145,7 +145,6 @@ export default class Card extends Component {
     );
   };
   render() {
-    const publishTime = this.props.publishTime;
     return (
       <Wrapper
         onPress={() => {

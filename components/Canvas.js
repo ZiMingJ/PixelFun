@@ -56,7 +56,7 @@ let history = [];
 
 const MyHeader = styled.View`
   padding-top: 50px;
-  height: ${HEADER_HEIGHT};
+  height: ${HEADER_HEIGHT}px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

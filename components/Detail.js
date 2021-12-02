@@ -130,9 +130,10 @@ export default class Detail extends Component {
       userName: null,
       commentsContent: [],
       publishTime:
-        this.props.route.params.item.publishTime === undefined
-          ? new Date()
-          : this.props.route.params.item.publishTime.toDate()
+        !this.props.route.params.publishTime == null &&
+        !this.props.route.params.publishTime === undefined
+          ? this.props.route.params.publishTime.toDate()
+          : new Date()
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -184,25 +185,28 @@ export default class Detail extends Component {
     );
     if (this.state.itemId !== 0 && this.state.commentsContent.length === 0) {
       //commentsContent = null;
-      commentsRef
-        .where("itemId", "==", this.state.itemId)
-        .orderBy("commentTime", "desc")
-        .onSnapshot(
-          querySnapshot => {
-            const newEntities = [];
-            querySnapshot.forEach(doc => {
-              const entity = doc.data();
-              entity.id = doc.id;
-              newEntities.push(entity);
-            });
-            this.setState({
-              commentsContent: newEntities
-            });
-          },
-          error => {
-            console.log(error);
-          }
-        );
+      const fetchData = async () => {
+        commentsRef
+          .where("itemId", "==", this.state.itemId)
+          .orderBy("commentTime", "desc")
+          .onSnapshot(
+            querySnapshot => {
+              const newEntities = [];
+              querySnapshot.forEach(doc => {
+                const entity = doc.data();
+                entity.id = doc.id;
+                newEntities.push(entity);
+              });
+              this.setState({
+                commentsContent: newEntities
+              });
+            },
+            error => {
+              console.log(error);
+            }
+          );
+      };
+      fetchData();
     }
   }
 
@@ -215,7 +219,7 @@ export default class Detail extends Component {
     });
     if (this.state.islike !== true) {
       imagesRef.doc(this.state.itemId).update({
-        likes: this.state.likesCount + 1,
+        likes: this.state.likesCount + 1
       });
     }
     this.props.route.params.onChangeLike(
@@ -229,9 +233,14 @@ export default class Detail extends Component {
     const { item } = this.props.route.params;
     return (
       <Wrapper>
-        <Text>{this.state.commentsContent.length}</Text>
         <ScrollView>
-          <Row>
+          <Row
+            style={{
+              borderColor: "#EBEBEB",
+              borderBottomWidth: 1,
+              paddingBottom: 10
+            }}
+          >
             <Image
               source={{
                 uri: `https://picsum.photos/id/125/250/250`
