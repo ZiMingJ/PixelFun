@@ -4,8 +4,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { firebase } from "../firebase/config";
 import { StyleSheet } from "react-native";
 import { useEffect } from "react";
-import { AsyncStorage } from "react-native";
-import storage from "../store";
+// import storage from "../store";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -15,17 +14,17 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         usersRef
           .doc(user.uid)
           .get()
-          .then(document => {
+          .then((document) => {
             const userData = document.data();
             setLoading(false);
             //setUser(userData);
           })
-          .catch(error => {
+          .catch((error) => {
             setLoading(false);
           });
       } else {
@@ -50,24 +49,24 @@ export default function LoginScreen({ navigation }) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(response => {
+      .then((response) => {
         const uid = response.user.uid;
         const usersRef = firebase.firestore().collection("users");
         usersRef
           .doc(uid)
           .get()
-          .then(firestoreDocument => {
+          .then((firestoreDocument) => {
             if (!firestoreDocument.exists) {
               alert("User does not exist anymore.");
               return;
             }
-            storage.save({
-              key: "uid",
-              data: {
-                id: uid
-              },
-              expires: null
-            });
+            // storage.save({
+            //   key: "uid",
+            //   data: {
+            //     id: uid,
+            //   },
+            //   expires: null,
+            // });
 
             //AsyncStorage.setItem("uid", JSON.stringify(uid));
             console.log(uid + "NEW ID");
@@ -76,16 +75,16 @@ export default function LoginScreen({ navigation }) {
             navigation.popToTop();
 
             navigation.replace("HomeTab", {
-              uid: uid
+              uid: uid,
             });
 
             //navigation.navigate("HomeTab");
           })
-          .catch(error => {
+          .catch((error) => {
             alert(error);
           });
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error);
       });
   };
@@ -101,7 +100,7 @@ export default function LoginScreen({ navigation }) {
           style={styles.input}
           placeholder="E-mail"
           placeholderTextColor="#aaaaaa"
-          onChangeText={text => setEmail(text)}
+          onChangeText={(text) => setEmail(text)}
           value={email}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -111,7 +110,7 @@ export default function LoginScreen({ navigation }) {
           placeholderTextColor="#aaaaaa"
           secureTextEntry
           placeholder="Password"
-          onChangeText={text => setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
           value={password}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -135,7 +134,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   title: {},
   logo: {
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 90,
     alignSelf: "center",
-    margin: 30
+    margin: 30,
   },
   input: {
     height: 48,
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
-    paddingLeft: 16
+    paddingLeft: 16,
   },
   button: {
     backgroundColor: "#788eec",
@@ -164,25 +163,25 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 5,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   buttonTitle: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   footerView: {
     flex: 1,
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   footerText: {
     fontSize: 16,
-    color: "#2e2e2d"
+    color: "#2e2e2d",
   },
   footerLink: {
     color: "#788eec",
     fontWeight: "bold",
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });

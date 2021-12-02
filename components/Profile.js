@@ -15,7 +15,7 @@ import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
 import { firebase } from "../firebase/config";
 import PixelArt from "./PixelArt";
-import storage from "../store";
+// import storage from "../store";
 import MoreIcon from "../assets/more";
 import CatIcon from "../assets/icons/cat";
 import PawIcon from "../assets/icons/paw";
