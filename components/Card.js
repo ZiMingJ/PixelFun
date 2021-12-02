@@ -17,10 +17,7 @@ import {
   Image,
   FlatList,
   Pressable,
-<<<<<<< HEAD
-  Alert
-=======
->>>>>>> 773f0a7 (final merge)
+  Alert,
 } from "react-native";
 import {
   TouchableOpacity,
@@ -84,6 +81,7 @@ const Item = ({
 }) => {};
 
 const imagesRef = firebase.firestore().collection("images");
+const usersRef = firebase.firestore().collection("users");
 
 export default class Card extends Component {
   constructor(props) {
@@ -97,10 +95,30 @@ export default class Card extends Component {
       // report: this.props.report,
       // author: this.props.author,
       islike: false,
+      userName: "Unknown",
+      userId: this.props.item.userID === undefined ? 0 : this.props.item.userID,
     };
   }
 
   static defaultProps = {};
+
+  componentDidMount() {
+    usersRef.where("id", "==", this.state.userId).onSnapshot(
+      (querySnapshot) => {
+        //const newEntities = [];
+        querySnapshot.forEach((doc) => {
+          this.setState({ userName: doc.data().fullName });
+        });
+        console.log(this.state.userName);
+        // this.setState({
+        //   published: newEntities,
+        // });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
   pressLike = () => {
     this.setState({
@@ -144,7 +162,7 @@ export default class Card extends Component {
                 borderRadius: 15,
               }}
             />
-            <UserName>{this.props.author}</UserName>
+            <UserName>{this.state.userName}</UserName>
           </Row>
           <MoreIcon width={25} height={25} />
         </TopRow>

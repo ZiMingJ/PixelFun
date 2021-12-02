@@ -20,10 +20,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-<<<<<<< HEAD
-  Alert
-=======
->>>>>>> 773f0a7 (final merge)
+  Alert,
 } from "react-native";
 
 const DATA = [
@@ -89,7 +86,6 @@ export default class Home extends Component {
 
   renderItem = ({ index, item }) => (
     <Card
-      uid={this.props.extraData}
       onChangeLike={this.onChangeLike}
       viewDetail={this.viewDetail}
       data={item.canvasData}
@@ -161,7 +157,6 @@ export default class Home extends Component {
   }
   render() {
     const { route, navigation } = this.props;
-
     return (
       <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
         <Text>{this.props.extraData}</Text>
@@ -176,23 +171,15 @@ export default class Home extends Component {
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="New Grid"
-<<<<<<< HEAD
             onPress={() => {
               if (this.props.extraData === 0) {
                 Alert.alert("Sorry", "You need to log in first.");
               } else {
                 navigation.navigate("Canvas", {
-                  uid: this.props.extraData
+                  uid: this.props.extraData,
                 });
               }
             }}
-=======
-            onPress={() =>
-              navigation.navigate("Canvas", {
-                uid: this.props.extraData,
-              })
-            }
->>>>>>> 773f0a7 (final merge)
           >
             <Icon name="md-grid" style={styles.actionButtonIcon} />
           </ActionButton.Item>

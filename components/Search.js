@@ -17,17 +17,25 @@ import {
   Image,
   AppRegistry,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { Background } from "@react-navigation/elements";
+
+const Input = styled.TextInput`
+  padding: 13px 50px 13px 15px;
+  border-radius: 5px;
+  border: 1px solid grey;
+  margin-bottom: 20px;
+`;
 
 const Photos = [];
 for (let i = 0; i < 10; i++) {
   Photos.push({
-    url: "https://picsum.photos/id/125/250/250"
+    url: "https://picsum.photos/id/125/250/250",
   });
 }
 const imagesRef = firebase.firestore().collection("images");
+var newEntities = [];
 export default class Search extends Component {
   constructor(props) {
     super(props);
@@ -35,17 +43,78 @@ export default class Search extends Component {
       search: "",
       index: null,
       userID: this.props.userID,
-      data: Photos
+      data: Photos,
+      allData: Photos,
+      result: [],
+      newComment: "",
     };
   }
 
   static defaultProps = {};
 
-  updateSearch = search => {
-    this.setState({ search });
-  };
+  onSubmit(e) {
+    if (e.nativeEvent.text === " ") {
+      this.setState({
+        data: this.state.allData,
+      });
+    }
+    newEntities = [];
+    this.state.data.forEach((d) => {
+      if (d.title.indexOf(e.nativeEvent.text) != -1) {
+        //result.push(d.title);
+        imagesRef
+          .where("title", "==", d.title)
+          .orderBy("publishTime")
+          .onSnapshot(
+            (querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                const entity = doc.data();
+                entity.id = doc.id;
+                newEntities.push(entity);
+                this.setState({
+                  data: newEntities,
+                });
+              });
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+      }
+    });
+    this.setState({ newComment: e.nativeEvent.text });
+  }
 
-  viewDetail = item => {
+  // updateSearch = (search) => {
+  //   this.setState({ search });
+  //   console.log(search + "SEARCH");
+  //   newEntities = [];
+  //   this.state.data.forEach((d) => {
+  //     if (d.title.indexOf(search) != -1) {
+  //       //result.push(d.title);
+  //       imagesRef
+  //         .where("title", "==", d.title)
+  //         .orderBy("publishTime")
+  //         .onSnapshot(
+  //           (querySnapshot) => {
+  //             querySnapshot.forEach((doc) => {
+  //               const entity = doc.data();
+  //               entity.id = doc.id;
+  //               newEntities.push(entity);
+  //               this.setState({
+  //                 data: newEntities,
+  //               });
+  //             });
+  //           },
+  //           (error) => {
+  //             console.log(error);
+  //           }
+  //         );
+  //     }
+  //   });
+  // };
+
+  viewDetail = (item) => {
     this.props.navigation.navigate("Detail", item);
   };
 
@@ -54,9 +123,9 @@ export default class Search extends Component {
       //.where("authorID", "==", userID)
       .orderBy("publishTime")
       .onSnapshot(
-        querySnapshot => {
+        (querySnapshot) => {
           const newEntities = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
@@ -64,10 +133,11 @@ export default class Search extends Component {
           console.log(newEntities.length);
           // setEntities(newEntities);
           this.setState({
-            data: newEntities
+            data: newEntities,
+            allData: newEntities,
           });
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -81,9 +151,13 @@ export default class Search extends Component {
       uid: this.props.extraData,
       islike: islike,
       likesCount: item.likes,
-      onChangeLike: this.onChangeLike
+      onChangeLike: this.onChangeLike,
     });
   };
+
+  // clear = () => {
+  //   this.setState({ search: "", data: allData });
+  // };
 
   renderItem = ({ index, item }) => (
     <TouchableOpacity
@@ -103,14 +177,32 @@ export default class Search extends Component {
     const { search } = this.state;
     return (
       <View>
-        <SearchBar
+        {/* <SearchBar
           placeholder="Type Here..."
           onChangeText={this.updateSearch}
+          onClear={this.clear}
           value={search}
           platform="ios"
           containerStyle={styles.container}
           inputContainerStyle={styles.inputContainer}
           inputStyle={styles.input}
+        /> */}
+        <Input
+          value={this.state.newComment}
+          editable={true}
+          onChange={(e) =>
+            this.setState({
+              newComment: e.nativeEvent.text,
+            })
+          }
+          placeholder="Search the key word of the title..."
+          returnKeyType="send"
+          placeholderTextColor="grey"
+          multiline={true}
+          maxLength={300}
+          blurOnSubmit={true}
+          enablesReturnKeyAutomatically={true}
+          onSubmitEditing={(e) => this.onSubmit(e)}
         />
         <FlatGrid
           spacing={20}
@@ -125,13 +217,13 @@ export default class Search extends Component {
 
 const styles = {
   container: {
-    alignItems: "center"
+    alignItems: "center",
   },
   inputContainer: {
     height: 30,
-    backgroundColor: "#EFEFEF"
+    backgroundColor: "#EFEFEF",
   },
   input: {
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 };
