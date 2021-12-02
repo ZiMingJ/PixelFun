@@ -20,7 +20,7 @@ import {
   Dimensions,
   ScrollView,
   Pressable,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from "react-native";
 
 const InputWrapper = styled.View`
@@ -114,14 +114,23 @@ export default class Detail extends Component {
         this.props.route.params.itemId === undefined
           ? 0
           : this.props.route.params.itemId,
+      item:
+        this.props.route.params.item === undefined
+          ? null
+          : this.props.route.params.item,
+      commentsCount:
+        this.props.route.params.commentsCount === undefined
+          ? 0
+          : this.props.route.params.commentsCount,
       userName: null,
-      commentsContent: []
+      commentsContent: [],
     };
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   static defaultProps = {};
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     console.log("on submit");
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const data = {
@@ -129,17 +138,28 @@ export default class Detail extends Component {
       userID: this.state.userID,
       userName: this.state.userName,
       commentTime: timestamp,
-      text: e.nativeEvent.text
+      text: e.nativeEvent.text,
     };
-    commentsRef.add(data);
+    commentsRef
+      .add(data)
+      //.then(this.setState({ commentsCount: this.state.commentsCount + 1 }))
+      .then(
+        imagesRef.doc(this.state.itemId).update({
+          comments: this.state.commentsContent.length + 1,
+        })
+      );
+
     // 记得增加对应photo的comments的count
   };
 
   componentDidMount() {
+    // this.setState({
+    //   commentsCount: this.state.item.comments,
+    // });
     usersRef.where("id", "==", this.state.userID).onSnapshot(
-      querySnapshot => {
+      (querySnapshot) => {
         //const newEntities = [];
-        querySnapshot.forEach(doc => {
+        querySnapshot.forEach((doc) => {
           this.setState({ userName: doc.data().fullName });
         });
         console.log(this.state.userName);
@@ -147,7 +167,7 @@ export default class Detail extends Component {
         //   published: newEntities,
         // });
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
@@ -157,22 +177,22 @@ export default class Detail extends Component {
         .where("itemId", "==", this.state.itemId)
         .orderBy("commentTime", "desc")
         .onSnapshot(
-          querySnapshot => {
+          (querySnapshot) => {
             const newEntities = [];
-            querySnapshot.forEach(doc => {
+            querySnapshot.forEach((doc) => {
               const entity = doc.data();
               entity.id = doc.id;
               newEntities.push(entity);
             });
             this.setState({
-              commentsContent: newEntities
+              commentsContent: newEntities,
             });
             //console.log(commentsContent);
             // this.setState({
             //   published: newEntities,
             // });
           },
-          error => {
+          (error) => {
             console.log(error);
           }
         );
@@ -184,7 +204,7 @@ export default class Detail extends Component {
       islike: !this.state.islike,
       likesCount: this.state.islike
         ? this.state.likesCount - 1
-        : this.state.likesCount + 1
+        : this.state.likesCount + 1,
     });
     this.props.route.params.onChangeLike(
       this.props.route.params.item,
@@ -197,16 +217,17 @@ export default class Detail extends Component {
     const { item } = this.props.route.params;
     return (
       <Wrapper>
+        <Text>{this.state.commentsContent.length}</Text>
         <ScrollView>
           <Row>
             <Image
               source={{
-                uri: `https://picsum.photos/id/125/250/250`
+                uri: `https://picsum.photos/id/125/250/250`,
               }}
               style={{
                 width: 34,
                 height: 34,
-                borderRadius: 15
+                borderRadius: 15,
               }}
             />
             <UserName>{this.state.userName}</UserName>
@@ -223,13 +244,13 @@ export default class Detail extends Component {
             style={{
               borderColor: "#EBEBEB",
               borderBottomWidth: 1,
-              paddingBottom: 16
+              paddingBottom: 16,
             }}
           >
             {/* <TimeLabel>{item.publishTime.toString()}</TimeLabel> */}
           </Row>
           <Row>
-            <Pressable onPress={e => this.pressLike()}>
+            <Pressable onPress={(e) => this.pressLike()}>
               {this.state.islike ? (
                 <Icon name="heart" size={25} color="tomato" />
               ) : (
@@ -262,9 +283,9 @@ export default class Detail extends Component {
             <Input
               value={this.state.newComment}
               editable={true}
-              onChange={e =>
+              onChange={(e) =>
                 this.setState({
-                  newComment: e.nativeEvent.text
+                  newComment: e.nativeEvent.text,
                 })
               }
               placeholder={
@@ -278,7 +299,7 @@ export default class Detail extends Component {
               maxLength={300}
               blurOnSubmit={true}
               enablesReturnKeyAutomatically={true}
-              onSubmitEditing={e => this.onSubmit(e)}
+              onSubmitEditing={(e) => this.onSubmit(e)}
             />
           </InputWrapper>
         </KeyboardAvoidingView>
