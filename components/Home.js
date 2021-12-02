@@ -65,16 +65,26 @@ export default class Home extends Component {
 
   static defaultProps = {};
 
-  viewDetail = item => {
+  onChangeLike = (item, islike, likesCount) => {
+    //item.id?
+    // islike: boolean
+    //likescount :int
+  };
+
+  viewDetail = (item, islike, likesCount) => {
     this.props.navigation.navigate("Detail", {
       itemId: item.id,
       item: item,
-      uid: this.props.extraData
+      uid: this.props.extraData,
+      islike: islike,
+      likesCount: likesCount,
+      onChangeLike: this.onChangeLike
     });
   };
 
   renderItem = ({ index, item }) => (
     <Card
+      onChangeLike={this.onChangeLike}
       viewDetail={this.viewDetail}
       data={item.canvasData}
       title={item.title}

@@ -145,8 +145,8 @@ class CanvasGrid extends Component {
     }
     const tx = evt.nativeEvent.pageX - EDITOR_BORDER_SIZE;
     // const ty =
-    //   evt.nativeEvent.pageY - EDITOR_BORDER_SIZE - HEADER_HEIGHT - insets.top;
-    const ty = evt.nativeEvent.pageY - EDITOR_BORDER_SIZE - headerHeight;
+    //   evt.nativeEvent.pageY - EDITOR_BORDER_SIZE - headerHeight - insets.top;
+    const ty = evt.nativeEvent.pageY - EDITOR_BORDER_SIZE - HEADER_HEIGHT;
     const px = Math.trunc(tx / PIXEL_SIZE);
     const py = Math.trunc(ty / PIXEL_SIZE);
     const arrayPosition = py * PIXEL_COUNT + px;

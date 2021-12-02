@@ -40,7 +40,6 @@ const Row = styled.View`
   flex-direction: row;
   align-items: center;
   margin: 4px 0 2px 0;
-  align-items: center;
   flex: 1;
   padding: 5px 15px 5px 15px;
 `;
@@ -81,9 +80,10 @@ const TimeLabel = styled.Text`
   color: #c1c1c1;
 `;
 const InfosText = styled.Text`
-  font-weight: 600;
-  font-size: 14px;
-  margin: 15px 0;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 15px 15px;
+  color: grey;
 `;
 
 // for (let i = 0; i < 5; i++) {
@@ -104,8 +104,8 @@ export default class Detail extends Component {
     super(props);
     this.state = {
       newComment: "",
-      likesCount: this.props.route.params.item.likes,
-      isLike: false,
+      likesCount: this.props.route.params.likesCount,
+      islike: this.props.route.params.islike,
       userID:
         this.props.route.params.uid === undefined
           ? 0
@@ -132,6 +132,7 @@ export default class Detail extends Component {
       text: e.nativeEvent.text
     };
     commentsRef.add(data);
+    // 记得增加对应photo的comments的count
   };
 
   componentDidMount() {
@@ -180,11 +181,16 @@ export default class Detail extends Component {
 
   pressLike = () => {
     this.setState({
-      isLike: !this.state.isLike,
-      likesCount: this.state.isLike
+      islike: !this.state.islike,
+      likesCount: this.state.islike
         ? this.state.likesCount - 1
         : this.state.likesCount + 1
     });
+    this.props.route.params.onChangeLike(
+      this.props.route.params.item,
+      this.state.islike,
+      this.state.likesCount
+    );
   };
 
   render() {
@@ -224,7 +230,7 @@ export default class Detail extends Component {
           </Row>
           <Row>
             <Pressable onPress={e => this.pressLike()}>
-              {this.state.isLike ? (
+              {this.state.islike ? (
                 <Icon name="heart" size={25} color="tomato" />
               ) : (
                 <Icon name="heart-outline" size={25} />
@@ -232,10 +238,12 @@ export default class Detail extends Component {
             </Pressable>
             <IconLabel>{this.state.likesCount}</IconLabel>
             <CommentIcon width={25} height={25} />
-            <IconLabel>{item.comments}</IconLabel>
+            <IconLabel>{this.state.commentsContent.length}</IconLabel>
           </Row>
           {this.state.commentsContent.length === 0 ? (
-            <InfosText>There's nothing to show here yet!</InfosText>
+            <Row>
+              <InfosText>🍻 Come on and be the first one to comment!</InfosText>
+            </Row>
           ) : (
             this.state.commentsContent.map((item, i) => (
               <Comment
@@ -260,7 +268,7 @@ export default class Detail extends Component {
                 })
               }
               placeholder={
-                this.state.newComment.length === 0
+                this.state.commentsContent.length === 0
                   ? "Add the first comment..."
                   : "Add your comment..."
               }
