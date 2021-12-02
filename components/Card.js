@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 import Icon from "react-native-vector-icons/Ionicons";
-
+import { getDate } from "../util";
 import LikeIcon from "../assets/like";
 import CommentIcon from "../assets/comment";
 import MoreIcon from "../assets/more";
@@ -17,11 +17,11 @@ import {
   Image,
   FlatList,
   Pressable,
-  Alert,
+  Alert
 } from "react-native";
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native-gesture-handler";
 
 const Row = styled.View`
@@ -54,7 +54,7 @@ const IconLabel = styled.Text`
 `;
 
 const Title = styled.Text`
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
 `;
 
@@ -67,7 +67,9 @@ const UserName = styled.Text`
 const TimeLabel = styled.Text`
   font-size: 13px;
   font-weight: 400;
-  color: #707070;
+  color: #8a8a8a;
+  margin-top: 6px;
+  margin-bottom: 10px;
 `;
 
 const Item = ({
@@ -77,7 +79,7 @@ const Item = ({
   commentsCount,
   backgroundColor,
   report,
-  author,
+  author
 }) => {};
 
 const imagesRef = firebase.firestore().collection("images");
@@ -95,8 +97,12 @@ export default class Card extends Component {
       // report: this.props.report,
       // author: this.props.author,
       islike: false,
-      userName: "Unknown",
+      userName: "Visitor",
       userId: this.props.item.userID === undefined ? 0 : this.props.item.userID,
+      publishTime:
+        this.props.publishTime === undefined
+          ? new Date()
+          : this.props.publishTime.toDate()
     };
   }
 
@@ -104,9 +110,9 @@ export default class Card extends Component {
 
   componentDidMount() {
     usersRef.where("id", "==", this.state.userId).onSnapshot(
-      (querySnapshot) => {
+      querySnapshot => {
         //const newEntities = [];
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(doc => {
           this.setState({ userName: doc.data().fullName });
         });
         console.log(this.state.userName);
@@ -114,7 +120,7 @@ export default class Card extends Component {
         //   published: newEntities,
         // });
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -125,11 +131,11 @@ export default class Card extends Component {
       islike: !this.state.islike,
       likesCount: this.state.islike
         ? this.state.likesCount - 1
-        : this.state.likesCount + 1,
+        : this.state.likesCount + 1
     });
     if (this.state.islike !== true) {
       imagesRef.doc(this.props.id).update({
-        likes: this.state.likesCount + 1,
+        likes: this.state.likesCount + 1
       });
     }
     this.props.onChangeLike(
@@ -139,6 +145,7 @@ export default class Card extends Component {
     );
   };
   render() {
+    const publishTime = this.props.publishTime;
     return (
       <Wrapper
         onPress={() => {
@@ -154,12 +161,12 @@ export default class Card extends Component {
           <Row>
             <Image
               source={{
-                uri: `https://picsum.photos/id/125/250/250`,
+                uri: `https://picsum.photos/id/125/250/250`
               }}
               style={{
                 width: 30,
                 height: 30,
-                borderRadius: 15,
+                borderRadius: 15
               }}
             />
             <UserName>{this.state.userName}</UserName>
@@ -176,7 +183,7 @@ export default class Card extends Component {
         </Row>
 
         <Row>
-          <Pressable onPress={(e) => this.pressLike()}>
+          <Pressable onPress={e => this.pressLike()}>
             {this.state.islike ? (
               <Icon name="heart" size={25} color="tomato" />
             ) : (
@@ -191,7 +198,10 @@ export default class Card extends Component {
           <Title>{this.props.title}</Title>
         </Row>
         <Row>
-          {/* <TimeLabel>{this.props.publishTime.toString()}></TimeLabel> */}
+          {/* <TimeLabel>
+            {new Date(this.props.publishTime).toLocaleDateString()}
+          </TimeLabel> */}
+          <TimeLabel>{getDate(this.state.publishTime)}</TimeLabel>
         </Row>
       </Wrapper>
     );
@@ -203,9 +213,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
-    fontSize: 32,
-  },
+    fontSize: 32
+  }
 });

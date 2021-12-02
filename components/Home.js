@@ -159,7 +159,7 @@ export default class Home extends Component {
     const { route, navigation } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
-        <Text>{this.props.extraData}</Text>
+        {/* <Text>{this.props.extraData}</Text> */}
 
         <FlatList
           data={this.state.data}
@@ -173,7 +173,20 @@ export default class Home extends Component {
             title="New Grid"
             onPress={() => {
               if (this.props.extraData === 0) {
-                Alert.alert("Sorry", "You need to log in first.");
+                Alert.alert("Sorry", "You need to log in first.", [
+                  {
+                    text: "No thanks",
+                    onPress: () => {},
+                    style: "cancel"
+                  },
+                  {
+                    text: "Sure",
+                    onPress: () => {
+                      this.props.navigation.navigate("Login");
+                    },
+                    style: "destructive"
+                  }
+                ]);
               } else {
                 navigation.navigate("Canvas", {
                   uid: this.props.extraData,
@@ -188,7 +201,24 @@ export default class Home extends Component {
             buttonColor="#1abc9c"
             title="Drafts"
             onPress={() => {
-              this.props.navigation.navigate("Profile");
+              if (this.props.extraData === 0) {
+                Alert.alert("Sorry", "You need to log in first.", [
+                  {
+                    text: "No thanks",
+                    onPress: () => {},
+                    style: "cancel"
+                  },
+                  {
+                    text: "Sure",
+                    onPress: () => {
+                      this.props.navigation.navigate("Login");
+                    },
+                    style: "destructive"
+                  }
+                ]);
+              } else {
+                this.props.navigation.navigate("Profile");
+              }
             }}
           >
             <Icon name="md-folder-open" style={styles.actionButtonIcon} />

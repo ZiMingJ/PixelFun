@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
   Button,
-  Alert,
+  Alert
 } from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
@@ -17,6 +17,8 @@ import { firebase } from "../firebase/config";
 import PixelArt from "./PixelArt";
 import storage from "../store";
 import MoreIcon from "../assets/more";
+import CatIcon from "../assets/icons/cat";
+import PawIcon from "../assets/icons/paw";
 
 const HeaderWrapper = styled.View`
   padding: 15px 5px 0px 5px;
@@ -85,7 +87,7 @@ const Tag = styled.Text`
 const InfosWrapper = styled.View`
   flex: 1;
   background: white;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const ButtonsRow = styled.View`
@@ -105,6 +107,23 @@ const IconButton = styled.TouchableOpacity`
   margin: 0px 10px;
   align-items: center;
   justify-content: center;
+`;
+
+const SignBox = styled.View`
+  align-items: center;
+  margin: 30px;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const EmptySign = styled.View`
+  margin: 28px;
+`;
+const InfosText = styled.Text`
+  font-weight: 500;
+  font-size: 17px;
+  margin: 15px 15px;
+  color: grey;
 `;
 
 const examples = [];
@@ -129,13 +148,13 @@ export default class Profile extends Component {
       userName: null,
       postsNum: null,
       likesNum: null,
-      draftsNum: null,
+      draftsNum: null
     };
   }
 
   static defaultProps = {};
 
-  deletePhoto = (item) => {
+  deletePhoto = item => {
     //Detele the photo here
     imagesRef.doc(item.id).delete();
   };
@@ -154,7 +173,7 @@ export default class Profile extends Component {
         //   }
         // });
       })
-      .catch((error) => {
+      .catch(error => {
         // An error happened.
       });
   }
@@ -164,18 +183,18 @@ export default class Profile extends Component {
       .where("userID", "==", this.props.userID)
       .orderBy("publishTime", "desc")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            published: newEntities,
+            published: newEntities
           });
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -183,25 +202,25 @@ export default class Profile extends Component {
       .where("userID", "==", this.props.userID)
       .orderBy("createdAt")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
           });
           this.setState({
-            drafts: newEntities,
+            drafts: newEntities
           });
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
     usersRef.where("id", "==", this.props.userID).onSnapshot(
-      (querySnapshot) => {
+      querySnapshot => {
         const newEntities = [];
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(doc => {
           const entity = doc.data();
           // entity.id = doc.id;
           // newEntities.push(entity);
@@ -209,13 +228,13 @@ export default class Profile extends Component {
             userName: doc.data().fullName,
             postsNum: doc.data().posts,
             likesNum: doc.data().likes,
-            draftsNum: doc.data().drafts,
+            draftsNum: doc.data().drafts
           });
           console.log("FULLNAME!!!!!");
           console.log(doc.data().fullName);
         });
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -229,7 +248,7 @@ export default class Profile extends Component {
           initialData: item.canvasData,
           backgroundColor: item.backGroundColor,
           uid: this.props.userID,
-          itemId: item.id,
+          itemId: item.id
         });
       }}
     >
@@ -251,15 +270,15 @@ export default class Profile extends Component {
           [
             {
               text: "Cancel",
-              onPress: () => {},
+              onPress: () => {}
             },
             {
               text: "Detele",
               onPress: () => {
                 this.deletePhoto(item);
               },
-              style: "destructive",
-            },
+              style: "destructive"
+            }
           ],
           { cancelable: false }
         );
@@ -278,8 +297,8 @@ export default class Profile extends Component {
     console.log(this.props.route.params);
     return (
       <InfosWrapper>
-        <Text>{this.props.userID}</Text>
-        <Text>{this.state.userID}</Text>
+        {/* <Text>{this.props.userID}</Text>
+        <Text>{this.state.userID}</Text> */}
         <HeaderWrapper>
           <Avatar>
             {this.state.userID === 0 ? (
@@ -290,30 +309,30 @@ export default class Profile extends Component {
               >
                 <Image
                   source={{
-                    uri: this.state.photoUrl,
+                    uri: this.state.photoUrl
                   }}
                   style={{
                     width: 80,
                     height: 80,
-                    borderRadius: 40,
+                    borderRadius: 40
                   }}
                 />
               </TouchableOpacity>
             ) : (
               <Image
                 source={{
-                  uri: this.state.photoUrl,
+                  uri: this.state.photoUrl
                 }}
                 style={{
                   width: 80,
                   height: 80,
-                  borderRadius: 40,
+                  borderRadius: 40
                 }}
               />
             )}
 
             <UserName>
-              {this.state.userID == 0 ? "Unknown" : this.state.userName}
+              {this.state.userID == 0 ? "Visitor" : this.state.userName}
             </UserName>
           </Avatar>
           <NumberWrapper>
@@ -348,15 +367,15 @@ export default class Profile extends Component {
                     [
                       {
                         text: "Cancel",
-                        onPress: () => {},
+                        onPress: () => {}
                       },
                       {
                         text: "Log Out",
                         onPress: () => {
                           this.onLogout();
                         },
-                        style: "destructive",
-                      },
+                        style: "destructive"
+                      }
                     ],
                     { cancelable: true }
                   );
@@ -371,14 +390,30 @@ export default class Profile extends Component {
         </HeaderWrapper>
 
         <EditButton
-          disabled={this.state.userID === 0}
-          onPress={() =>
-            navigation.navigate("EditProfile", {
-              name: this.state.userName,
-              uid: this.props.userID,
-              url: this.state.photoUrl,
-            })
-          }
+          onPress={() => {
+            if (this.props.userID === 0) {
+              Alert.alert("Sorry", "You need to log in first.", [
+                {
+                  text: "No thanks",
+                  onPress: () => {},
+                  style: "cancel"
+                },
+                {
+                  text: "Sure",
+                  onPress: () => {
+                    this.props.navigation.navigate("Login");
+                  },
+                  style: "destructive"
+                }
+              ]);
+            } else {
+              navigation.navigate("EditProfile", {
+                name: this.state.userName,
+                uid: this.props.userID,
+                url: this.state.photoUrl
+              });
+            }
+          }}
         >
           <EditProfile>Edit Profile</EditProfile>
         </EditButton>
@@ -405,13 +440,45 @@ export default class Profile extends Component {
         <View style={{ backgroundColor: "gray" }}>
           {/* <Text>aa{this.state.publishImages2[0].title}aa</Text> */}
         </View>
-        {!this.state.showDrafts ? (
-          <FlatGrid
-            spacing={20}
-            data={this.state.published}
-            style={styles.gridView}
-            renderItem={this.renderPublishItem}
-          />
+        {this.state.userID === 0 ? (
+          <SignBox>
+            <EmptySign>
+              <InfosText>Hi, there!!</InfosText>
+            </EmptySign>
+            <CatIcon width={45} height={45} />
+            <EmptySign>
+              <InfosText>🍻 Log in and enjoy the pixel art!</InfosText>
+            </EmptySign>
+          </SignBox>
+        ) : !this.state.showDrafts ? (
+          this.state.published.length == 0 ? (
+            <SignBox>
+              <EmptySign>
+                <InfosText>Come on!!</InfosText>
+              </EmptySign>
+              <PawIcon width={80} height={80} />
+              <EmptySign>
+                <InfosText>🍻 Create your first pixel art!</InfosText>
+              </EmptySign>
+            </SignBox>
+          ) : (
+            <FlatGrid
+              spacing={20}
+              data={this.state.published}
+              style={styles.gridView}
+              renderItem={this.renderPublishItem}
+            />
+          )
+        ) : this.state.drafts.length == 0 ? (
+          <SignBox>
+            <EmptySign>
+              <InfosText>Come on!!</InfosText>
+            </EmptySign>
+            <PawIcon width={80} height={80} />
+            <EmptySign>
+              <InfosText>🍻 Create your first pixel art!</InfosText>
+            </EmptySign>
+          </SignBox>
         ) : (
           <FlatGrid
             data={this.state.drafts}
@@ -428,29 +495,29 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   gridView: {
     marginTop: 10,
-    flex: 1,
+    flex: 1
   },
   itemContainer: {
     justifyContent: "flex-end",
     borderRadius: 5,
     padding: 10,
-    height: 150,
+    height: 150
   },
   itemName: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: "600"
   },
   itemCode: {
     fontWeight: "600",
     fontSize: 12,
-    color: "#fff",
+    color: "#fff"
   },
   button: {
     height: 40,
     width: 100,
     backgroundColor: "grey",
     alignContent: "center",
-    justifyContent: "center",
-  },
+    justifyContent: "center"
+  }
 });

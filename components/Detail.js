@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 
+import { getDate } from "../util";
 import LikeIcon from "../assets/like";
 import CommentIcon from "../assets/comment";
 import MoreIcon from "../assets/more";
@@ -78,7 +79,7 @@ const UserName = styled.Text`
 const TimeLabel = styled.Text`
   font-size: 13px;
   font-weight: 400;
-  color: #c1c1c1;
+  color: #8a8a8a;
 `;
 const InfosText = styled.Text`
   font-weight: 500;
@@ -103,6 +104,7 @@ export default class Detail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       newComment: "",
       likesCount:
         this.props.route.params.likesCount === undefined
@@ -126,7 +128,11 @@ export default class Detail extends Component {
           ? 0
           : this.props.route.params.commentsCount,
       userName: null,
-      commentsContent: []
+      commentsContent: [],
+      publishTime:
+        this.props.route.params.item.publishTime === undefined
+          ? new Date()
+          : this.props.route.params.item.publishTime.toDate()
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -134,6 +140,9 @@ export default class Detail extends Component {
   static defaultProps = {};
 
   onSubmit = e => {
+    this.setState({
+      newComment: ""
+    });
     console.log("on submit");
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const data = {
@@ -152,7 +161,9 @@ export default class Detail extends Component {
         })
       );
 
-    // 记得增加对应photo的comments的count
+    this.setState({
+      loading: false
+    });
   };
 
   componentDidMount() {
@@ -248,7 +259,7 @@ export default class Detail extends Component {
               paddingBottom: 16
             }}
           >
-            {/* <TimeLabel>{item.publishTime.toString()}</TimeLabel> */}
+            <TimeLabel>{getDate(this.state.publishTime)}</TimeLabel>
           </Row>
           <Row>
             <Pressable onPress={e => this.pressLike()}>
@@ -281,27 +292,36 @@ export default class Detail extends Component {
         </ScrollView>
         <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={70}>
           <InputWrapper insetBottom={30}>
-            <Input
-              value={this.state.newComment}
-              editable={true}
-              onChange={e =>
-                this.setState({
-                  newComment: e.nativeEvent.text
-                })
-              }
-              placeholder={
-                this.state.commentsContent.length === 0
-                  ? "Add the first comment..."
-                  : "Add your comment..."
-              }
-              returnKeyType="send"
-              placeholderTextColor="grey"
-              multiline={true}
-              maxLength={300}
-              blurOnSubmit={true}
-              enablesReturnKeyAutomatically={true}
-              onSubmitEditing={e => this.onSubmit(e)}
-            />
+            {this.state.loading ? (
+              <ActivityIndicator size="small" color="grey" />
+            ) : (
+              <Input
+                value={this.state.newComment}
+                editable={true}
+                onChange={e =>
+                  this.setState({
+                    newComment: e.nativeEvent.text
+                  })
+                }
+                placeholder={
+                  this.state.commentsContent.length === 0
+                    ? "Add the first comment..."
+                    : "Add your comment..."
+                }
+                returnKeyType="send"
+                placeholderTextColor="grey"
+                multiline={true}
+                maxLength={300}
+                blurOnSubmit={true}
+                enablesReturnKeyAutomatically={true}
+                onSubmitEditing={e => {
+                  this.setState({
+                    loading: true
+                  });
+                  this.onSubmit(e);
+                }}
+              />
+            )}
           </InputWrapper>
         </KeyboardAvoidingView>
       </Wrapper>
