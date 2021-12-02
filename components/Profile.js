@@ -374,8 +374,8 @@ export default class Profile extends Component {
           disabled={this.state.userID === 0}
           onPress={() =>
             navigation.navigate("EditProfile", {
-              name: "testname",
-              uid: this.props.extraData,
+              name: this.state.userName,
+              uid: this.props.userID,
               url: this.state.photoUrl
             })
           }

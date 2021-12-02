@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Text, StyleSheet, View, TextInput, Image } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  Image,
+  TouchableOpacity
+} from "react-native";
 // import Tabbar from "@mindinventory/react-native-tab-bar-interaction";
 
 import HomeIcon from "../assets/icons/home";
@@ -64,7 +71,12 @@ export default class MyTabbar extends Component {
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name="Search">
+        <Tab.Screen
+          name="Search"
+          options={{
+            title: "Search"
+          }}
+        >
           {props => (
             <Search
               {...props}

@@ -52,7 +52,7 @@ export default class Search extends Component {
   componentDidMount() {
     imagesRef
       //.where("authorID", "==", userID)
-      .orderBy("publishTime", "desc")
+      .orderBy("publishTime")
       .onSnapshot(
         querySnapshot => {
           const newEntities = [];
@@ -72,9 +72,25 @@ export default class Search extends Component {
         }
       );
   }
+  onChangeLike = () => {};
+  viewDetail = (item, islike) => {
+    this.props.navigation.navigate("Detail", {
+      itemId: item.id,
+      item: item,
+      commentsCount: item.comments,
+      uid: this.props.extraData,
+      islike: islike,
+      likesCount: item.likes,
+      onChangeLike: this.onChangeLike
+    });
+  };
 
   renderItem = ({ index, item }) => (
-    <TouchableOpacity onPress={() => {}}>
+    <TouchableOpacity
+      onPress={() => {
+        this.viewDetail(item, false);
+      }}
+    >
       <PixelArt
         data={item.canvasData}
         backgroundColor={item.backGroundColor}
@@ -87,23 +103,21 @@ export default class Search extends Component {
     const { search } = this.state;
     return (
       <View>
-        <ScrollView>
-          <SearchBar
-            placeholder="Type Here..."
-            onChangeText={this.updateSearch}
-            value={search}
-            platform="ios"
-            containerStyle={styles.container}
-            inputContainerStyle={styles.inputContainer}
-            inputStyle={styles.input}
-          />
-          <FlatGrid
-            spacing={20}
-            data={this.state.data}
-            style={styles.gridView}
-            renderItem={this.renderItem}
-          />
-        </ScrollView>
+        <SearchBar
+          placeholder="Type Here..."
+          onChangeText={this.updateSearch}
+          value={search}
+          platform="ios"
+          containerStyle={styles.container}
+          inputContainerStyle={styles.inputContainer}
+          inputStyle={styles.input}
+        />
+        <FlatGrid
+          spacing={20}
+          data={this.state.data}
+          style={styles.gridView}
+          renderItem={this.renderItem}
+        />
       </View>
     );
   }
