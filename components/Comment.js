@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { firebase } from "../firebase/config";
 
 import {
   Text,
@@ -10,11 +11,11 @@ import {
   TextInput,
   Image,
   FlatList,
-  Pressable
+  Pressable,
 } from "react-native";
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 
 const Row = styled.View`
@@ -57,15 +58,36 @@ const DateText = styled.Text`
   font-weight: 300;
   margin-left: 10px;
 `;
+const usersRef = firebase.firestore().collection("users");
+
 export default class Card extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
+      url: "https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77",
     };
   }
 
   static defaultProps = {};
+
+  componentDidMount() {
+    usersRef.where("id", "==", this.props.userId).onSnapshot(
+      (querySnapshot) => {
+        //const newEntities = [];
+        querySnapshot.forEach((doc) => {
+          this.setState({ url: doc.data().url });
+        });
+        //console.log(this.state.userName);
+        // this.setState({
+        //   published: newEntities,
+        // });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
   render() {
     var { text, id, user, time, userId } = this.props;
@@ -80,12 +102,12 @@ export default class Card extends Component {
           <Row>
             <Image
               source={{
-                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`
+                uri: this.state.url,
               }}
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: 20
+                borderRadius: 20,
               }}
             />
             <View>
@@ -105,9 +127,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
-  }
+    fontSize: 32,
+  },
 });

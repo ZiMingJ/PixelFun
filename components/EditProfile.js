@@ -75,6 +75,7 @@ export default class EditProfile extends Component {
     // {photoUrl:this.state.url}
     usersRef.doc(this.state.userID).update({
       fullName: this.state.name,
+      url: this.state.url,
     });
     Alert.alert("Sucess", "Save!");
     this.props.navigation.goBack();

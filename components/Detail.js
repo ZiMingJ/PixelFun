@@ -22,7 +22,7 @@ import {
   ScrollView,
   Pressable,
   KeyboardAvoidingView,
-  Alert
+  Alert,
 } from "react-native";
 
 const InputWrapper = styled.View`
@@ -130,61 +130,82 @@ export default class Detail extends Component {
       userName: null,
       commentsContent: [],
       publishTime:
+<<<<<<< HEAD
         !this.props.route.params.publishTime == null &&
         !this.props.route.params.publishTime === undefined
           ? this.props.route.params.publishTime.toDate()
           : new Date()
+=======
+        this.props.route.params.item.publishTime === undefined
+          ? new Date()
+          : this.props.route.params.item.publishTime.toDate(),
+      url: "https://picsum.photos/id/125/250/250",
+      userNameComment: "Vistor",
+>>>>>>> eb79477 (All avator)
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   static defaultProps = {};
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     this.setState({
-      newComment: ""
+      newComment: "",
     });
     console.log("on submit");
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const data = {
       itemId: this.state.itemId,
       userID: this.state.userID,
-      userName: this.state.userName,
+      userName: this.state.userNameComment,
       commentTime: timestamp,
-      text: e.nativeEvent.text
+      text: e.nativeEvent.text,
     };
     commentsRef
       .add(data)
       //.then(this.setState({ commentsCount: this.state.commentsCount + 1 }))
       .then(
         imagesRef.doc(this.state.itemId).update({
-          comments: this.state.commentsContent.length + 1
+          comments: this.state.commentsContent.length + 1,
         })
       );
 
     this.setState({
-      loading: false
+      loading: false,
     });
   };
 
   componentDidMount() {
-    usersRef.where("id", "==", this.state.userID).onSnapshot(
-      querySnapshot => {
-        //const newEntities = [];
-        querySnapshot.forEach(doc => {
-          this.setState({ userName: doc.data().fullName });
+    usersRef.where("id", "==", this.state.item.userID).onSnapshot(
+      (querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.setState({ userName: doc.data().fullName, url: doc.data().url });
         });
-        console.log(this.state.userName);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    usersRef.where("id", "==", this.state.userID).onSnapshot(
+      (querySnapshot) => {
+        //const newEntities = [];
+        querySnapshot.forEach((doc) => {
+          this.setState({
+            userNameComment: doc.data().fullName,
+          });
+        });
+        //console.log(this.state.userName);
         // this.setState({
         //   published: newEntities,
         // });
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
     if (this.state.itemId !== 0 && this.state.commentsContent.length === 0) {
       //commentsContent = null;
+<<<<<<< HEAD
       const fetchData = async () => {
         commentsRef
           .where("itemId", "==", this.state.itemId)
@@ -207,6 +228,27 @@ export default class Detail extends Component {
           );
       };
       fetchData();
+=======
+      commentsRef
+        .where("itemId", "==", this.state.itemId)
+        .orderBy("commentTime", "desc")
+        .onSnapshot(
+          (querySnapshot) => {
+            const newEntities = [];
+            querySnapshot.forEach((doc) => {
+              const entity = doc.data();
+              entity.id = doc.id;
+              newEntities.push(entity);
+            });
+            this.setState({
+              commentsContent: newEntities,
+            });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+>>>>>>> eb79477 (All avator)
     }
   }
 
@@ -215,7 +257,7 @@ export default class Detail extends Component {
       islike: !this.state.islike,
       likesCount: this.state.islike
         ? this.state.likesCount - 1
-        : this.state.likesCount + 1
+        : this.state.likesCount + 1,
     });
     if (this.state.islike !== true) {
       imagesRef.doc(this.state.itemId).update({
@@ -243,12 +285,12 @@ export default class Detail extends Component {
           >
             <Image
               source={{
-                uri: `https://picsum.photos/id/125/250/250`
+                uri: this.state.url,
               }}
               style={{
                 width: 34,
                 height: 34,
-                borderRadius: 15
+                borderRadius: 15,
               }}
             />
             <UserName>{this.state.userName}</UserName>
@@ -265,13 +307,13 @@ export default class Detail extends Component {
             style={{
               borderColor: "#EBEBEB",
               borderBottomWidth: 1,
-              paddingBottom: 16
+              paddingBottom: 16,
             }}
           >
             <TimeLabel>{getDate(this.state.publishTime)}</TimeLabel>
           </Row>
           <Row>
-            <Pressable onPress={e => this.pressLike()}>
+            <Pressable onPress={(e) => this.pressLike()}>
               {this.state.islike ? (
                 <Icon name="heart" size={25} color="tomato" />
               ) : (
@@ -307,9 +349,9 @@ export default class Detail extends Component {
               <Input
                 value={this.state.newComment}
                 editable={true}
-                onChange={e =>
+                onChange={(e) =>
                   this.setState({
-                    newComment: e.nativeEvent.text
+                    newComment: e.nativeEvent.text,
                   })
                 }
                 placeholder={
@@ -323,9 +365,9 @@ export default class Detail extends Component {
                 maxLength={300}
                 blurOnSubmit={true}
                 enablesReturnKeyAutomatically={true}
-                onSubmitEditing={e => {
+                onSubmitEditing={(e) => {
                   this.setState({
-                    loading: true
+                    loading: true,
                   });
                   this.onSubmit(e);
                 }}
