@@ -17,7 +17,7 @@ import {
   Image,
   AppRegistry,
   ScrollView,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import { Background } from "@react-navigation/elements";
 
@@ -31,7 +31,7 @@ const Input = styled.TextInput`
 const Photos = [];
 for (let i = 0; i < 10; i++) {
   Photos.push({
-    url: "https://picsum.photos/id/125/250/250",
+    url: "https://picsum.photos/id/125/250/250"
   });
 }
 const imagesRef = firebase.firestore().collection("images");
@@ -46,7 +46,7 @@ export default class Search extends Component {
       data: Photos,
       allData: Photos,
       result: [],
-      newComment: "",
+      newComment: ""
     };
   }
 
@@ -55,28 +55,28 @@ export default class Search extends Component {
   onSubmit(e) {
     if (e.nativeEvent.text === " ") {
       this.setState({
-        data: this.state.allData,
+        data: this.state.allData
       });
     }
     newEntities = [];
-    this.state.data.forEach((d) => {
+    this.state.data.forEach(d => {
       if (d.title.indexOf(e.nativeEvent.text) != -1) {
         //result.push(d.title);
         imagesRef
           .where("title", "==", d.title)
           .orderBy("publishTime")
           .onSnapshot(
-            (querySnapshot) => {
-              querySnapshot.forEach((doc) => {
+            querySnapshot => {
+              querySnapshot.forEach(doc => {
                 const entity = doc.data();
                 entity.id = doc.id;
                 newEntities.push(entity);
                 this.setState({
-                  data: newEntities,
+                  data: newEntities
                 });
               });
             },
-            (error) => {
+            error => {
               console.log(error);
             }
           );
@@ -114,7 +114,7 @@ export default class Search extends Component {
   //   });
   // };
 
-  viewDetail = (item) => {
+  viewDetail = item => {
     this.props.navigation.navigate("Detail", item);
   };
 
@@ -123,9 +123,9 @@ export default class Search extends Component {
       //.where("authorID", "==", userID)
       .orderBy("publishTime")
       .onSnapshot(
-        (querySnapshot) => {
+        querySnapshot => {
           const newEntities = [];
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const entity = doc.data();
             entity.id = doc.id;
             newEntities.push(entity);
@@ -134,10 +134,10 @@ export default class Search extends Component {
           // setEntities(newEntities);
           this.setState({
             data: newEntities,
-            allData: newEntities,
+            allData: newEntities
           });
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -151,7 +151,7 @@ export default class Search extends Component {
       uid: this.props.extraData,
       islike: islike,
       likesCount: item.likes,
-      onChangeLike: this.onChangeLike,
+      onChangeLike: this.onChangeLike
     });
   };
 
@@ -190,9 +190,9 @@ export default class Search extends Component {
         <Input
           value={this.state.newComment}
           editable={true}
-          onChange={(e) =>
+          onChange={e =>
             this.setState({
-              newComment: e.nativeEvent.text,
+              newComment: e.nativeEvent.text
             })
           }
           placeholder="Search the key word of the title..."
@@ -202,7 +202,7 @@ export default class Search extends Component {
           maxLength={300}
           blurOnSubmit={true}
           enablesReturnKeyAutomatically={true}
-          onSubmitEditing={(e) => this.onSubmit(e)}
+          onSubmitEditing={e => this.onSubmit(e)}
         />
         <FlatGrid
           spacing={20}
@@ -217,13 +217,13 @@ export default class Search extends Component {
 
 const styles = {
   container: {
-    alignItems: "center",
+    alignItems: "center"
   },
   inputContainer: {
     height: 30,
-    backgroundColor: "#EFEFEF",
+    backgroundColor: "#EFEFEF"
   },
   input: {
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 };

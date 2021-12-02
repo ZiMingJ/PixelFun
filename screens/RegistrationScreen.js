@@ -23,25 +23,32 @@ export default function RegistrationScreen({ navigation }) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((response) => {
+      .then(response => {
         const uid = response.user.uid;
         const data = {
           id: uid,
           email,
           fullName,
+          drafts: 0,
+          likes: 0,
+          posts: 0,
+          url:
+            "https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/6.jpeg?alt=media&token=d1764fdc-ff38-4413-92f5-ab22c2fb75c4"
         };
         const usersRef = firebase.firestore().collection("users");
         usersRef
           .doc(uid)
           .set(data)
           .then(() => {
-            navigation.navigate("HomeTab", { user: data });
+            navigation.popToTop();
+
+            navigation.replace("HomeTab", { uid: uid });
           })
-          .catch((error) => {
+          .catch(error => {
             alert(error);
           });
       })
-      .catch((error) => {
+      .catch(error => {
         alert(error);
       });
   };
@@ -57,7 +64,7 @@ export default function RegistrationScreen({ navigation }) {
           style={styles.input}
           placeholder="Full Name"
           placeholderTextColor="#aaaaaa"
-          onChangeText={(text) => setFullName(text)}
+          onChangeText={text => setFullName(text)}
           value={fullName}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -66,7 +73,7 @@ export default function RegistrationScreen({ navigation }) {
           style={styles.input}
           placeholder="E-mail"
           placeholderTextColor="#aaaaaa"
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={text => setEmail(text)}
           value={email}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -76,7 +83,7 @@ export default function RegistrationScreen({ navigation }) {
           placeholderTextColor="#aaaaaa"
           secureTextEntry
           placeholder="Password"
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={text => setPassword(text)}
           value={password}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -86,7 +93,7 @@ export default function RegistrationScreen({ navigation }) {
           placeholderTextColor="#aaaaaa"
           secureTextEntry
           placeholder="Confirm Password"
-          onChangeText={(text) => setConfirmPassword(text)}
+          onChangeText={text => setConfirmPassword(text)}
           value={confirmPassword}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -113,7 +120,7 @@ export default function RegistrationScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "center"
   },
   title: {},
   logo: {
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 90,
     alignSelf: "center",
-    margin: 30,
+    margin: 30
   },
   input: {
     height: 48,
@@ -132,7 +139,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
-    paddingLeft: 16,
+    paddingLeft: 16
   },
   button: {
     backgroundColor: "#788eec",
@@ -142,25 +149,25 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 5,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   buttonTitle: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   footerView: {
     flex: 1,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 20
   },
   footerText: {
     fontSize: 16,
-    color: "#2e2e2d",
+    color: "#2e2e2d"
   },
   footerLink: {
     color: "#788eec",
     fontWeight: "bold",
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 });

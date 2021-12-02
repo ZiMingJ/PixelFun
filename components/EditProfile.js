@@ -17,11 +17,11 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
-  Alert,
+  Alert
 } from "react-native";
 
 const Avatar = styled.View`
-  padding: 20px 20px 20px 20px;
+  padding: 40px 20px 30px 20px;
   background: white;
   justify-content: center;
   align-items: center;
@@ -46,7 +46,7 @@ const EditButton = styled.TouchableOpacity`
 const Row = styled.View`
   flex-direction: row;
   align-items: center;
-  margin: 5px 0 0 0;
+  margin: 5px 0 30px 0;
   align-items: center;
   background-color: white;
 `;
@@ -64,7 +64,7 @@ export default class EditProfile extends Component {
     this.state = {
       name: this.props.route === undefined ? "" : this.props.route.params.name,
       url: this.props.route === undefined ? "" : this.props.route.params.url,
-      userID: this.props.route === undefined ? "" : this.props.route.params.uid,
+      userID: this.props.route === undefined ? "" : this.props.route.params.uid
     };
   }
 
@@ -75,10 +75,9 @@ export default class EditProfile extends Component {
     // {photoUrl:this.state.url}
     usersRef.doc(this.state.userID).update({
       fullName: this.state.name,
-      url: this.state.url,
+      url: this.state.url
     });
-    Alert.alert("Sucess", "Save!");
-    this.props.navigation.goBack();
+    Alert.alert("Sucess", "Save!", () => this.props.navigation.goBack());
   };
 
   renderItem = ({ item, index }) => (
@@ -86,17 +85,17 @@ export default class EditProfile extends Component {
       style={{ borderColor: "grey", borderWidth: 1 }}
       onPress={() => {
         this.setState({
-          url: item,
+          url: item
         });
       }}
     >
       <Image
         source={{
-          uri: item,
+          uri: item
         }}
         style={{
           width: 120,
-          height: 120,
+          height: 120
         }}
       />
     </TouchableOpacity>
@@ -111,7 +110,7 @@ export default class EditProfile extends Component {
           title="Save   "
           color="tomato"
         />
-      ),
+      )
     });
 
     return (
@@ -119,12 +118,12 @@ export default class EditProfile extends Component {
         <Avatar>
           <Image
             source={{
-              uri: this.state.url,
+              uri: this.state.url
             }}
             style={{
               width: 100,
               height: 100,
-              borderRadius: 50,
+              borderRadius: 50
             }}
           />
         </Avatar>
@@ -136,9 +135,9 @@ export default class EditProfile extends Component {
               height: 40,
               width: 200,
               borderColor: "gray",
-              borderBottomWidth: 1,
+              borderBottomWidth: 1
             }}
-            onChangeText={(text) => this.setState({ name: text })}
+            onChangeText={text => this.setState({ name: text })}
           />
         </Row>
         <FlatGrid
@@ -154,17 +153,17 @@ export default class EditProfile extends Component {
 
 const styles = {
   container: {
-    alignItems: "center",
+    alignItems: "center"
   },
   inputContainer: {
     height: 30,
-    backgroundColor: "#EFEFEF",
+    backgroundColor: "#EFEFEF"
   },
   input: {
-    fontSize: 16,
+    fontSize: 16
   },
   gridView: {
     marginTop: 10,
-    flex: 1,
-  },
+    flex: 1
+  }
 };

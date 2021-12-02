@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, LogBox } from "react-native";
 import Constants from "expo-constants";
-
 import Canvas from "./components/Canvas";
 import ColorPicker from "./components/ColorPicker";
 import Home from "./components/Home";
@@ -38,7 +37,7 @@ if (!global.btoa) {
 if (!global.atob) {
   global.atob = decode;
 }
-
+LogBox.ignoreAllLogs();
 export default function App() {
   const Stack = createStackNavigator();
   const [loading, setLoading] = useState(true);
@@ -46,17 +45,17 @@ export default function App() {
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         usersRef
           .doc(user.uid)
           .get()
-          .then((document) => {
+          .then(document => {
             const userData = document.data();
             setLoading(false);
             setUser(userData);
           })
-          .catch((error) => {
+          .catch(error => {
             setLoading(false);
           });
       } else {
@@ -98,7 +97,7 @@ export default function App() {
                       component={Tabbar}
                       options={{
                         headerShown: false,
-                        ...TransitionPresets.SlideFromRightIOS,
+                        ...TransitionPresets.SlideFromRightIOS
                       }}
                     />
                     <Stack.Screen
@@ -107,7 +106,7 @@ export default function App() {
                       options={{
                         title: "Canvas",
                         headerShown: false,
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                        ...TransitionPresets.ModalSlideFromBottomIOS
                       }}
                     />
 
@@ -115,7 +114,7 @@ export default function App() {
                       name="Publish"
                       component={Publish}
                       options={{
-                        title: "Publish",
+                        title: "Publish"
                       }}
                     />
                   </Stack.Group>
@@ -141,7 +140,7 @@ export default function App() {
                       name="EditProfile"
                       component={EditProfile}
                       options={({ navigation, route }) => ({
-                        headerTitle: "Edit Profile",
+                        headerTitle: "Edit Profile"
                       })}
                     />
                     {/* <Stack.Screen
@@ -188,6 +187,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-  },
+    backgroundColor: "#ecf0f1"
+  }
 });

@@ -17,11 +17,11 @@ import {
   Image,
   FlatList,
   Pressable,
-  Alert,
+  Alert
 } from "react-native";
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native-gesture-handler";
 
 const Row = styled.View`
@@ -79,7 +79,7 @@ const Item = ({
   commentsCount,
   backgroundColor,
   report,
-  author,
+  author
 }) => {};
 
 const imagesRef = firebase.firestore().collection("images");
@@ -101,15 +101,9 @@ export default class Card extends Component {
       userId: this.props.item.userID === undefined ? 0 : this.props.item.userID,
       url: "https://picsum.photos/id/125/250/250",
       publishTime:
-<<<<<<< HEAD
         !this.props.publishTime == null && !this.props.publishTime === undefined
           ? this.props.publishTime.toDate()
           : new Date()
-=======
-        this.props.publishTime === undefined
-          ? new Date()
-          : this.props.publishTime.toDate(),
->>>>>>> eb79477 (All avator)
     };
   }
 
@@ -117,9 +111,9 @@ export default class Card extends Component {
 
   componentDidMount() {
     usersRef.where("id", "==", this.state.userId).onSnapshot(
-      (querySnapshot) => {
+      querySnapshot => {
         //const newEntities = [];
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(doc => {
           this.setState({ userName: doc.data().fullName, url: doc.data().url });
         });
         console.log(this.state.userName);
@@ -127,7 +121,7 @@ export default class Card extends Component {
         //   published: newEntities,
         // });
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -138,11 +132,11 @@ export default class Card extends Component {
       islike: !this.state.islike,
       likesCount: this.state.islike
         ? this.state.likesCount - 1
-        : this.state.likesCount + 1,
+        : this.state.likesCount + 1
     });
     if (this.state.islike !== true) {
       imagesRef.doc(this.props.id).update({
-        likes: this.state.likesCount + 1,
+        likes: this.state.likesCount + 1
       });
     }
     this.props.onChangeLike(
@@ -167,12 +161,12 @@ export default class Card extends Component {
           <Row>
             <Image
               source={{
-                uri: this.state.url,
+                uri: this.state.url
               }}
               style={{
                 width: 30,
                 height: 30,
-                borderRadius: 15,
+                borderRadius: 15
               }}
             />
             <UserName>{this.state.userName}</UserName>
@@ -189,7 +183,7 @@ export default class Card extends Component {
         </Row>
 
         <Row>
-          <Pressable onPress={(e) => this.pressLike()}>
+          <Pressable onPress={e => this.pressLike()}>
             {this.state.islike ? (
               <Icon name="heart" size={25} color="tomato" />
             ) : (
@@ -219,9 +213,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
-    fontSize: 32,
-  },
+    fontSize: 32
+  }
 });

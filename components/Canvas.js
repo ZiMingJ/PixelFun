@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
-  Alert,
+  Alert
 } from "react-native";
 import { PIXEL_COUNT, HEADER_HEIGHT, TOOLS } from "../constants";
 
@@ -45,7 +45,7 @@ let colors = [
   "#35CE8D",
   "#4DB3FF",
   "#0085FF",
-  "#274B6D",
+  "#274B6D"
 ];
 
 let colorMap = [];
@@ -144,13 +144,16 @@ export default class Canvas extends Component {
         this.props.route.params.itemId === undefined
           ? 0
           : this.props.route.params.itemId,
-      isVisible: false,
+      isVisible: false
     };
   }
 
   static defaultProps = {};
 
-  onPublishPress = (title) => {
+  onPublishPress = title => {
+    if (this.state.itemId != 0) {
+      this.deleteDraft(this.state.itemId);
+    }
     console.log(title);
     //if (entityText && entityText.length > 0) {
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -161,17 +164,21 @@ export default class Canvas extends Component {
       publishTime: timestamp,
       title: title,
       likes: 0,
-      comments: 0,
+      comments: 0
     };
     imagesRef
       .add(data)
-      .then((_doc) => {
+      .then(_doc => {
         this.props.navigation.navigate("Home");
       })
-      .catch((error) => {
+      .catch(error => {
         alert(error);
       });
     //}
+  };
+
+  deleteDraft = itemId => {
+    draftsRef.doc(itemId).delete();
   };
 
   onDraftPress = () => {
@@ -179,7 +186,7 @@ export default class Canvas extends Component {
     if (this.state.itemId != 0) {
       draftsRef.doc(this.state.itemId).update({
         backGroundColor: this.state.backgroundColor,
-        canvasData: this.state.canvasData,
+        canvasData: this.state.canvasData
       });
       this.props.navigation.navigate("Profile");
     } else {
@@ -188,16 +195,16 @@ export default class Canvas extends Component {
         userID: this.state.userID,
         backGroundColor: this.state.backgroundColor,
         canvasData: this.state.canvasData,
-        createdAt: timestamp,
+        createdAt: timestamp
       };
       draftsRef
         .add(data)
-        .then((_doc) => {
+        .then(_doc => {
           this.props.navigation.navigate("Profile");
           // setEntityText("");
           // Keyboard.dismiss();
         })
-        .catch((error) => {
+        .catch(error => {
           alert(error);
         });
     }
@@ -208,30 +215,30 @@ export default class Canvas extends Component {
   getInitialCanvasData = () =>
     Array.from(
       {
-        length: PIXEL_COUNT * PIXEL_COUNT,
+        length: PIXEL_COUNT * PIXEL_COUNT
       },
       () => ({ color: "none" })
     );
 
-  updateCanvas = (data) => {
+  updateCanvas = data => {
     history.push(this.state.canvasData);
     if (history.length > 10) {
       history.shift();
     }
     this.setState({
-      canvasData: data,
+      canvasData: data
     });
   };
 
   goBack = () => {
     this.setState({
       backgroundColor: "white",
-      canvasData: this.getInitialCanvasData(),
+      canvasData: this.getInitialCanvasData()
     });
     this.props.navigation.goBack();
   };
 
-  updateColorMap = (newColor) => {
+  updateColorMap = newColor => {
     let colorMap = this.state.colorMap;
     for (let i = 0; i < colorMap.length; i++) {
       if (colorMap[i].color === this.state.currentColor) {
@@ -240,7 +247,7 @@ export default class Canvas extends Component {
     }
     this.setState({
       colorMap,
-      currentColor: newColor,
+      currentColor: newColor
     });
   };
 
@@ -251,9 +258,7 @@ export default class Canvas extends Component {
         ? this.state.currentColor
         : route.params.newColor;
     this.state.userID = route.params === undefined ? 0 : route.params.uid;
-    const nonEmpty = this.state.canvasData.some(
-      (item) => item.color !== "none"
-    );
+    const nonEmpty = this.state.canvasData.some(item => item.color !== "none");
 
     return (
       <View style>
@@ -272,15 +277,15 @@ export default class Canvas extends Component {
                       onPress: () => {
                         this.goBack();
                       },
-                      style: "destructive",
+                      style: "destructive"
                     },
                     {
                       text: "Sure!",
                       onPress: () => {
                         this.onDraftPress();
                         this.goBack();
-                      },
-                    },
+                      }
+                    }
                   ],
                   { cancelable: false }
                 );
@@ -298,7 +303,7 @@ export default class Canvas extends Component {
                 navigation.navigate("Publish", {
                   canvasData: this.state.canvasData,
                   backgroundColor: this.state.backgroundColor,
-                  onPublishPress: this.onPublishPress,
+                  onPublishPress: this.onPublishPress
                 });
               } else {
                 Alert.alert("Oh no!", "You cannot submit an empty canvas!");
@@ -339,7 +344,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.PENCIL}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.PENCIL,
+                  selectedTool: TOOLS.PENCIL
                 })
               }
             >
@@ -349,7 +354,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.BUCKET}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.BUCKET,
+                  selectedTool: TOOLS.BUCKET
                 })
               }
             >
@@ -359,7 +364,7 @@ export default class Canvas extends Component {
               active={this.state.selectedTool === TOOLS.ERASER}
               onPress={() =>
                 this.setState({
-                  selectedTool: TOOLS.ERASER,
+                  selectedTool: TOOLS.ERASER
                 })
               }
             >
@@ -379,7 +384,7 @@ export default class Canvas extends Component {
               onPress={() => {
                 if (history.length > 1) {
                   this.setState({
-                    canvasData: history[history.length - 2],
+                    canvasData: history[history.length - 2]
                   });
                   history.pop();
                 }
@@ -394,7 +399,7 @@ export default class Canvas extends Component {
               active={this.state.displayGrid}
               onPress={() =>
                 this.setState({
-                  displayGrid: !this.state.displayGrid,
+                  displayGrid: !this.state.displayGrid
                 })
               }
             >
@@ -444,16 +449,16 @@ export default class Canvas extends Component {
                 onPress={() => {
                   if (this.state.displayDrawTab) {
                     this.setState({
-                      currentColor: item.color,
+                      currentColor: item.color
                     });
                     if (this.state.selectedTool === TOOLS.ERASER) {
                       this.setState({
-                        selectedTool: TOOLS.ERASER,
+                        selectedTool: TOOLS.ERASER
                       });
                     }
                   } else {
                     this.setState({
-                      backgroundColor: item.color,
+                      backgroundColor: item.color
                     });
                   }
                 }}
@@ -465,7 +470,7 @@ export default class Canvas extends Component {
           onPress={() => {
             this.props.navigation.navigate("ColorPicker", {
               updateColorMap: this.updateColorMap,
-              currentColor: this.state.currentColor,
+              currentColor: this.state.currentColor
             });
           }}
         >
@@ -501,13 +506,13 @@ const styles = StyleSheet.create({
   circle: {
     width: 44,
     height: 44,
-    borderRadius: 44 / 2,
+    borderRadius: 44 / 2
   },
 
   actionButtonIcon: {
     fontSize: 30,
     height: 30,
     color: "skyblue",
-    marginHorizontal: 20,
-  },
+    marginHorizontal: 20
+  }
 });
