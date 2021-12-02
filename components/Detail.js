@@ -99,13 +99,15 @@ const InfosText = styled.Text`
 const commentsRef = firebase.firestore().collection("comments");
 const imagesRef = firebase.firestore().collection("images");
 const usersRef = firebase.firestore().collection("users");
-
 export default class Detail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       newComment: "",
-      likesCount: this.props.route.params.likesCount,
+      likesCount:
+        this.props.route.params.likesCount === undefined
+          ? 0
+          : this.props.route.params.likesCount,
       islike: this.props.route.params.islike,
       userID:
         this.props.route.params.uid === undefined
@@ -154,9 +156,6 @@ export default class Detail extends Component {
   };
 
   componentDidMount() {
-    // this.setState({
-    //   commentsCount: this.state.item.comments,
-    // });
     usersRef.where("id", "==", this.state.userID).onSnapshot(
       querySnapshot => {
         //const newEntities = [];
@@ -188,10 +187,6 @@ export default class Detail extends Component {
             this.setState({
               commentsContent: newEntities
             });
-            //console.log(commentsContent);
-            // this.setState({
-            //   published: newEntities,
-            // });
           },
           error => {
             console.log(error);
@@ -207,6 +202,11 @@ export default class Detail extends Component {
         ? this.state.likesCount - 1
         : this.state.likesCount + 1
     });
+    if (this.state.islike !== true) {
+      imagesRef.doc(this.state.itemId).update({
+        likes: this.state.likesCount + 1,
+      });
+    }
     this.props.route.params.onChangeLike(
       this.props.route.params.item,
       this.state.islike,

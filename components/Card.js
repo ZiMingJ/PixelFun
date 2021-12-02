@@ -7,6 +7,8 @@ import LikeIcon from "../assets/like";
 import CommentIcon from "../assets/comment";
 import MoreIcon from "../assets/more";
 import PixelArt from "./PixelArt";
+import { firebase } from "../firebase/config";
+
 import {
   Text,
   StyleSheet,
@@ -15,11 +17,14 @@ import {
   Image,
   FlatList,
   Pressable,
+<<<<<<< HEAD
   Alert
+=======
+>>>>>>> 773f0a7 (final merge)
 } from "react-native";
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 
 const Row = styled.View`
@@ -75,8 +80,10 @@ const Item = ({
   commentsCount,
   backgroundColor,
   report,
-  author
+  author,
 }) => {};
+
+const imagesRef = firebase.firestore().collection("images");
 
 export default class Card extends Component {
   constructor(props) {
@@ -89,7 +96,7 @@ export default class Card extends Component {
       // backgroundColor: this.props.backgroundColor,
       // report: this.props.report,
       // author: this.props.author,
-      islike: false
+      islike: false,
     };
   }
 
@@ -100,8 +107,13 @@ export default class Card extends Component {
       islike: !this.state.islike,
       likesCount: this.state.islike
         ? this.state.likesCount - 1
-        : this.state.likesCount + 1
+        : this.state.likesCount + 1,
     });
+    if (this.state.islike !== true) {
+      imagesRef.doc(this.props.id).update({
+        likes: this.state.likesCount + 1,
+      });
+    }
     this.props.onChangeLike(
       this.props.item,
       this.state.islike,
@@ -124,12 +136,12 @@ export default class Card extends Component {
           <Row>
             <Image
               source={{
-                uri: `https://picsum.photos/id/125/250/250`
+                uri: `https://picsum.photos/id/125/250/250`,
               }}
               style={{
                 width: 30,
                 height: 30,
-                borderRadius: 15
+                borderRadius: 15,
               }}
             />
             <UserName>{this.props.author}</UserName>
@@ -146,7 +158,7 @@ export default class Card extends Component {
         </Row>
 
         <Row>
-          <Pressable onPress={e => this.pressLike()}>
+          <Pressable onPress={(e) => this.pressLike()}>
             {this.state.islike ? (
               <Icon name="heart" size={25} color="tomato" />
             ) : (
@@ -173,9 +185,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
-  }
+    fontSize: 32,
+  },
 });
