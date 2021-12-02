@@ -16,14 +16,24 @@ import { FlatGrid } from "react-native-super-grid";
 import { firebase } from "../firebase/config";
 import PixelArt from "./PixelArt";
 import storage from "../store";
+import MoreIcon from "../assets/more";
 
 const HeaderWrapper = styled.View`
-  padding: 20px 30px 10px 5px;
+  padding: 15px 5px 0px 5px;
   background: white;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   justify-content: space-around;
+`;
+
+const Col = styled.View`
+  align-items: flex-start;
+  margin-right: 20px;
+  justify-content: flex-start;
+  flex: 1;
+  height: 160px;
+  flex-direction: row;
 `;
 
 const Avatar = styled.View`
@@ -32,6 +42,7 @@ const Avatar = styled.View`
   justify-content: center;
   align-items: center;
   justify-content: space-around;
+  flex: 5;
 `;
 
 const UserName = styled.Text`
@@ -50,7 +61,7 @@ const EditButton = styled.TouchableOpacity`
   align-items: center;
   border-width: 1px;
   border-color: gray;
-  margin: 0px 10px 0px 10px;
+  margin: 0px 10px 10px 10px;
 `;
 
 const NumberWrapper = styled.View`
@@ -58,6 +69,7 @@ const NumberWrapper = styled.View`
   justify-content: center;
   align-items: center;
   justify-content: space-around;
+  flex: 5;
 `;
 
 const Number = styled.Text`
@@ -127,40 +139,6 @@ export default class Profile extends Component {
     //Detele the photo here
     imagesRef.doc(item.id).delete();
   };
-
-  shouldComponentUpdate(nextProps, nextState) {
-    this.forceUpdate();
-    return true;
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (props.userID !== state.userID) {
-      const publishedNew = [];
-
-      imagesRef
-        .where("userID", "==", props.userID)
-        .orderBy("publishTime", "desc")
-        .onSnapshot(
-          querySnapshot => {
-            querySnapshot.forEach(doc => {
-              let entity = doc.data();
-              entity.id = doc.id;
-              publishedNew.push(entity);
-              console.log("????");
-              console.log(entity.id);
-            });
-          },
-          error => {
-            console.log(error);
-          }
-        );
-
-      return {
-        published: publishedNew
-      };
-    }
-    return null;
-  }
 
   onLogout() {
     firebase
@@ -294,78 +272,106 @@ export default class Profile extends Component {
       />
     </TouchableOpacity>
   );
+
   render() {
     const { route, navigation } = this.props;
-    //this.forceUpdate();
+    console.log(this.props.route.params);
     return (
       <InfosWrapper>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            if (this.state.userID != 0) {
-              Alert.alert(
-                "Attention",
-                "Are you sure to log out?",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => {}
-                  },
-                  {
-                    text: "Log Out",
-                    onPress: () => {
-                      this.onLogout();
-                    },
-                    style: "destructive"
-                  }
-                ],
-                { cancelable: true }
-              );
-            } else {
-              this.onLogout();
-            }
-          }}
-        >
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
         <Text>{this.props.userID}</Text>
         <Text>{this.state.userID}</Text>
         <HeaderWrapper>
           <Avatar>
-            <Image
-              source={{
-                uri: this.state.photoUrl
-              }}
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 40
-              }}
-            />
+            {this.state.userID === 0 ? (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("Login");
+                }}
+              >
+                <Image
+                  source={{
+                    uri: this.state.photoUrl
+                  }}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 40
+                  }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <Image
+                source={{
+                  uri: this.state.photoUrl
+                }}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 40
+                }}
+              />
+            )}
 
-            <UserName>{this.state.userName}</UserName>
+            <UserName>
+              {this.state.userID == 0 ? "Unknown" : this.state.userName}
+            </UserName>
           </Avatar>
           <NumberWrapper>
-            <Number>{this.state.postsNum}</Number>
+            <Number>
+              {this.state.userID == 0 ? 0 : this.state.published.length}
+            </Number>
             <View>
               <Tag>Posts</Tag>
             </View>
           </NumberWrapper>
           <NumberWrapper>
-            <Number>{this.state.likesNum}</Number>
+            <Number>{this.state.userID == 0 ? 0 : this.state.likesNum}</Number>
             <View>
               <Tag>Likes</Tag>
             </View>
           </NumberWrapper>
           <NumberWrapper>
-            <Number>{this.state.draftsNum}</Number>
+            <Number>
+              {this.state.userID == 0 ? 0 : this.state.drafts.length}
+            </Number>
             <View>
               <Tag>Drafts</Tag>
             </View>
           </NumberWrapper>
+          <Col>
+            <TouchableOpacity
+              onPress={() => {
+                if (this.state.userID != 0) {
+                  Alert.alert(
+                    "Attention",
+                    "Are you sure to log out?",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => {}
+                      },
+                      {
+                        text: "Log Out",
+                        onPress: () => {
+                          this.onLogout();
+                        },
+                        style: "destructive"
+                      }
+                    ],
+                    { cancelable: true }
+                  );
+                } else {
+                  this.onLogout();
+                }
+              }}
+            >
+              <MoreIcon width={27} height={27} />
+            </TouchableOpacity>
+          </Col>
         </HeaderWrapper>
 
         <EditButton
+          disabled={this.state.userID === 0}
           onPress={() =>
             navigation.navigate("EditProfile", {
               name: "testname",

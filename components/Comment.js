@@ -10,11 +10,11 @@ import {
   TextInput,
   Image,
   FlatList,
-  Pressable,
+  Pressable
 } from "react-native";
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native-gesture-handler";
 
 const Row = styled.View`
@@ -61,7 +61,7 @@ export default class Card extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
+      loading: false
     };
   }
 
@@ -80,16 +80,16 @@ export default class Card extends Component {
           <Row>
             <Image
               source={{
-                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`,
+                uri: `https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/chicken.png?alt=media&token=dc3a138d-be0d-4783-b083-5cfc2658cb77`
               }}
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: 20,
+                borderRadius: 20
               }}
             />
             <View>
-              <UserName>{user === undefined ? "Unknown" : user}</UserName>
+              <UserName>{userId === 0 ? "Visitor" : user}</UserName>
               {/* <DateText>{time.toString()}</DateText> */}
             </View>
           </Row>
@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
-    fontSize: 32,
-  },
+    fontSize: 32
+  }
 });

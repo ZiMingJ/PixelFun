@@ -19,7 +19,8 @@ import {
   TextInput,
   Image,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 
 const DATA = [
@@ -85,6 +86,7 @@ export default class Home extends Component {
 
   renderItem = ({ index, item }) => (
     <Card
+      uid={this.props.extraData}
       onChangeLike={this.onChangeLike}
       viewDetail={this.viewDetail}
       data={item.canvasData}
@@ -99,27 +101,6 @@ export default class Home extends Component {
       publishTime={item.publishTime}
     />
   );
-  //componentWillMount() {
-  // AsyncStorage.getItem("uid", (err, result) => {
-  //   console.log(result);
-  //   console.log("Up is user id");
-  //   this.setState({ userID: result });
-  // });
-  // storage
-  //   .load({
-  //     key: "uid",
-  //   })
-  //   .then((ret) => {
-  //     this.setState({
-  //       userID: ret.id,
-  //     });
-  //     console.log(ret.id);
-  //     console.log("success!");
-  //   })
-  //   .catch((err) => {
-  //     console.warn(err.message);
-  //   });
-  //}
 
   componentDidMount() {
     // storage
@@ -192,11 +173,15 @@ export default class Home extends Component {
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="New Grid"
-            onPress={() =>
-              navigation.navigate("Canvas", {
-                uid: this.props.extraData
-              })
-            }
+            onPress={() => {
+              if (this.props.extraData === 0) {
+                Alert.alert("Sorry", "You need to log in first.");
+              } else {
+                navigation.navigate("Canvas", {
+                  uid: this.props.extraData
+                });
+              }
+            }}
           >
             <Icon name="md-grid" style={styles.actionButtonIcon} />
           </ActionButton.Item>
@@ -204,18 +189,20 @@ export default class Home extends Component {
           <ActionButton.Item
             buttonColor="#1abc9c"
             title="Drafts"
-            onPress={() => {}}
+            onPress={() => {
+              this.props.navigation.navigate("Profile");
+            }}
           >
             <Icon name="md-folder-open" style={styles.actionButtonIcon} />
           </ActionButton.Item>
 
-          <ActionButton.Item
+          {/* <ActionButton.Item
             buttonColor="#3498db"
             title="Camera"
             onPress={() => {}}
           >
             <Icon name="md-camera" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
+          </ActionButton.Item> */}
         </ActionButton>
       </View>
     );

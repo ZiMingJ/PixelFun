@@ -5,6 +5,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Image, Dimensions, Modal, TouchableOpacity } from "react-native";
 import * as _ from "lodash";
+import PixelArt from "./PixelArt";
+
+const SCREEN_HEIGHT = Dimensions.get("window").height;
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 class PhotoGrid extends Component {
   constructor(props) {
@@ -55,7 +59,7 @@ class PhotoGrid extends Component {
             this.photoPopupToggle(item, index);
           }}
         >
-          <ImageComponent
+          {/* <ImageComponent
             source={{ uri: item.url }}
             {...imageProps}
             style={[
@@ -64,6 +68,11 @@ class PhotoGrid extends Component {
               ...(expanded ? [styles.expandedImage] : []),
               { borderRadius: this.props.borderRadius }
             ]}
+          /> */}
+          <PixelArt
+            data={item.canvasData}
+            backgroundColor={item.backGroundColor}
+            size={expanded ? (SCREEN_WIDTH / 3) * 2 : SCREEN_WIDTH / 3}
           />
           {children && children(item)}
         </TouchableOpacity>
@@ -194,7 +203,6 @@ class PhotoGrid extends Component {
 const styles = {
   container: {
     flex: 1,
-    paddingTop: 20,
     alignItems: "center",
     justifyContent: "center"
   },
@@ -214,23 +222,18 @@ const styles = {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    width: Dimensions.get("window").width - 20,
-    paddingRight: 5
+    width: Dimensions.get("window").width
   },
 
   photoView: {
     height: 120,
     flex: 2,
     backgroundColor: "gray",
-    marginHorizontal: 5,
-    marginVertical: 5,
     justifyContent: "center"
   },
   expandedView: {
     height: 249,
     backgroundColor: "gray",
-    marginHorizontal: 5,
-    marginVertical: 5,
     flex: 2
   },
   expandedImage: {

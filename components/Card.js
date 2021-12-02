@@ -14,7 +14,8 @@ import {
   TextInput,
   Image,
   FlatList,
-  Pressable
+  Pressable,
+  Alert
 } from "react-native";
 import {
   TouchableOpacity,
