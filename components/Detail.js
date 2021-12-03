@@ -69,7 +69,6 @@ const Title = styled.Text`
   font-size: 16px;
   font-weight: 400;
 `;
-
 const UserName = styled.Text`
   margin-left: 10px;
   font-size: 14px;

@@ -99,7 +99,8 @@ export default class Card extends Component {
       islike: false,
       userName: "Visitor",
       userId: this.props.item.userID === undefined ? 0 : this.props.item.userID,
-      url: "https://picsum.photos/id/125/250/250",
+      url:
+        "https://firebasestorage.googleapis.com/v0/b/pixelfun-8f53a.appspot.com/o/6.jpeg?alt=media&token=d1764fdc-ff38-4413-92f5-ab22c2fb75c4",
       publishTime:
         !this.props.publishTime == null && !this.props.publishTime === undefined
           ? this.props.publishTime.toDate()
@@ -173,15 +174,13 @@ export default class Card extends Component {
           </Row>
           <MoreIcon width={25} height={25} />
         </TopRow>
-
         <Row>
           <PixelArt
-            size={340}
+            size={342}
             backgroundColor={this.props.backgroundColor}
             data={this.props.data}
           />
         </Row>
-
         <Row>
           <Pressable onPress={e => this.pressLike()}>
             {this.state.islike ? (
