@@ -1,22 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
-import PixelArt from "./PixelArt";
+import PixelArt from "../components/PixelArt";
 import { Dimensions } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Input, Button } from "react-native-elements";
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  Image,
-  AppRegistry,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  KeyboardAvoidingView
-} from "react-native";
+import { Text, ActivityIndicator, KeyboardAvoidingView } from "react-native";
 
 const Title = styled.Text`
   font-size: 20px;

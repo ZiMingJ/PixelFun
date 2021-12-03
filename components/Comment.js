@@ -5,19 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { firebase } from "../firebase/config";
 import { getDate } from "../util";
 
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  Image,
-  FlatList,
-  Pressable
-} from "react-native";
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback
-} from "react-native-gesture-handler";
+import { Text, StyleSheet, View, Image } from "react-native";
 
 const Row = styled.View`
   flex-direction: row;
@@ -76,18 +64,11 @@ export default class Card extends Component {
   componentDidMount() {
     usersRef.where("id", "==", this.props.userId).onSnapshot(
       querySnapshot => {
-        //const newEntities = [];
         querySnapshot.forEach(doc => {
           this.setState({ url: doc.data().url });
         });
-        //console.log(this.state.userName);
-        // this.setState({
-        //   published: newEntities,
-        // });
       },
-      error => {
-        console.log(error);
-      }
+      error => {}
     );
   }
 

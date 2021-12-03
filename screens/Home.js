@@ -1,16 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import styled, { css } from "styled-components/native";
 
-// import LikeIcon from "../assets/like";
-// import CommentIcon from "../assets/comment";
-// import MoreIcon from "../assets/more";
-import Card from "./Card";
+import Card from "../components/Card";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
 import { firebase } from "../firebase/config";
-// import { AsyncStorage } from "react-native";
-// import storage from "../store";
 
 import {
   Text,
@@ -20,7 +13,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  Alert,
+  Alert
 } from "react-native";
 
 const DATA = [
@@ -31,7 +24,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#EC9560",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -40,7 +33,7 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#4BBED0",
     report: "babalabala",
-    author: "Jerromy",
+    author: "Jerromy"
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
@@ -49,8 +42,8 @@ const DATA = [
     commentsCount: 4,
     backgroundColor: "#414954",
     report: "babalabala",
-    author: "Jerromy",
-  },
+    author: "Jerromy"
+  }
 ];
 const imagesRef = firebase.firestore().collection("images");
 
@@ -60,17 +53,13 @@ export default class Home extends Component {
     this.state = {
       index: null,
       userID: this.props.extraData,
-      data: DATA,
+      data: DATA
     };
   }
 
   static defaultProps = {};
 
-  onChangeLike = (item, islike, likesCount) => {
-    //item.id?
-    // islike: boolean
-    //likescount :int
-  };
+  onChangeLike = (item, islike, likesCount) => {};
 
   viewDetail = (item, islike, likesCount) => {
     this.props.navigation.navigate("Detail", {
@@ -81,7 +70,7 @@ export default class Home extends Component {
       islike: islike,
       likesCount: likesCount,
       onChangeLike: this.onChangeLike,
-      publishTime: item.publishTime,
+      publishTime: item.publishTime
     });
   };
 
@@ -103,59 +92,21 @@ export default class Home extends Component {
   );
 
   componentDidMount() {
-    // storage
-    //   .load({
-    //     key: "uid",
-    //     autoSync: true,
-    //     syncInBackground: true,
-    //     syncParams: {
-    //       extraFetchOptions: {},
-    //       someFlag: true,
-    //     },
-    //   })
-    //   .then((ret) => {
-    //     this.setState({
-    //       userID: ret.id,
-    //     });
-    //     console.log(ret.id);
-    //     console.log("success!");
-    //   })
-    //   .catch((err) => {
-    //     console.warn(err.message);
-    //     switch (err.name) {
-    //       case "NotFoundError":
-    //         // 更新
-    //         // this.setState({
-    //         //     data:'数据为空'
-    //         // });
-    //         break;
-    //       case "ExpiredError":
-    //         // TODO
-    //         break;
-    //     }
-    //   });
     const fetchData = async () => {
-      imagesRef
-        //.where("authorID", "==", userID)
-        .orderBy("publishTime", "desc")
-        .onSnapshot(
-          (querySnapshot) => {
-            const newEntities = [];
-            querySnapshot.forEach((doc) => {
-              const entity = doc.data();
-              entity.id = doc.id;
-              newEntities.push(entity);
-            });
-            console.log(newEntities.length);
-            // setEntities(newEntities);
-            this.setState({
-              data: newEntities,
-            });
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+      imagesRef.orderBy("publishTime", "desc").onSnapshot(
+        querySnapshot => {
+          const newEntities = [];
+          querySnapshot.forEach(doc => {
+            const entity = doc.data();
+            entity.id = doc.id;
+            newEntities.push(entity);
+          });
+          this.setState({
+            data: newEntities
+          });
+        },
+        error => {}
+      );
     };
     fetchData();
   }
@@ -163,12 +114,10 @@ export default class Home extends Component {
     const { route, navigation } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
-        {/* <Text>{this.props.extraData}</Text> */}
-
         <FlatList
           data={this.state.data}
           renderItem={this.renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
         />
 
         <ActionButton buttonColor="rgba(231,76,60,1)">
@@ -181,19 +130,19 @@ export default class Home extends Component {
                   {
                     text: "No thanks",
                     onPress: () => {},
-                    style: "cancel",
+                    style: "cancel"
                   },
                   {
                     text: "Sure",
                     onPress: () => {
                       this.props.navigation.navigate("Login");
                     },
-                    style: "destructive",
-                  },
+                    style: "destructive"
+                  }
                 ]);
               } else {
                 navigation.navigate("Canvas", {
-                  uid: this.props.extraData,
+                  uid: this.props.extraData
                 });
               }
             }}
@@ -210,15 +159,15 @@ export default class Home extends Component {
                   {
                     text: "No thanks",
                     onPress: () => {},
-                    style: "cancel",
+                    style: "cancel"
                   },
                   {
                     text: "Sure",
                     onPress: () => {
                       this.props.navigation.navigate("Login");
                     },
-                    style: "destructive",
-                  },
+                    style: "destructive"
+                  }
                 ]);
               } else {
                 this.props.navigation.navigate("Profile");
@@ -227,14 +176,6 @@ export default class Home extends Component {
           >
             <Icon name="md-folder-open" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-
-          {/* <ActionButton.Item
-            buttonColor="#3498db"
-            title="Camera"
-            onPress={() => {}}
-          >
-            <Icon name="md-camera" style={styles.actionButtonIcon} />
-          </ActionButton.Item> */}
         </ActionButton>
       </View>
     );
@@ -246,14 +187,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
-    fontSize: 32,
+    fontSize: 32
   },
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: "white",
-  },
+    color: "white"
+  }
 });

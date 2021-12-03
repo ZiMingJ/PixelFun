@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 import { PIXEL_COUNT } from "../constants";
-import { Dimensions, TouchableOpacity, Alert, View, Text } from "react-native";
 
 const Wrapper = styled.View`
   border-radius: ${({ rounded }) => (rounded ? 3 : 0)}px;
@@ -16,8 +14,7 @@ const Wrapper = styled.View`
 const PixelsWrapper = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  padding: ${({ pixelSize }) =>
-    pixelSize - 1}px; //-1 to avoid early flex wraps with decimals
+  padding: ${({ pixelSize }) => pixelSize - 1}px;
 `;
 
 const PixelBlock = styled.View`

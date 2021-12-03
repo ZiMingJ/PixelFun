@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import { TriangleColorPicker, fromHsv } from "react-native-color-picker";
 
 class ColorPicker extends React.Component {

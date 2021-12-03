@@ -9,7 +9,7 @@ export const ExampleUncontrolledTriangle = () => (
     </Text>
     <TriangleColorPicker
       oldColor="purple"
-      onColorSelected={(color) => alert(`Color selected: ${color}`)}
+      onColorSelected={color => alert(`Color selected: ${color}`)}
       style={{ flex: 1 }}
     />
   </View>

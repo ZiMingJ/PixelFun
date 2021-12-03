@@ -1,21 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  Dimensions,
-  Button,
-  Alert
-} from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import styled, { css } from "styled-components/native";
 import { FlatGrid } from "react-native-super-grid";
 import { firebase } from "../firebase/config";
 import PixelArt from "../components/PixelArt";
-// import storage from "../store";
 import MoreIcon from "../assets/more";
 import CatIcon from "../assets/icons/cat";
 import PawIcon from "../assets/icons/paw";
@@ -155,7 +144,6 @@ export default class Profile extends Component {
   static defaultProps = {};
 
   deletePhoto = item => {
-    //Detele the photo here
     imagesRef.doc(item.id).delete();
   };
 
@@ -168,18 +156,9 @@ export default class Profile extends Component {
       .auth()
       .signOut()
       .then(() => {
-        // Sign-out successful.
         this.props.navigation.navigate("Login");
-        // firebase.auth().onAuthStateChanged((user) => {
-        //   if (user) {
-        //   } else {
-
-        //   }
-        // });
       })
-      .catch(error => {
-        // An error happened.
-      });
+      .catch(error => {});
   }
 
   componentDidMount() {
@@ -198,9 +177,7 @@ export default class Profile extends Component {
             published: newEntities
           });
         },
-        error => {
-          console.log(error);
-        }
+        error => {}
       );
     draftsRef
       .where("userID", "==", this.props.userID)
@@ -217,17 +194,14 @@ export default class Profile extends Component {
             drafts: newEntities
           });
         },
-        error => {
-          console.log(error);
-        }
+        error => {}
       );
     usersRef.where("id", "==", this.props.userID).onSnapshot(
       querySnapshot => {
         const newEntities = [];
         querySnapshot.forEach(doc => {
           const entity = doc.data();
-          // entity.id = doc.id;
-          // newEntities.push(entity);
+
           this.setState({
             photoUrl: doc.data().url,
             userName: doc.data().fullName,
@@ -235,13 +209,9 @@ export default class Profile extends Component {
             likesNum: doc.data().likes,
             draftsNum: doc.data().drafts
           });
-          console.log("FULLNAME!!!!!");
-          console.log(doc.data().fullName);
         });
       },
-      error => {
-        console.log(error);
-      }
+      error => {}
     );
   }
 
@@ -319,11 +289,8 @@ export default class Profile extends Component {
 
   render() {
     const { route, navigation } = this.props;
-    console.log(this.props.route.params);
     return (
       <InfosWrapper>
-        {/* <Text>{this.props.userID}</Text>
-        <Text>{this.state.userID}</Text> */}
         <HeaderWrapper>
           <Avatar>
             {this.state.userID === 0 ? (

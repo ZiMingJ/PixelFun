@@ -146,7 +146,6 @@ export default class Canvas extends Component {
     if (this.state.itemId != 0) {
       this.deleteDraft(this.state.itemId);
     }
-    //if (entityText && entityText.length > 0) {
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const data = {
       userID: this.state.userID,
@@ -166,7 +165,6 @@ export default class Canvas extends Component {
       .catch(error => {
         alert(error);
       });
-    //}
   };
 
   deleteDraft = itemId => {
@@ -174,7 +172,6 @@ export default class Canvas extends Component {
   };
 
   onDraftPress = () => {
-    //if (entityText && entityText.length > 0) {
     if (this.state.itemId != 0) {
       draftsRef.doc(this.state.itemId).update({
         backGroundColor: this.state.backgroundColor,
@@ -193,15 +190,11 @@ export default class Canvas extends Component {
         .add(data)
         .then(_doc => {
           this.props.navigation.navigate("Profile");
-          // setEntityText("");
-          // Keyboard.dismiss();
         })
         .catch(error => {
           alert(error);
         });
     }
-
-    //}
   };
 
   getInitialCanvasData = () =>
@@ -231,8 +224,6 @@ export default class Canvas extends Component {
   };
 
   updateColorMap = newColor => {
-    console.log(this.state.userID);
-
     let colorMap = this.state.colorMap;
     for (let i = 0; i < colorMap.length; i++) {
       if (colorMap[i].color === this.state.currentColor) {

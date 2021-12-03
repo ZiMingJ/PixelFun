@@ -4,7 +4,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { firebase } from "../firebase/config";
 import { StyleSheet } from "react-native";
 import { useEffect } from "react";
-// import storage from "../store";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -22,7 +21,6 @@ export default function LoginScreen({ navigation }) {
           .then(document => {
             const userData = document.data();
             setLoading(false);
-            //setUser(userData);
           })
           .catch(error => {
             setLoading(false);
@@ -34,7 +32,6 @@ export default function LoginScreen({ navigation }) {
   }, []);
 
   if (loading) {
-    console.log("No User!");
     return (
       <>
         <Text>No User!!!</Text>
@@ -60,25 +57,12 @@ export default function LoginScreen({ navigation }) {
               alert("User does not exist anymore.");
               return;
             }
-            // storage.save({
-            //   key: "uid",
-            //   data: {
-            //     id: uid,
-            //   },
-            //   expires: null,
-            // });
-
-            //AsyncStorage.setItem("uid", JSON.stringify(uid));
-            console.log(uid + "NEW ID");
-            //navigation.navigate("HomeTab", { user: user });
 
             navigation.popToTop();
 
             navigation.replace("HomeTab", {
               uid: uid
             });
-
-            //navigation.navigate("HomeTab");
           })
           .catch(error => {
             alert(error);

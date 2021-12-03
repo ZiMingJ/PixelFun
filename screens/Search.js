@@ -2,23 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 
-import Card from "./Card";
-import { PhotoGrid } from "./PhotoGrid";
-import { SearchBar } from "react-native-elements";
 import { firebase } from "../firebase/config";
 import { FlatGrid } from "react-native-super-grid";
-import PixelArt from "./PixelArt";
+import PixelArt from "../components/PixelArt";
 
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  Image,
-  AppRegistry,
-  ScrollView,
-  TouchableOpacity
-} from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { Background } from "@react-navigation/elements";
 
 const Input = styled.TextInput`
@@ -61,7 +49,6 @@ export default class Search extends Component {
     newEntities = [];
     this.state.data.forEach(d => {
       if (d.title.indexOf(e.nativeEvent.text) != -1) {
-        //result.push(d.title);
         imagesRef
           .where("title", "==", d.title)
           .orderBy("publishTime")
@@ -76,71 +63,33 @@ export default class Search extends Component {
                 });
               });
             },
-            error => {
-              console.log(error);
-            }
+            error => {}
           );
       }
     });
     this.setState({ newComment: e.nativeEvent.text });
   }
 
-  // updateSearch = (search) => {
-  //   this.setState({ search });
-  //   console.log(search + "SEARCH");
-  //   newEntities = [];
-  //   this.state.data.forEach((d) => {
-  //     if (d.title.indexOf(search) != -1) {
-  //       //result.push(d.title);
-  //       imagesRef
-  //         .where("title", "==", d.title)
-  //         .orderBy("publishTime")
-  //         .onSnapshot(
-  //           (querySnapshot) => {
-  //             querySnapshot.forEach((doc) => {
-  //               const entity = doc.data();
-  //               entity.id = doc.id;
-  //               newEntities.push(entity);
-  //               this.setState({
-  //                 data: newEntities,
-  //               });
-  //             });
-  //           },
-  //           (error) => {
-  //             console.log(error);
-  //           }
-  //         );
-  //     }
-  //   });
-  // };
-
   viewDetail = item => {
     this.props.navigation.navigate("Detail", item);
   };
 
   componentDidMount() {
-    imagesRef
-      //.where("authorID", "==", userID)
-      .orderBy("publishTime")
-      .onSnapshot(
-        querySnapshot => {
-          const newEntities = [];
-          querySnapshot.forEach(doc => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            newEntities.push(entity);
-          });
-          console.log(newEntities.length);
-          // setEntities(newEntities);
-          this.setState({
-            data: newEntities,
-            allData: newEntities
-          });
-        },
-        error => {
-          console.log(error);
-        }
-      );
+    imagesRef.orderBy("publishTime").onSnapshot(
+      querySnapshot => {
+        const newEntities = [];
+        querySnapshot.forEach(doc => {
+          const entity = doc.data();
+          entity.id = doc.id;
+          newEntities.push(entity);
+        });
+        this.setState({
+          data: newEntities,
+          allData: newEntities
+        });
+      },
+      error => {}
+    );
   }
   onChangeLike = () => {};
   viewDetail = (item, islike) => {
@@ -154,10 +103,6 @@ export default class Search extends Component {
       onChangeLike: this.onChangeLike
     });
   };
-
-  // clear = () => {
-  //   this.setState({ search: "", data: allData });
-  // };
 
   renderItem = ({ index, item }) => (
     <TouchableOpacity
@@ -177,16 +122,6 @@ export default class Search extends Component {
     const { search } = this.state;
     return (
       <View>
-        {/* <SearchBar
-          placeholder="Type Here..."
-          onChangeText={this.updateSearch}
-          onClear={this.clear}
-          value={search}
-          platform="ios"
-          containerStyle={styles.container}
-          inputContainerStyle={styles.inputContainer}
-          inputStyle={styles.input}
-        /> */}
         <Input
           value={this.state.newComment}
           editable={true}

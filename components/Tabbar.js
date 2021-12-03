@@ -1,23 +1,10 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  Image,
-  TouchableOpacity
-} from "react-native";
-// import Tabbar from "@mindinventory/react-native-tab-bar-interaction";
+import { StyleSheet } from "react-native";
 
-import HomeIcon from "../assets/icons/home";
-import ProfileIcon from "../assets/icons/profile";
-import AddIcon from "../assets/icons/add";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../components/Home";
-import Search from "../components/Search";
-import Profile from "../components/Profile";
-import Canvas from "../components/Canvas";
+import Home from "../screens/Home";
+import Search from "../screens/Search";
+import Profile from "../screens/Profile";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { DeviceEventEmitter } from "react-native";
@@ -35,9 +22,7 @@ export default class MyTabbar extends Component {
     this.props.navigation.navigate(active);
   };
   componentDidMount() {
-    // 注册事件通知
     DeviceEventEmitter.emit("testName");
-    //testName:通知的名称 param：发送的消息（传参）
   }
   render() {
     const { route, navigation } = this.props;
@@ -56,7 +41,6 @@ export default class MyTabbar extends Component {
               iconName = focused ? "search" : "search-outline";
             }
 
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: "tomato",
@@ -93,17 +77,6 @@ export default class MyTabbar extends Component {
           )}
         </Tab.Screen>
       </Tab.Navigator>
-      // <View style={styles.container}>
-      //   <Text>tabb</Text>
-      //   <Tabbar
-      //     tabs={tabs}
-      //     tabBarContainerBackground="white"
-      //     tabBarBackground="grey"
-      //     activeTabBackground="white"
-      //     labelStyle={{ color: "#414954", fontWeight: "600", fontSize: 11 }}
-      //     onTabChange={evt => this.handleTabChange(evt.name)}
-      //   />
-      // </View>
     );
   }
 }

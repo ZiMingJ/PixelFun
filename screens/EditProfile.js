@@ -1,20 +1,12 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Input } from "react-native-elements";
 import { AvatorPhotos } from "../constants";
 import { FlatGrid } from "react-native-super-grid";
 import { firebase } from "../firebase/config";
 
 import {
-  Text,
-  StyleSheet,
-  View,
   TextInput,
   Image,
-  AppRegistry,
-  ScrollView,
   TouchableOpacity,
   Button,
   Alert
@@ -71,8 +63,6 @@ export default class EditProfile extends Component {
   static defaultProps = {};
 
   onSubmit = () => {
-    // {name:this.state.name}
-    // {photoUrl:this.state.url}
     usersRef.doc(this.state.userID).update({
       fullName: this.state.name,
       url: this.state.url

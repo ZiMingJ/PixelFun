@@ -55,7 +55,6 @@ export default function App() {
   }, []);
 
   if (loading) {
-    console.log("No User!");
     return (
       <>
         <Text>No User!!!</Text>

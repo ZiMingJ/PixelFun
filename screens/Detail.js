@@ -10,17 +10,11 @@ import Comment from "../components/Comment";
 import { firebase } from "../firebase/config";
 
 import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
   Image,
-  FlatList,
   Dimensions,
   ScrollView,
   Pressable,
-  KeyboardAvoidingView,
-  Alert
+  KeyboardAvoidingView
 } from "react-native";
 
 const InputWrapper = styled.View`
@@ -85,15 +79,6 @@ const InfosText = styled.Text`
   color: grey;
 `;
 
-// for (let i = 0; i < 5; i++) {
-//   commentsContent.push({
-//     id: i,
-//     user: "daisy",
-//     time: new Date(),
-//     text: "dadhsahuaiwhou",
-//     userId: "safhsauhaoshaoh",
-//   });
-// }
 const commentsRef = firebase.firestore().collection("comments");
 const imagesRef = firebase.firestore().collection("images");
 const usersRef = firebase.firestore().collection("users");
@@ -144,7 +129,6 @@ export default class Detail extends Component {
     this.setState({
       newComment: ""
     });
-    console.log("on submit");
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const data = {
       itemId: this.state.itemId,
@@ -153,14 +137,11 @@ export default class Detail extends Component {
       commentTime: timestamp,
       text: e.nativeEvent.text
     };
-    commentsRef
-      .add(data)
-      //.then(this.setState({ commentsCount: this.state.commentsCount + 1 }))
-      .then(
-        imagesRef.doc(this.state.itemId).update({
-          comments: this.state.commentsContent.length + 1
-        })
-      );
+    commentsRef.add(data).then(
+      imagesRef.doc(this.state.itemId).update({
+        comments: this.state.commentsContent.length + 1
+      })
+    );
 
     this.setState({
       loading: false
@@ -174,29 +155,19 @@ export default class Detail extends Component {
           this.setState({ userName: doc.data().fullName, url: doc.data().url });
         });
       },
-      error => {
-        console.log(error);
-      }
+      error => {}
     );
     usersRef.where("id", "==", this.state.userID).onSnapshot(
       querySnapshot => {
-        //const newEntities = [];
         querySnapshot.forEach(doc => {
           this.setState({
             userNameComment: doc.data().fullName
           });
         });
-        //console.log(this.state.userName);
-        // this.setState({
-        //   published: newEntities,
-        // });
       },
-      error => {
-        console.log(error);
-      }
+      error => {}
     );
     if (this.state.itemId !== 0 && this.state.commentsContent.length === 0) {
-      //commentsContent = null;
       commentsRef
         .where("itemId", "==", this.state.itemId)
         .orderBy("commentTime", "desc")
@@ -212,9 +183,7 @@ export default class Detail extends Component {
               commentsContent: newEntities
             });
           },
-          error => {
-            console.log(error);
-          }
+          error => {}
         );
     }
   }
