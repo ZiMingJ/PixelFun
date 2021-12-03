@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
 
 import { getDate } from "../util";
-import LikeIcon from "../assets/like";
 import CommentIcon from "../assets/comment";
-import MoreIcon from "../assets/more";
-import PixelArt from "./PixelArt";
+import PixelArt from "../components/PixelArt";
 import Icon from "react-native-vector-icons/Ionicons";
-import Comment from "./Comment";
+import Comment from "../components/Comment";
 import { firebase } from "../firebase/config";
 
 import {

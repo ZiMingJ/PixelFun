@@ -1,35 +1,25 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Button, LogBox } from "react-native";
-import Constants from "expo-constants";
-import Canvas from "./components/Canvas";
-import ColorPicker from "./components/ColorPicker";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
+import Canvas from "./screens/Canvas";
+import ColorPicker from "./screens/ColorPicker";
+
 import Tabbar from "./components/Tabbar";
-import Detail from "./components/Detail";
-import EditProfile from "./components/EditProfile";
-import Publish from "./components/Publish";
-import { Card } from "react-native-paper";
+import Detail from "./screens/Detail";
+import EditProfile from "./screens/EditProfile";
+import Publish from "./screens/Publish";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { CardStyleInterpolators } from "@react-navigation/stack";
-import { TransitionPresets } from "@react-navigation/stack";
-import { HeaderStyleInterpolators } from "@react-navigation/stack";
 
+import { TransitionPresets } from "@react-navigation/stack";
 import "react-native-gesture-handler";
-//import React, { useEffect, useState } from "react";
 import { useEffect, useState } from "react";
 
 import { firebase } from "./firebase/config";
-// import { NavigationContainer } from "@react-navigation/native";
-// import { createStackNavigator } from "@react-navigation/stack";
+
 import { LoginScreen, HomeScreen, RegistrationScreen } from "./screens";
 import { decode, encode } from "base-64";
-// import storage from "./store";
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -82,15 +72,6 @@ export default function App() {
             <Stack.Navigator>
               {user ? (
                 <>
-                  {/* <Stack.Screen
-                    name="HomeTab"
-                    component={Tabbar}
-                    options={{ headerShown: false }}
-                  >
-                    {(props) => <Tabbar {...props} extraData={user} />}
-                  </Stack.Screen> */}
-                  {/* <Tabbar /> */}
-
                   <Stack.Group>
                     <Stack.Screen
                       name="HomeTab"
@@ -143,31 +124,10 @@ export default function App() {
                         headerTitle: "Edit Profile"
                       })}
                     />
-                    {/* <Stack.Screen
-                      name="EditProfile"
-                      component={EditProfile}
-                      options={{
-                        headerTitle: "Edit Profile",
-                        headerRight: () => (
-                          <Button
-                            onPress={() => alert("This is a button!")}
-                            title="Save  "
-                            color="tomato"
-                          />
-                        )
-                      }}
-                    /> */}
                   </Stack.Group>
                 </>
               ) : (
                 <>
-                  {/* <Stack.Screen
-                    name="HomeTab"
-                    //component={Tabbar}
-                    options={{ headerShown: false }}
-                  > */}
-                  {/* {(props) => <Tabbar {...props} extraData={user} />} */}
-                  {/* </Stack.Screen> */}
                   <Stack.Screen name="Login" component={LoginScreen} />
                   <Stack.Screen
                     name="Registration"
