@@ -154,7 +154,6 @@ export default class Canvas extends Component {
     if (this.state.itemId != 0) {
       this.deleteDraft(this.state.itemId);
     }
-    console.log(title);
     //if (entityText && entityText.length > 0) {
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const data = {
@@ -166,6 +165,7 @@ export default class Canvas extends Component {
       likes: 0,
       comments: 0
     };
+
     imagesRef
       .add(data)
       .then(_doc => {
@@ -239,14 +239,16 @@ export default class Canvas extends Component {
   };
 
   updateColorMap = newColor => {
+    console.log(this.state.userID);
+
     let colorMap = this.state.colorMap;
     for (let i = 0; i < colorMap.length; i++) {
       if (colorMap[i].color === this.state.currentColor) {
-        colorMap[i].color = newColor;
+        colorMap[i].color = newColor.toString();
       }
     }
     this.setState({
-      colorMap,
+      colorMap: colorMap,
       currentColor: newColor
     });
   };
@@ -257,7 +259,6 @@ export default class Canvas extends Component {
       route.params === undefined
         ? this.state.currentColor
         : route.params.newColor;
-    this.state.userID = route.params === undefined ? 0 : route.params.uid;
     const nonEmpty = this.state.canvasData.some(item => item.color !== "none");
 
     return (
@@ -470,7 +471,8 @@ export default class Canvas extends Component {
           onPress={() => {
             this.props.navigation.navigate("ColorPicker", {
               updateColorMap: this.updateColorMap,
-              currentColor: this.state.currentColor
+              currentColor: this.state.currentColor,
+              uid: this.state.userID
             });
           }}
         >

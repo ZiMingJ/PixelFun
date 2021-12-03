@@ -18,7 +18,7 @@ class ColorPicker extends React.Component {
 
   render() {
     const { route, navigation } = this.props;
-    const { updateColorMap, currentColor } = route.params;
+    const { updateColorMap, currentColor, uid } = route.params;
     return (
       <View style={styles.container}>
         <View style={{ flex: 1, padding: 45, backgroundColor: "#212021" }}>
@@ -26,7 +26,8 @@ class ColorPicker extends React.Component {
             title="Confirm"
             onPress={() => {
               this.props.navigation.navigate("Canvas", {
-                newColor: this.state.newColor
+                newColor: this.state.newColor,
+                uid: uid
               });
             }}
           />
